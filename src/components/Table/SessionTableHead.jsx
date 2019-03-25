@@ -46,27 +46,30 @@ export default class SessionTableHead extends Component {
             />
           </TableCell>
           {rows.map(row => (
-            <TableCell
-              variant="body"
-              key={row.id}
-              align={row.numeric ? "center" : "right"}
-              padding={row.disablePadding ? "none" : "default"}
-              sortDirection={orderBy === row.id ? order : false}
-            >
-              <Tooltip
-                title="Sort"
-                placement={row.numeric ? "bottom-end" : "bottom-start"}
-                enterDelay={200}
+            
+              <TableCell
+          
+                variant="head"
+                key={row.id}
+                align={row.numeric ? "center" : "right"}
+                padding={row.disablePadding ? "none" : "default"}
+                sortDirection={orderBy === row.id ? order : false}
               >
-                <TableSortLabel
-                  active={orderBy === row.id}
-                  direction={order}
-                  onClick={this.createSortHandler(row.id)}
+                <Tooltip
+                  title="Sort"
+                  placement={row.numeric ? "bottom-end" : "bottom-start"}
+                  enterDelay={200}
                 >
-                  {row.label}
-                </TableSortLabel>
-              </Tooltip>
-            </TableCell>
+                  <TableSortLabel
+                    active={orderBy === row.id}
+                    direction={order}
+                    onClick={this.createSortHandler(row.id)}
+                  >
+                    {row.label}
+                  </TableSortLabel>
+                </Tooltip>
+              </TableCell>
+           
           ))}
         </TableRow>
       </TableHead>

@@ -19,13 +19,16 @@ import AttendanceButton from "../Button/AttendanceButton";
 const styles = theme => ({
   root: {
     witdth: "100%",
-    marginTop: theme.spacing.unit * 3
+    marginTop: theme.spacing.unit 
   },
   table: {
     minWroll_numberth: 1020
   },
   tableWrapper: {
     overflowX: "auto"
+  },
+  size: {
+    textSize: 20
   }
 });
 function desc(a, b, orderBy) {
@@ -69,7 +72,9 @@ class SessionTable extends Component {
     console.log(data);
     check_index.forEach(element => {
       data[data.findIndex(x => x.roll_number === element)].present = true;
-      data[data.findIndex(x => x.roll_number === element)].remark = !data.remark;
+      data[
+        data.findIndex(x => x.roll_number === element)
+      ].remark = !data.remark;
     });
 
     this.setState({ data });
@@ -150,20 +155,30 @@ class SessionTable extends Component {
                       <TableCell padding="checkbox">
                         <Checkbox checked={isSelected} />
                       </TableCell>
-                      <TableCell variant="body" scope="row">
-                        {n.roll_number}
+                      <TableCell scope="row">
+                      <Typography variant="subheading">
+                      {n.roll_number}
+                    </Typography>
                       </TableCell>
-                      <TableCell variant="body" align="left">
-                        {n.name}
+                      <TableCell align="left">
+                      <Typography variant="subheading">
+                      {n.name}
+                    </Typography>
                       </TableCell>
-                      <TableCell variant="body" align="center">
-                        {isSelected ? (
+                      <TableCell align="center">
+
+                      <Typography variant="subheading">
+                      {isSelected ? (
                           <div>Yes</div>
                         ) : (
                           <div style={{ color: "#E74C3C" }}>No</div>
                         )}
+                    </Typography>
+                        
                       </TableCell>
-                      <TableCell align="left"><InputBase multiline/></TableCell>
+                      <TableCell align="left">
+                        <InputBase multiline />
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -174,12 +189,18 @@ class SessionTable extends Component {
                       Total Present :
                     </Typography>
                   </TableCell>
-                  <TableCell variant="body">{selected.length}</TableCell>
+                  <TableCell>
+                    <Typography variant="subheading">
+                      {selected.length}
+                    </Typography>
+                  </TableCell>
                   <TableCell>
                     <Typography variant="subheading">Total Absent :</Typography>
                   </TableCell>
-                  <TableCell variant="body">
-                    {data.length - selected.length}
+                  <TableCell>
+                    <Typography variant="subheading">
+                      {data.length - selected.length}
+                    </Typography>
                   </TableCell>
                 </TableRow>
               </TableBody>
