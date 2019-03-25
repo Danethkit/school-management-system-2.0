@@ -2,12 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import {
-    InputLabel,
-    Input,
-    MenuItem,
-    FormControl,
-    Select
-  } from "@material-ui/core/";
+  InputLabel,
+  Input,
+  MenuItem,
+  FormControl,
+  Select
+} from "@material-ui/core/";
 
 const styles = theme => ({
   formControl: {
@@ -30,10 +30,9 @@ class DuplicateFrom extends React.Component {
     const { classes } = this.props;
 
     return (
-      <div>
-        
+      <>
         <FormControl className={classes.formControl}>
-        <InputLabel>Duplicate from:</InputLabel>
+          <InputLabel>Duplicate from:</InputLabel>
           <Select
             value={this.state.session}
             onChange={this.handleChange("session")}
@@ -50,7 +49,7 @@ class DuplicateFrom extends React.Component {
             <MenuItem value={9}>Session 9</MenuItem>
           </Select>
         </FormControl>
-      </div>
+      </>
     );
   }
 }

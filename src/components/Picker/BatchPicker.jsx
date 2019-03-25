@@ -1,10 +1,5 @@
 import React, { Component } from "react";
-import {
-  MenuItem,
-  FormControl,
-  Select,
-  Grid
-} from "@material-ui/core/";
+import { MenuItem, FormControl, Select, Grid } from "@material-ui/core/";
 
 export default class BatchPicker extends Component {
   state = {
@@ -26,9 +21,9 @@ export default class BatchPicker extends Component {
 
   render() {
     return (
-      <div>
+      <>
         <Grid container>
-          <Grid item >
+          <Grid item sm>
             Batch :
           </Grid>
           <Grid item sm={9}>
@@ -56,7 +51,7 @@ export default class BatchPicker extends Component {
             </form>
           </Grid>
         </Grid>
-      </div>
+      </>
     );
   }
 }

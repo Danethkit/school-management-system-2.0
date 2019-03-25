@@ -8,12 +8,26 @@ import {
   Table,
   Checkbox,
   withStyles,
-  Typography
+  Typography,
+  InputBase
 } from "@material-ui/core";
 import SessionTableHead from "./SessionTableHead";
 import SessionTableToolBar from "./SessionTableToolBar";
-import dataB4 from "../../data/dataB4.json";
+import Data from "../../data/dataB4.json";
+import AttendanceButton from "../Button/AttendanceButton";
 
+const styles = theme => ({
+  root: {
+    witdth: "100%",
+    marginTop: theme.spacing.unit * 3
+  },
+  table: {
+    minWroll_numberth: 1020
+  },
+  tableWrapper: {
+    overflowX: "auto"
+  }
+});
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -40,29 +54,27 @@ function getSorting(order, orderBy) {
     : (a, b) => -desc(a, b, orderBy);
 }
 
-const styles = theme => ({
-  root: {
-    wroll_numberth: "200%",
-    marginTop: theme.spacing.unit
-  },
-  table: {
-    minWroll_numberth: 100
-  },
-  tableWrapper: {
-    overflowX: "auto"
-  }
-});
-
 class SessionTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: dataB4,
+      data: Data,
       order: "asc",
       orderBy: "name",
       selected: []
     };
   }
+
+  store_data(data, check_index) {
+    console.log(data);
+    check_index.forEach(element => {
+      data[data.findIndex(x => x.roll_number === element)].present = true;
+      data[data.findIndex(x => x.roll_number === element)].remark = !data.remark;
+    });
+
+    this.setState({ data });
+  }
+
   handleRequestSort = (event, property) => {
     const orderBy = property;
     let order = "desc";
@@ -108,64 +120,76 @@ class SessionTable extends Component {
     const { data, order, orderBy, selected } = this.state;
 
     return (
-      <Paper className={classes.root}>
-        <SessionTableToolBar numSelected={selected.length} />
-        <div className={classes.tableWrapper}>
-          <Table aria-labelledby="tableTitle" />
-          <SessionTableHead
-            numSelected={selected.length}
-            order={order}
-            orderBy={orderBy}
-            onSelectAllClick={this.handleSelectAllClick}
-            onRequestSort={this.handleRequestSort}
-            rowCount={data.length}
-          />
+      <>
+        <Paper className={classes.root}>
+          <SessionTableToolBar numSelected={selected.length} />
+          <div className={classes.tableWrapper}>
+            <Table aria-labelledby="tableTitle">
+              <SessionTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={this.handleSelectAllClick}
+                onRequestSort={this.handleRequestSort}
+                rowCount={data.length}
+              />
 
-          <TableBody>
-            {stableSort(data, getSorting(order, orderBy)).map(n => {
-              const isSelected = this.isSelected(n.roll_number);
-              return (
-                <TableRow
-                  hover
-                  onClick={event => this.handleClick(event, n.roll_number)}
-                  role="checkbox"
-                  aria-checked={isSelected}
-                  tabIndex={-1}
-                  key={n.roll_number}
-                  selected={isSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox checked={isSelected} />
+              <TableBody>
+                {stableSort(data, getSorting(order, orderBy)).map(n => {
+                  const isSelected = this.isSelected(n.roll_number);
+                  return (
+                    <TableRow
+                      hover
+                      onClick={event => this.handleClick(event, n.roll_number)}
+                      role="checkbox"
+                      aria-checked={isSelected}
+                      tabIndex={-1}
+                      key={n.roll_number}
+                      selected={isSelected}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox checked={isSelected} />
+                      </TableCell>
+                      <TableCell variant="body2" scope="row">
+                        {n.roll_number}
+                      </TableCell>
+                      <TableCell variant="body2" align="left">
+                        {n.name}
+                      </TableCell>
+                      <TableCell variant="body2" align="center">
+                        {isSelected ? (
+                          <div>Yes</div>
+                        ) : (
+                          <div style={{ color: "#E74C3C" }}>No</div>
+                        )}
+                      </TableCell>
+                      <TableCell align="left"><InputBase multiline/></TableCell>
+                    </TableRow>
+                  );
+                })}
+                <TableRow>
+                  <TableCell />
+                  <TableCell>
+                    <Typography variant="subheading">
+                      Total Present :
+                    </Typography>
                   </TableCell>
-                  <TableCell variant="body2" scope="row">
-                    {n.roll_number}
+                  <TableCell variant="body2">{selected.length}</TableCell>
+                  <TableCell>
+                    <Typography variant="subheading">Total Absent :</Typography>
                   </TableCell>
-                  <TableCell variant="body2" align="left">
-                    {n.name}
+                  <TableCell variant="body2">
+                    {data.length - selected.length}
                   </TableCell>
-                  <TableCell variant="body2" align="center">
-                    {n.present ? <div>Yes</div> : <div>No</div>}
-                  </TableCell>
-                  <TableCell align="left">{n.remark}</TableCell>
                 </TableRow>
-              );
-            })}
-            <TableRow>
-              <TableCell />
-              <TableCell>
-                <Typography variant="subheading">Total Present :</Typography>
-              </TableCell>
-              <TableCell variant="body2">{selected.length}</TableCell>
-              <TableCell>
-                <Typography variant="subheading">Total Absent :</Typography>
-              </TableCell>
-              <TableCell variant="body2">
-                {data.length - selected.length}
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </div>
-      </Paper>
+              </TableBody>
+            </Table>
+          </div>
+        </Paper>
+        <AttendanceButton
+          onSave={() => this.store_data(Data, this.state.selected)}
+        />
+      </>
     );
   }
 }
