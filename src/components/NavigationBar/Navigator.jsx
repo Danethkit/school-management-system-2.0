@@ -1,9 +1,8 @@
 import React from 'react'
-import {AppBar, Badge, IconButton, Menu, MenuItem, Tab, Tabs, Toolbar} from "@material-ui/core"
+import {AppBar, Badge, IconButton, Tab, Tabs, Toolbar} from "@material-ui/core"
 import MenuIcon from "@material-ui/icons/Menu"
 import { withStyles} from "@material-ui/core"
 import {AccountCircle,Chat,AlternateEmail} from "@material-ui/icons"
-import { Link } from "react-router-dom";
 
 const navBar = ['Facultices', 'Attendances','Assignments', 'Event',
              'TimeTables', 'Exams', 'Library', 'Apps', 'App Setting']
