@@ -22,7 +22,7 @@ export default class CoursePicker extends Component {
   render() {
     return (
       <Grid container>
-        <Grid item >
+        <Grid item sm>
           Course :
         </Grid>
         <Grid item sm={9}>

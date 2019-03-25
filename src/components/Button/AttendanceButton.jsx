@@ -64,7 +64,7 @@ class AttendanceButton extends React.Component {
     const { messageInfo } = this.state;
 
     return (
-      <div>
+      <>
         <Grid
           container
           direction="row"
@@ -83,7 +83,8 @@ class AttendanceButton extends React.Component {
             variant="outlined"
             color="primary"
             className={classes.button}
-            onClick={this.handleClick("Data is save.")}
+            onClick={() => this.props.onSave()}
+            //onClick={this.handleClick("Data is save.")}
           >
             Save
           </Button>
@@ -123,7 +124,7 @@ class AttendanceButton extends React.Component {
             </IconButton>
           ]}
         />
-      </div>
+      </>
     );
   }
 }

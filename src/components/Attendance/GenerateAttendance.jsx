@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Header from "../../components/header";
+import Header from "../Header";
 
 export default class GenerateAttendance extends Component {
   render() {
