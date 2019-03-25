@@ -150,13 +150,13 @@ class SessionTable extends Component {
                       <TableCell padding="checkbox">
                         <Checkbox checked={isSelected} />
                       </TableCell>
-                      <TableCell variant="body2" scope="row">
+                      <TableCell variant="body" scope="row">
                         {n.roll_number}
                       </TableCell>
-                      <TableCell variant="body2" align="left">
+                      <TableCell variant="body" align="left">
                         {n.name}
                       </TableCell>
-                      <TableCell variant="body2" align="center">
+                      <TableCell variant="body" align="center">
                         {isSelected ? (
                           <div>Yes</div>
                         ) : (
@@ -174,11 +174,11 @@ class SessionTable extends Component {
                       Total Present :
                     </Typography>
                   </TableCell>
-                  <TableCell variant="body2">{selected.length}</TableCell>
+                  <TableCell variant="body">{selected.length}</TableCell>
                   <TableCell>
                     <Typography variant="subheading">Total Absent :</Typography>
                   </TableCell>
-                  <TableCell variant="body2">
+                  <TableCell variant="body">
                     {data.length - selected.length}
                   </TableCell>
                 </TableRow>
