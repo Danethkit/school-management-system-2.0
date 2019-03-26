@@ -1,7 +1,9 @@
 import React from 'react'
-import {FormControl, InputLabel, OutlinedInput, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles} from "@material-ui/core";
+import {Search} from "@material-ui/icons"
+import {FormControl, InputLabel, Typography, OutlinedInput, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles} from "@material-ui/core";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
+import TimetableHeaderPicker from "../components/TimetablePicker/TimetableHeaderPicker";
 
 const CustomTableCell = withStyles(theme => ({
     head: {
@@ -73,6 +75,11 @@ const styles = theme => ({
     },
     outLinedInput:{
         color: 'primary'
+    },
+    heading: {
+        fontSize: theme.typography.pxToRem(15),
+        marginLeft:20,
+
     },
 
 })
@@ -149,8 +156,10 @@ class ViewTimetable extends React.Component{
         const {classes} = this.props;
 
         return(
-            <React.Fragment>
-                {numberTable.map(table => (
+            <>
+
+                    <TimetableHeaderPicker/>
+                    {numberTable.map(table => (
                     <div className={classes.generateTimetable} key={table.id}>
                        <div className={classes.headContainer}>
                          <FormControl className={classes.formControl}  variant="outlined" >
@@ -279,10 +288,9 @@ class ViewTimetable extends React.Component{
             </Paper>
         </div>
 
-
         </div>
                 ))}
-            </React.Fragment>
+            </>
     )
     }
 }
