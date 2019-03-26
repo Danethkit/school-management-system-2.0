@@ -7,9 +7,34 @@ import {
   Tabs,
   Toolbar
 } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
+import CheeseburgerMenu from 'cheeseburger-menu';
+import HamburgerMenu from 'react-hamburger-menu';
 import { withStyles } from "@material-ui/core";
 import { AccountCircle, Chat, AlternateEmail } from "@material-ui/icons";
+import MenuContent from "./MenuContent";
+
+const styles = theme => ({
+  root: {
+    flexGrow: 0,
+    backgroundColor: "#000"
+  },
+
+  iconButtonBlock: {
+    marginRight: -10
+  },
+
+  menuButton: {
+    marginRight: 0,
+    marginLeft: 0
+  },
+  tabs: {
+    flexGrow: 0
+  },
+  tab: {
+    minWidth: 1,
+    textColor: "#fff"
+  }
+});
 
 const navBar = [
   "Facultices",
@@ -22,33 +47,26 @@ const navBar = [
   "Apps",
   "App Setting"
 ];
-const styles = theme => ({
-  root: {
-    flexGrow: 0,
-    backgroundColor: "#000"
-  },
 
-  iconButtonBlock: {
-    marginRight: -10
-  },
 
-  menuButton: {
-    marginRight: 2,
-    marginLeft: -18
-  },
-  tabs: {
-    flexGrow: 0
-  },
-  tab: {
-    minWidth: 1,
-    textColor: "#fff"
-  }
-});
 
 class NavigationBar extends React.Component {
-  state = {
-    route: "/facultices"
-  };
+  constructor(props){
+    super(props)
+    
+    this.state = {
+      menuOpen: false,
+      route: "/attendances"
+    }
+  }
+
+  openMenu(){
+    this.setState({ menuOpen: true })
+  }
+
+  closeMenu(){
+    this.setState({ menuOpen: false })
+  }
 
   ChangeNavigateRoute = (event, route) => {
     this.setState({ route });
@@ -56,15 +74,38 @@ class NavigationBar extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    console.log('===========', this.props)
+    const { history, classes } = this.props;
+    
+    if(history.location.pathname=="/attendances"){
+        var items = ["attendline", "more"]
+    }
+    
     return (
-      <React.Fragment>
+      <>
         <AppBar position="static">
           <Toolbar variant="dense" display="flex" className={classes.root}>
-            <IconButton className={classes.menuButton} color="inherit">
-              <MenuIcon />
-            </IconButton>
-
+            <CheeseburgerMenu 
+            className={classes.menuButton} 
+            color="inherit"
+            isOpen={this.state.menuOpen}
+            closeCallback = {this.closeMenu.bind(this)}
+            >
+            
+            <MenuContent />
+            </CheeseburgerMenu>
+            <HamburgerMenu
+              isOpen={this.state.menuOpen}
+              menuClicked={this.openMenu.bind(this)}
+              width={22}
+           
+              height={12}
+              strokeWidth={1}
+              rotate={0}
+              color='white'
+              borderRadius={0}
+              animationDuration={0.7}
+            />
             <Tabs
               variant="scrollable"
               scrollButtons="off"
@@ -100,7 +141,7 @@ class NavigationBar extends React.Component {
           
           </Toolbar>
         </AppBar>
-      </React.Fragment>
+      </>
     );
   }
 }
