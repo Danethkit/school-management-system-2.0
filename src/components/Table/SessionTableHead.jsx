@@ -47,7 +47,7 @@ export default class SessionTableHead extends Component {
           </TableCell>
           {rows.map(row => (
             <TableCell
-              variant="subtitle2"
+              variant="head"
               key={row.id}
               align={row.numeric ? "center" : "right"}
               padding={row.disablePadding ? "none" : "default"}
