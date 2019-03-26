@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+// import axios from 'axios';
 import {
   Paper,
   TableBody,
@@ -15,6 +16,8 @@ import SessionTableHead from "./SessionTableHead";
 import SessionTableToolBar from "./SessionTableToolBar";
 import Data from "../../data/dataB4.json";
 import AttendanceButton from "../Button/AttendanceButton";
+
+// axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
 
 const styles = theme => ({
   root: {
@@ -58,11 +61,39 @@ class SessionTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: Data,
+      data: [],
       order: "asc",
       orderBy: "name",
       selected: []
     };
+
+  }
+
+  
+  
+  componentDidMount() {
+      
+    
+    // axios.get('http://localhost:8069/sms').then(response => {console.log('ssss', response)})
+    fetch('http://localhost:8069/sms', {
+      method: "GET", 
+      cache: "no-cache", 
+      // mode: "no-cors",
+      // headers: {
+      //     "Content-Type": "application/json",
+      //     'Access-Control-Allow-Origin':'*',
+      //     'Access-Control-Allow-Methods':'POST, GET, OPTIONS',
+      //     'Access-Control-Max-Age':1000,
+      //     'Access-Control-Allow-Headers':'origin, x-csrftoken, content-type, accept'
+      // }
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('data==========', data)
+      this.setState({data}) 
+    })
+    .catch(error=> console.log('error', error))
+  
   }
 
   store_data(data, check_index) {
@@ -150,13 +181,13 @@ class SessionTable extends Component {
                       <TableCell padding="checkbox">
                         <Checkbox checked={isSelected} />
                       </TableCell>
-                      <TableCell variant="body2" scope="row">
+                      <TableCell scope="row">
                         {n.roll_number}
                       </TableCell>
-                      <TableCell variant="body2" align="left">
+                      <TableCell  align="left">
                         {n.name}
                       </TableCell>
-                      <TableCell variant="body2" align="center">
+                      <TableCell  align="center">
                         {isSelected ? (
                           <div>Yes</div>
                         ) : (
@@ -174,11 +205,11 @@ class SessionTable extends Component {
                       Total Present :
                     </Typography>
                   </TableCell>
-                  <TableCell variant="body2">{selected.length}</TableCell>
+                  <TableCell >{selected.length}</TableCell>
                   <TableCell>
                     <Typography variant="subheading">Total Absent :</Typography>
                   </TableCell>
-                  <TableCell variant="body2">
+                  <TableCell >
                     {data.length - selected.length}
                   </TableCell>
                 </TableRow>
