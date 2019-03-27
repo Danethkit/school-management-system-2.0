@@ -14,16 +14,20 @@ export default function HeadPicker() {
     <div>
       <Card>
         <CardContent>
-          <Grid container>
+          <Grid container spacing={16}>
             <Grid item sm>
               <DatePicker />
               <SessionPicker />
+            </Grid>
+            <Grid item sm>
               <FacultyPicker />
               <SubjectPicker />
             </Grid>
             <Grid item sm>
               <CoursePicker />
               <SemesterPicker />
+            </Grid>
+            <Grid item sm>
               <BatchPicker />
               <GroupPicker />
             </Grid>
