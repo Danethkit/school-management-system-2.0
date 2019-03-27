@@ -19,7 +19,7 @@ import AttendanceButton from "../Button/AttendanceButton";
 const styles = theme => ({
   root: {
     witdth: "100%",
-    marginTop: theme.spacing.unit 
+    marginTop: theme.spacing.unit
   },
   table: {
     minWroll_numberth: 1020
@@ -27,8 +27,9 @@ const styles = theme => ({
   tableWrapper: {
     overflowX: "auto"
   },
-  size: {
-    textSize: 20
+
+  textRow: {
+    fontSize: 13
   }
 });
 function desc(a, b, orderBy) {
@@ -155,28 +156,20 @@ class SessionTable extends Component {
                       <TableCell padding="checkbox">
                         <Checkbox checked={isSelected} />
                       </TableCell>
-                      <TableCell scope="row">
-                      <Typography variant="subheading">
-                      {n.roll_number}
-                    </Typography>
+                      <TableCell className={classes.textRow} scope="row">
+                        {n.roll_number}
                       </TableCell>
-                      <TableCell align="left">
-                      <Typography variant="subheading">
-                      {n.name}
-                    </Typography>
+                      <TableCell className={classes.textRow}>
+                        {n.name}
                       </TableCell>
-                      <TableCell align="center">
-
-                      <Typography variant="subheading">
-                      {isSelected ? (
+                      <TableCell className={classes.textRow}>
+                        {isSelected ? (
                           <div>Yes</div>
                         ) : (
                           <div style={{ color: "#E74C3C" }}>No</div>
                         )}
-                    </Typography>
-                        
                       </TableCell>
-                      <TableCell align="left">
+                      <TableCell className={classes.textRow}>
                         <InputBase multiline />
                       </TableCell>
                     </TableRow>

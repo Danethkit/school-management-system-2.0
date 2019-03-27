@@ -5,38 +5,34 @@ import {
   TableRow,
   TableCell,
   Tooltip,
-  TableSortLabel
+  TableSortLabel,
+  withStyles
 } from "@material-ui/core";
-
+const styles = theme => ({
+  text: {
+    fontWeight: "bold",
+    fontSize: 13
+  }
+});
 const rows = [
-  {
-    id: "student",
-    numeric: false,
-    disablePadding: false,
-    label: "Student"
-  },
-  { id: "subject", numeric: true, disablePadding: false, label: "Subject" },
-  { id: "session", numeric: true, disablePadding: false, label: "Session" },
-  { id: "present", numeric: true, disablePadding: false, label: "Present" },
-  { id: "date", numeric: true, disablePadding: false, label: "Date" },
-  { id: "absent", numeric: true, disablePadding: false, label: "Absent" },
-  { id: "classes", numeric: true, disablePadding: false, label: "Classes" },
-  {
-    id: "percentile",
-    numeric: true,
-    disablePadding: false,
-    label: "Percentile"
-  },
-  { id: "remark", numeric: true, disablePadding: false, label: "Remark" }
+  { id: "student", label: "Student" },
+  { id: "subject", label: "Subject" },
+  { id: "session", label: "Session" },
+  { id: "present", label: "Present" },
+  { id: "date", label: "Date" },
+  { id: "absent", label: "Absent" },
+  { id: "classes", label: "Classes" },
+  { id: "percentile", label: "Percentile" },
+  { id: "remark", label: "Remark" }
 ];
 
-export default class AttendanceLineTableHead extends Component {
+class AttendanceLineTableHead extends Component {
   createSortHandler = property => event => {
     this.props.onRequestSort(event, property);
   };
 
   render() {
-    const { order, orderBy } = this.props;
+    const { order, orderBy, classes } = this.props;
 
     return (
       <TableHead>
@@ -44,18 +40,12 @@ export default class AttendanceLineTableHead extends Component {
           {rows.map(
             row => (
               <TableCell
-                variant="body"
                 key={row.id}
-                align={row.numeric ? "center" : "left"}
-                padding={(row.disablePadding = "flex")}
                 sortDirection={orderBy === row.id ? order : false}
               >
-                <Tooltip
-                  title="Sort"
-                  placement={row.numeric ? "bottom-end" : "bottom-start"}
-                  enterDelay={300}
-                >
+                <Tooltip title="Sort" enterDelay={300}>
                   <TableSortLabel
+                    className={classes.text}
                     active={orderBy === row.id}
                     direction={order}
                     onClick={this.createSortHandler(row.id)}
@@ -77,3 +67,4 @@ AttendanceLineTableHead.propTypes = {
   order: PropTypes.string.isRequired,
   orderBy: PropTypes.string.isRequired
 };
+export default withStyles(styles)(AttendanceLineTableHead);

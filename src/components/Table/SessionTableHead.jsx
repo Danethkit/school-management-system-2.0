@@ -6,9 +6,16 @@ import {
   TableCell,
   Tooltip,
   TableSortLabel,
-  Checkbox
+  Checkbox,
+  withStyles
 } from "@material-ui/core";
 
+const styles = theme => ({
+  text: {
+    fontWeight: "bold",
+    fontSize: 13
+  }
+});
 const rows = [
   {
     id: "roll_number",
@@ -17,11 +24,11 @@ const rows = [
     label: "Roll Number"
   },
   { id: "name", numeric: true, disablePadding: false, label: "Student Name" },
-  { id: "present", numeric: true, disablePadding: false, label: "Present ?" },
+  { id: "present", numeric: true, disablePadding: true, label: "Present ?" },
   { id: "remark", numeric: true, disablePadding: false, label: "Remark" }
 ];
 
-export default class SessionTableHead extends Component {
+class SessionTableHead extends Component {
   createSortHandler = property => event => {
     this.props.onRequestSort(event, property);
   };
@@ -32,7 +39,8 @@ export default class SessionTableHead extends Component {
       order,
       orderBy,
       numSelected,
-      rowCount
+      rowCount,
+      classes
     } = this.props;
 
     return (
@@ -49,7 +57,7 @@ export default class SessionTableHead extends Component {
             <TableCell
               variant="head"
               key={row.id}
-              align={row.numeric ? "center" : "right"}
+              align={row.numeric ? "left" : "center"}
               padding={row.disablePadding ? "none" : "default"}
               sortDirection={orderBy === row.id ? order : false}
             >
@@ -59,6 +67,7 @@ export default class SessionTableHead extends Component {
                 enterDelay={200}
               >
                 <TableSortLabel
+                  className={classes.text}
                   active={orderBy === row.id}
                   direction={order}
                   onClick={this.createSortHandler(row.id)}
@@ -81,3 +90,5 @@ SessionTableHead.propTypes = {
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired
 };
+
+export default withStyles(styles)(SessionTableHead);
