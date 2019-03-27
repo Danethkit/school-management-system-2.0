@@ -1,17 +1,20 @@
 import "date-fns";
 import React from "react";
 import PropTypes from "prop-types";
-import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider, DatePicker } from "material-ui-pickers";
+import { InputAdornment } from "@material-ui/core";
+import classNames from "classnames";
 
-const styles = {
-  grid: {
-    width: "20%",
-    paddingTop: 10
+const styles = theme => ({
+  margin: {
+    margin: theme.spacing.unit
+  },
+  textFile: {
+    fontSize: 14
   }
-};
+});
 
 class datePicker extends React.Component {
   state = {
@@ -27,20 +30,24 @@ class datePicker extends React.Component {
 
     return (
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <Grid container>
-          <Grid item sm>
-            Date :
-          </Grid>
-          <Grid item sm={9}>
-            
-              <DatePicker
-                value={this.state.selectedDate}
-                onChange={this.handleDateChange}
-                className={classes.filledInput}
-              />
-            
-          </Grid>
-        </Grid>
+        <DatePicker
+          autoFocus
+          fullWidth
+          value={this.state.selectedDate}
+          onChange={this.handleDateChange}
+          className={classNames(classes.margin, classes.textField)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment
+                disableTypography={true}
+                className={classes.textFile}
+                position="start"
+              >
+                <b>Date:</b>
+              </InputAdornment>
+            )
+          }}
+        />
       </MuiPickersUtilsProvider>
     );
   }

@@ -1,51 +1,72 @@
 import React, { Component } from "react";
-import { Grid, MenuItem, FormControl, Select } from "@material-ui/core/";
+import {
+  MenuItem,
+  TextField,
+  InputAdornment,
+  withStyles
+} from "@material-ui/core/";
+import classNames from "classnames";
 
-export default class CoursePicker extends Component {
+const styles = theme => ({
+  margin: {
+    margin: theme.spacing.unit
+  },
+  textFile: {
+    fontSize: 14
+  }
+});
+
+let id = 0;
+
+function inputCourse(id, course) {
+  id += 1;
+  return { id, course };
+}
+const courseData = [
+  inputCourse(id, "Software Engineering"),
+  inputCourse(id, "Hospitality Management")
+];
+
+class CoursePicker extends Component {
+  handleChange = prop => event => {
+    this.setState({ [prop]: event.target.value });
+  };
   state = {
-    course: "1",
-    open: false
-  };
-
-  handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  handleClose = () => {
-    this.setState({ open: false });
-  };
-
-  handleOpen = () => {
-    this.setState({ open: true });
+    Course: ""
   };
 
   render() {
+    const { classes } = this.props;
     return (
-      <Grid container>
-        <Grid item sm>
-          Course :
-        </Grid>
-        <Grid item sm={9}>
-          <form autoComplete="off">
-            <FormControl>
-              <Select
-                open={this.state.open}
-                onClose={this.handleClose}
-                onOpen={this.handleOpen}
-                value={this.state.course}
-                onChange={this.handleChange}
-                inputProps={{
-                  name: "course",
-                  id: "demo-controlled-open-select"
-                }}
+      <div>
+        <TextField
+          select
+          fullWidth
+          autoFocus
+          className={classNames(classes.margin)}
+          value={this.state.Course}
+          onChange={this.handleChange("Course")}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment
+                disableTypography={true}
+                className={classes.textFile}
+                position="start"
               >
-                <MenuItem value={1}>Software Engineering</MenuItem>
-                <MenuItem value={2}>Hospitality Management</MenuItem>
-              </Select>
-            </FormControl>
-          </form>
-        </Grid>
-      </Grid>
+                <b>Course:</b>{" "}
+              </InputAdornment>
+            )
+          }}
+        >
+          {courseData.map(option => (
+            <MenuItem key={option.id} value={option.course}>
+              {option.course}
+            </MenuItem>
+          ))}
+        </TextField>
+      </div>
     );
   }
 }
+
+export default withStyles(styles)(CoursePicker);

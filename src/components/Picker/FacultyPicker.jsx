@@ -1,53 +1,72 @@
 import React, { Component } from "react";
-import { Grid, MenuItem, FormControl, Select } from "@material-ui/core/";
+import {
+  MenuItem,
+  TextField,
+  InputAdornment,
+  withStyles
+} from "@material-ui/core/";
 
-export default class FacultyPicker extends Component {
+const styles = theme => ({
+  margin: {
+    margin: theme.spacing.unit
+  },
+  textFile: {
+    fontSize: 14
+  }
+});
+
+let id = 0;
+
+function inputFaculty(id, faculty) {
+  id += 1;
+  return { id, faculty };
+}
+const facultyData = [
+  inputFaculty(id, "Shiraz"),
+  inputFaculty(id, "Dinesh"),
+  inputFaculty(id, "Vignesh")
+];
+
+class FacultyPicker extends Component {
+  handleChange = prop => event => {
+    this.setState({ [prop]: event.target.value });
+  };
   state = {
-    faculty: "4",
-    open: false
-  };
-
-  handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  handleClose = () => {
-    this.setState({ open: false });
-  };
-
-  handleOpen = () => {
-    this.setState({ open: true });
+    Faculty: ""
   };
 
   render() {
+    const { classes } = this.props;
     return (
-      <Grid container>
-        <Grid item sm>
-        Faculty :
-        </Grid>
-        <Grid item sm={9}>
-          <form autoComplete="on">
-            <FormControl>
-              <Select
-                open={this.state.open}
-                onClose={this.handleClose}
-                onOpen={this.handleOpen}
-                value={this.state.faculty}
-                onChange={this.handleChange}
-                inputProps={{
-                  name: "faculty",
-                  id: "demo-controlled-open-select"
-                }}
+      <div>
+        <TextField
+          fullWidth
+          select
+          autoFocus
+          className={classes.margin}
+          value={this.state.Faculty}
+          onChange={this.handleChange("Faculty")}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment
+                disableTypography={true}
+                className={classes.textFile}
+                position="start"
               >
-                <MenuItem value={1}>Leo</MenuItem>
-                <MenuItem value={2}>Dinesh</MenuItem>
-                <MenuItem value={3}>Vignesh</MenuItem>
-                <MenuItem value={4}>Shiraz</MenuItem>
-              </Select>
-            </FormControl>
-          </form>
-        </Grid>
-      </Grid>
+                <b>Faculty:</b>{" "}
+              </InputAdornment>
+            )
+          }}
+        >
+          {facultyData.map(option => (
+            <MenuItem key={option.id} value={option.faculty}>
+              {option.faculty}
+            </MenuItem>
+          ))}
+        </TextField>
+      </div>
     );
   }
 }
+
+export default withStyles(styles)(FacultyPicker);

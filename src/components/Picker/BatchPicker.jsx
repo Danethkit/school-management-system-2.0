@@ -1,57 +1,75 @@
 import React, { Component } from "react";
-import { MenuItem, FormControl, Select, Grid } from "@material-ui/core/";
+import {
+  MenuItem,
+  TextField,
+  InputAdornment,
+  withStyles
+} from "@material-ui/core/";
+import classNames from "classnames";
 
-export default class BatchPicker extends Component {
+const styles = theme => ({
+  margin: {
+    margin: theme.spacing.unit
+  },
+  textFile: {
+    fontSize: 14
+  }
+});
+
+let id = 0;
+
+function inputBatch(id, batch) {
+  id += 1;
+  return { id, batch };
+}
+const batchData = [
+  inputBatch(id, "Batch 2"),
+  inputBatch(id, "Batch 3"),
+  inputBatch(id, "Batch 4"),
+  inputBatch(id, "Batch 5"),
+  inputBatch(id, "Batch 6")
+];
+
+class BatchPicker extends Component {
+  handleChange = prop => event => {
+    this.setState({ [prop]: event.target.value });
+  };
   state = {
-    batch: "4",
-    open: false
-  };
-
-  handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  handleClose = () => {
-    this.setState({ open: false });
-  };
-
-  handleOpen = () => {
-    this.setState({ open: true });
+    Batch: ""
   };
 
   render() {
+    const { classes } = this.props;
     return (
       <>
-        <Grid container>
-          <Grid item sm>
-            Batch :
-          </Grid>
-          <Grid item sm={9}>
-            <form autoComplete="off">
-              <FormControl>
-                <Select
-                  open={this.state.open}
-                  onClose={this.handleClose}
-                  onOpen={this.handleOpen}
-                  value={this.state.batch}
-                  onChange={this.handleChange}
-                  inputProps={{
-                    name: "batch",
-                    id: "demo-controlled-open-select"
-                  }}
-                >
-                  <MenuItem value={1}>Batch 1</MenuItem>
-                  <MenuItem value={2}>Batch 2</MenuItem>
-                  <MenuItem value={3}>Batch 3</MenuItem>
-                  <MenuItem value={4}>Batch 4</MenuItem>
-                  <MenuItem value={5}>Batch 5</MenuItem>
-                  <MenuItem value={6}>Batch 6</MenuItem>
-                </Select>
-              </FormControl>
-            </form>
-          </Grid>
-        </Grid>
+        <TextField
+          select
+          fullWidth
+          autoFocus
+          className={classNames(classes.margin, classes.textField)}
+          value={this.state.Batch}
+          onChange={this.handleChange("Batch")}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment
+                disableTypography={true}
+                className={classes.textFile}
+                position="start"
+              >
+                <b>Batch:</b>{" "}
+              </InputAdornment>
+            )
+          }}
+        >
+          {batchData.map(option => (
+            <MenuItem key={option.id} value={option.batch}>
+              {option.batch}
+            </MenuItem>
+          ))}
+        </TextField>
       </>
     );
   }
 }
+
+export default withStyles(styles)(BatchPicker);

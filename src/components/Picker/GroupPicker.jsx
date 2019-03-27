@@ -1,52 +1,73 @@
 import React, { Component } from "react";
-import { Grid, MenuItem, FormControl, Select } from "@material-ui/core/";
+import {
+  MenuItem,
+  TextField,
+  InputAdornment,
+  withStyles
+} from "@material-ui/core/";
+import classNames from "classnames";
 
-export default class GroupPicker extends Component {
+const styles = theme => ({
+  margin: {
+    margin: theme.spacing.unit
+  },
+  textFile: {
+    fontSize: 14
+  }
+});
+
+let id = 0;
+
+function inputGroup(id, group) {
+  id += 1;
+  return { id, group };
+}
+const groupData = [
+  inputGroup(id, "Group 1"),
+  inputGroup(id, "Group 2"),
+  inputGroup(id, "Group 2")
+];
+
+class GroupPicker extends Component {
+  handleChange = prop => event => {
+    this.setState({ [prop]: event.target.value });
+  };
   state = {
-    group: "1",
-    open: false
-  };
-
-  handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  handleClose = () => {
-    this.setState({ open: false });
-  };
-
-  handleOpen = () => {
-    this.setState({ open: true });
+    Group: ""
   };
 
   render() {
+    const { classes } = this.props;
     return (
-      <Grid container>
-        <Grid item sm>
-        Group :
-        </Grid>
-        <Grid item sm={9}>
-          <form autoComplete="off">
-            <FormControl>
-              <Select
-                open={this.state.open}
-                onClose={this.handleClose}
-                onOpen={this.handleOpen}
-                value={this.state.group}
-                onChange={this.handleChange}
-                inputProps={{
-                  name: "group",
-                  id: "demo-controlled-open-select"
-                }}
+      <div>
+        <TextField
+          fullWidth
+          select
+          autoFocus
+          className={classNames(classes.margin)}
+          value={this.state.Group}
+          onChange={this.handleChange("Group")}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment
+                disableTypography={true}
+                className={classes.textFile}
+                position="start"
               >
-                <MenuItem value={1}>Group 1</MenuItem>
-                <MenuItem value={2}>Group 2</MenuItem>
-                <MenuItem value={3}>Group 3</MenuItem>
-              </Select>
-            </FormControl>
-          </form>
-        </Grid>
-      </Grid>
+                <b>Group:</b>{" "}
+              </InputAdornment>
+            )
+          }}
+        >
+          {groupData.map(option => (
+            <MenuItem key={option.id} value={option.group}>
+              {option.group}
+            </MenuItem>
+          ))}
+        </TextField>
+      </div>
     );
   }
 }
+
+export default withStyles(styles)(GroupPicker);
