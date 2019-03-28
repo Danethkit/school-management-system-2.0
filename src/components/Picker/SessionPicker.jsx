@@ -1,58 +1,79 @@
 import React, { Component } from "react";
-import { Grid, MenuItem, FormControl, Select } from "@material-ui/core/";
+import {
+  MenuItem,
+  TextField,
+  InputAdornment,
+  withStyles
+} from "@material-ui/core/";
+import classNames from "classnames";
 
-export default class SessionPicker extends Component {
+const styles = theme => ({
+  margin: {
+    margin: theme.spacing.unit
+  },
+  textFile: {
+    fontSize: 14
+  }
+});
+
+let id = 0;
+
+function inputSession(id, session) {
+  id += 1;
+  return { id, session };
+}
+const sessionData = [
+  inputSession(id, "08:00am-08:50am"),
+  inputSession(id, "08:50am-09:40am"),
+  inputSession(id, "09:40am-10:30am"),
+  inputSession(id, "10:45am-11:35am"),
+  inputSession(id, "11:35am-12:25am"),
+  inputSession(id, "01:25pm-02:15pm"),
+  inputSession(id, "02:15pm-03:05pm"),
+  inputSession(id, "03:20pm-04:10pm"),
+  inputSession(id, "04:10pm-05:00pm")
+];
+
+class SessionPicker extends Component {
+  handleChange = prop => event => {
+    this.setState({ [prop]: event.target.value });
+  };
   state = {
-    session: "1",
-    open: false
-  };
-
-  handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  handleClose = () => {
-    this.setState({ open: false });
-  };
-
-  handleOpen = () => {
-    this.setState({ open: true });
+    Session: ""
   };
 
   render() {
+    const { classes } = this.props;
     return (
-      <Grid container>
-        <Grid item sm>
-        Session :
-        </Grid>
-        <Grid item sm={9}>
-          <form autoComplete="off">
-            <FormControl>
-              <Select
-                open={this.state.open}
-                onClose={this.handleClose}
-                onOpen={this.handleOpen}
-                value={this.state.session}
-                onChange={this.handleChange}
-                inputProps={{
-                  name: "session",
-                  id: "demo-controlled-open-select"
-                }}
+      <div>
+        <TextField
+          fullWidth
+          select
+          autoFocus
+          className={classNames(classes.margin)}
+          value={this.state.Session}
+          onChange={this.handleChange("Session")}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment
+                disableTypography={true}
+                className={classes.textFile}
+                position="start"
               >
-                <MenuItem value={1}>08:00am-08:50am</MenuItem>
-                <MenuItem value={2}>08:50am-09:00am</MenuItem>
-                <MenuItem value={3}>09:40am-10:30am</MenuItem>
-                <MenuItem value={4}>10:45am-11:35am</MenuItem>
-                <MenuItem value={5}>11:35am-12:25pm</MenuItem>
-                <MenuItem value={6}>01:25pm-02:15pm</MenuItem>
-                <MenuItem value={7}>02:15pm-03:20pm</MenuItem>
-                <MenuItem value={8}>03:20pm-04:10pm</MenuItem>
-                <MenuItem value={9}>04:10pm-05:00pm</MenuItem>
-              </Select>
-            </FormControl>
-          </form>
-        </Grid>
-      </Grid>
+                <b>Session:</b>{" "}
+              </InputAdornment>
+            )
+          }}
+        >
+          {sessionData.map(option => (
+            <MenuItem key={option.id} value={option.session}>
+              {option.session}
+            </MenuItem>
+          ))}
+        </TextField>
+      </div>
     );
   }
 }
+
+export default withStyles(styles)(SessionPicker);

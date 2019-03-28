@@ -13,14 +13,16 @@ import Data from "../../data/attendanceLineData.json";
 
 const styles = theme => ({
   root: {
-    width: "100%",
-    marginTop: theme.spacing.unit * 2
+    width: "100%"
   },
   table: {
     minWidth: 1020
   },
   tableWrapper: {
     overflowX: "auto"
+  },
+  textRow: {
+    fontSize: 13
   }
 });
 function desc(a, b, orderBy) {
@@ -95,19 +97,35 @@ class AttendanceLineTable extends Component {
                 .map(row => {
                   return (
                     <TableRow hover key={row.id}>
-                      <TableCell component="th" scope="row">
+                      <TableCell
+                        component="th"
+                        className={classes.textRow}
+                        scope="row"
+                      >
                         {row.student}
                       </TableCell>
-                      <TableCell align="right">{row.subject}</TableCell>
-                      <TableCell align="right">{row.session}</TableCell>
-                      <TableCell align="right">
+                      <TableCell className={classes.textRow} padding="none">
+                        {row.subject}
+                      </TableCell>
+                      <TableCell className={classes.textRow} padding="none">
+                        {row.session}
+                      </TableCell>
+                      <TableCell className={classes.textRow}>
                         {row.present ? <div>Yes</div> : <div>No</div>}
                       </TableCell>
-                      <TableCell align="right">{row.date}</TableCell>
-                      <TableCell align="right">{row.absent}</TableCell>
-                      <TableCell align="right">{row.classes}</TableCell>
-                      <TableCell align="right">{row.percentile}</TableCell>
-                      <TableCell align="right">{row.remark}</TableCell>
+                      <TableCell className={classes.textRow} padding="none">
+                        {row.date}
+                      </TableCell>
+                      <TableCell className={classes.textRow}>
+                        {row.absent}
+                      </TableCell>
+                      <TableCell className={classes.textRow}>
+                        {row.classes}
+                      </TableCell>
+                      <TableCell className={classes.textRow}>
+                        {row.percentile}
+                      </TableCell>
+                      <TableCell>{row.remark}</TableCell>
                     </TableRow>
                   );
                 })}

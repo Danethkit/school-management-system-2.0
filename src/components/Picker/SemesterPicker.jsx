@@ -1,57 +1,78 @@
 import React, { Component } from "react";
-import { Grid, MenuItem, FormControl, Select } from "@material-ui/core/";
+import {
+  MenuItem,
+  TextField,
+  InputAdornment,
+  withStyles
+} from "@material-ui/core/";
+import classNames from "classnames";
 
-export default class SemesterPicker extends Component {
+const styles = theme => ({
+  margin: {
+    margin: theme.spacing.unit
+  },
+  textFile: {
+    fontSize: 14
+  }
+});
+
+let id = 0;
+
+function inputSemester(id, semester) {
+  id += 1;
+  return { id, semester };
+}
+const semesterData = [
+  inputSemester(id, "Semester 1"),
+  inputSemester(id, "Semester 2"),
+  inputSemester(id, "Semester 3"),
+  inputSemester(id, "Semester 4"),
+  inputSemester(id, "Semester 5"),
+  inputSemester(id, "Semester 6"),
+  inputSemester(id, "Semester 7"),
+  inputSemester(id, "Semester 8")
+];
+
+class SemesterPicker extends Component {
+  handleChange = prop => event => {
+    this.setState({ [prop]: event.target.value });
+  };
   state = {
-    semester: "3",
-    open: false
-  };
-
-  handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  handleClose = () => {
-    this.setState({ open: false });
-  };
-
-  handleOpen = () => {
-    this.setState({ open: true });
+    Semester: ""
   };
 
   render() {
+    const { classes } = this.props;
     return (
-      <Grid container>
-        <Grid item sm>
-        Semester :
-        </Grid>
-        <Grid item sm={9}>
-          <form autoComplete="off">
-            <FormControl>
-              <Select
-                open={this.state.open}
-                onClose={this.handleClose}
-                onOpen={this.handleOpen}
-                value={this.state.semester}
-                onChange={this.handleChange}
-                inputProps={{
-                  name: "semester",
-                  id: "demo-controlled-open-select"
-                }}
+      <div>
+        <TextField
+          select
+          fullWidth
+          autoFocus
+          className={classNames(classes.margin)}
+          value={this.state.Semester}
+          onChange={this.handleChange("Semester")}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment
+                disableTypography={true}
+                className={classes.textFile}
+                position="start"
               >
-                <MenuItem value={1}>Semester 1</MenuItem>
-                <MenuItem value={2}>Semester 2</MenuItem>
-                <MenuItem value={3}>Semester 3</MenuItem>
-                <MenuItem value={4}>Semester 4</MenuItem>
-                <MenuItem value={5}>Semester 5</MenuItem>
-                <MenuItem value={6}>Semester 6</MenuItem>
-                <MenuItem value={7}>Semester 7</MenuItem>
-                <MenuItem value={8}>Semester 8</MenuItem>
-              </Select>
-            </FormControl>
-          </form>
-        </Grid>
-      </Grid>
+                <b>Semester:</b>{" "}
+              </InputAdornment>
+            )
+          }}
+        >
+          {semesterData.map(option => (
+            <MenuItem key={option.id} value={option.semester}>
+              {option.semester}
+            </MenuItem>
+          ))}
+        </TextField>
+      </div>
     );
   }
 }
+
+export default withStyles(styles)(SemesterPicker);

@@ -26,7 +26,7 @@ import { error } from "util"
 const styles = theme => ({
   root: {
     witdth: "100%",
-    marginTop: theme.spacing.unit 
+    marginTop: theme.spacing.unit
   },
   table: {
     minWroll_numberth: 1020
@@ -34,8 +34,9 @@ const styles = theme => ({
   tableWrapper: {
     overflowX: "auto"
   },
-  size: {
-    textSize: 20
+
+  textRow: {
+    fontSize: 13
   }
 });
 
@@ -220,7 +221,7 @@ class SessionTable extends Component {
                           <div style={{ color: "#E74C3C" }}>No</div>
                         )}
                       </TableCell>
-                      <TableCell align="left">
+                      <TableCell className={classes.textRow}>
                         <InputBase multiline />
                       </TableCell>
                     </TableRow>
