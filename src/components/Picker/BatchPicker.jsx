@@ -6,6 +6,8 @@ import {
   withStyles
 } from "@material-ui/core/";
 import classNames from "classnames";
+import { connect } from 'react-redux'
+import { onBatchChange } from '../../action'
 
 const styles = theme => ({
   margin: {
@@ -16,30 +18,11 @@ const styles = theme => ({
   }
 });
 
-let id = 0;
-
-function inputBatch(id, batch) {
-  id += 1;
-  return { id, batch };
-}
-const batchData = [
-  inputBatch(id, "Batch 2"),
-  inputBatch(id, "Batch 3"),
-  inputBatch(id, "Batch 4"),
-  inputBatch(id, "Batch 5"),
-  inputBatch(id, "Batch 6")
-];
-
 class BatchPicker extends Component {
-  handleChange = prop => event => {
-    this.setState({ [prop]: event.target.value });
-  };
-  state = {
-    Batch: ""
-  };
 
   render() {
-    const { classes } = this.props;
+    const { classes, dispatch, changeBatch, requestStudentData } = this.props;
+    const allBatch = Object.keys(requestStudentData.studentData).sort((a, b)=> a.split(" ")[1] - b.split(" ")[1])
     return (
       <>
         <TextField
@@ -47,8 +30,8 @@ class BatchPicker extends Component {
           fullWidth
           autoFocus
           className={classNames(classes.margin, classes.textField)}
-          value={this.state.Batch}
-          onChange={this.handleChange("Batch")}
+          value={changeBatch.batch}
+          onChange={(event)=> {dispatch(onBatchChange(event.target.value))}}
           InputProps={{
             startAdornment: (
               <InputAdornment
@@ -61,9 +44,9 @@ class BatchPicker extends Component {
             )
           }}
         >
-          {batchData.map(option => (
-            <MenuItem key={option.id} value={option.batch}>
-              {option.batch}
+          {allBatch.map(e => (
+            <MenuItem key={e} value={e}>
+              {e}
             </MenuItem>
           ))}
         </TextField>
@@ -71,4 +54,4 @@ class BatchPicker extends Component {
     );
   }
 }
-export default connect(state => state)(BatchPicker)
+export default connect(state => state)(withStyles(styles)(BatchPicker))

@@ -20,9 +20,6 @@ import { connect } from 'react-redux'
 import { error } from "util"
 
 
-
-// axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
-
 const styles = theme => ({
   root: {
     witdth: "100%",
@@ -86,33 +83,6 @@ class SessionTable extends Component {
       selected: []
     };
 
-  }
-
-  
-  
-  componentDidMount() {
-      
-    
-    // axios.get('http://localhost:8069/sms').then(response => {console.log('ssss', response)})
-    fetch('http://localhost:8069/sms', {
-      method: "GET", 
-      cache: "no-cache", 
-      // mode: "no-cors",
-      // headers: {
-      //     "Content-Type": "application/json",
-      //     'Access-Control-Allow-Origin':'*',
-      //     'Access-Control-Allow-Methods':'POST, GET, OPTIONS',
-      //     'Access-Control-Max-Age':1000,
-      //     'Access-Control-Allow-Headers':'origin, x-csrftoken, content-type, accept'
-      // }
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('data==========', data)
-      this.setState({data}) 
-    })
-    .catch(error=> console.log('error', error))
-  
   }
 
   componentDidMount() {

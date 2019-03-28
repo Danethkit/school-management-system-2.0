@@ -20,9 +20,7 @@ export const requestStudent= () => (dispatch) => {
         if(err) return dispatch({type: REQUEST_STUDENTS_FAILED, data:err})
         let params = [[[], ['name', 'last_name', 'roll_number', 'batch_id']]]
         odoo.execute_kw('op.student', 'search_read', params, (err, data)=>{
-            if(err) return dispatch({type: REQUEST_STUDENTS_FAILED, data:err})
-            console.log('data:', data)
-            
+            if(err) return dispatch({type: REQUEST_STUDENTS_FAILED, data:err})            
             let res = {}
             data.forEach(element => {
                 let batch = element.batch_id[1]
