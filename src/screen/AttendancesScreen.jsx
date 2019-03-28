@@ -6,8 +6,7 @@ import SessionTable from "../components/Table/SessionTable";
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    width: "100%",
-    backgroundColor: theme.palette.background.paper
+    width: "100%"
   }
 });
 class AttendancesSheet extends Component {
@@ -32,7 +31,7 @@ class AttendancesSheet extends Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-       <h1>Attendance Sheet</h1>
+        <h1>Attendance Sheet</h1>
         <AppBar position="static" color="default">
           <Tabs
             value={this.state.sessionNumber}

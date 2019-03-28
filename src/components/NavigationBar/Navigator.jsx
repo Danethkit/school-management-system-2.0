@@ -16,11 +16,14 @@ import MenuContent from "./MenuContent";
 const styles = theme => ({
   root: {
     flexGrow: 0,
-    backgroundColor: "#000"
+    backgroundColor: "#000",
+    padding: -10,
+    paddingLeft: -10
   },
 
   iconButtonBlock: {
-    marginRight: -10
+    marginRight: -10,
+    fontSize: 10
   },
 
   menuButton: {
@@ -32,7 +35,8 @@ const styles = theme => ({
   },
   tab: {
     minWidth: 1,
-    textColor: "#fff"
+    textColor: "#fff",
+    fontWeight: "bold"
   }
 });
 
@@ -74,14 +78,20 @@ class NavigationBar extends React.Component {
     var items = [];
     if (this.props.history.location.pathname.includes("/attendances")) {
       items = [
-        "attendances/attendances_sheet",
-        "attendances/attendances_line",
-        "attendances/generate_attendances",
-        "attendances/attendances_result"
+        {path: "attendances/attendance_sheet", label: "Attendance Sheet"},
+        {path: "attendances/attendance_lines", label: "Attendance Lines"},
+        {path: "attendances/generate_attendance", label: "Generate Attendance"},
+        {path: "attendances/attendance_result", label: "Attendance Result"},
+        {path: "attendances/generate_report", label: "Generate Report"}
       ];
-    } else {
-      items = ["timetables"];
+    } else if(this.props.history.location.pathname.includes("/timetable")){
+      items = [
+        {path: "timetables", label: "Current Timetable"},
+        {path: "timetables", label: "Timetable Record"},
+        {path: "timetables", label: "Generate Timetable"}
+      ];
     }
+    
     const { classes } = this.props;
 
     return (
@@ -93,19 +103,20 @@ class NavigationBar extends React.Component {
               color="inherit"
               isOpen={this.state.menuOpen}
               closeCallback={this.closeMenu.bind(this)}
+              width={200}
             >
               <MenuContent items={items} />
             </CheeseburgerMenu>
             <HamburgerMenu
               isOpen={this.state.menuOpen}
               menuClicked={this.openMenu.bind(this)}
-              width={32}
+              width={28}
               height={12}
               strokeWidth={1}
               rotate={0}
               color="white"
               borderRadius={0}
-              animationDuration={0.7}
+              animationDuration={0.4}
             />
             <Tabs
               variant="scrollable"
@@ -130,7 +141,7 @@ class NavigationBar extends React.Component {
               </Badge>
             </IconButton>
 
-            <IconButton color="inherit">
+            <IconButton color="inherit" className={classes.iconButtonBlock}>
               <Badge badgeContent={17} color="secondary">
                 <Chat />
               </Badge>
