@@ -205,18 +205,12 @@ const bodyData = [
     ""
   )
 ];
-console.log(bodyData);
 
-function createTable(course, batch, group, semester, week) {
-  id += 1;
-  return {
-    id,
-    course,
-    batch,
-    group,
-    semester,
-    week
-  };
+function createTable(course, batch, group,semester, week) {
+    id += 1;
+    return {
+        id, course, batch, group, semester, week
+    }
 }
 const numberTable = [
   createTable("Software EE", 2, 1, 7),

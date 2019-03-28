@@ -71,5 +71,4 @@ class BatchPicker extends Component {
     );
   }
 }
-
-export default withStyles(styles)(BatchPicker);
+export default connect(state => state)(BatchPicker)

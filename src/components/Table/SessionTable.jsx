@@ -1,5 +1,6 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from "react"
+import PropTypes from "prop-types"
+import {requestStudent} from '../../action'
 import {
   Paper,
   TableBody,
@@ -10,11 +11,17 @@ import {
   withStyles,
   Typography,
   InputBase
-} from "@material-ui/core";
-import SessionTableHead from "./SessionTableHead";
-import SessionTableToolBar from "./SessionTableToolBar";
-import Data from "../../data/dataB4.json";
-import AttendanceButton from "../Button/AttendanceButton";
+} from "@material-ui/core"
+import SessionTableHead from "./SessionTableHead"
+import SessionTableToolBar from "./SessionTableToolBar"
+import Data from "../../data/dataB4.json"
+import AttendanceButton from "../Button/AttendanceButton"
+import { connect } from 'react-redux'
+import { error } from "util"
+
+
+
+// axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
 
 const styles = theme => ({
   root: {
@@ -32,6 +39,7 @@ const styles = theme => ({
     fontSize: 13
   }
 });
+
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -58,19 +66,60 @@ function getSorting(order, orderBy) {
     : (a, b) => -desc(a, b, orderBy);
 }
 
+const mapStateToProps = (state) => {
+  return {
+    studentData : state.requestStudentData.studentData ,
+    isPending: state.requestStudentData.isPending,
+    error: state.requestStudentData.error,
+    batch: state.changeBatch.batch
+  }
+}
+
+
 class SessionTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: Data,
+      data: [],
       order: "asc",
       orderBy: "name",
       selected: []
     };
+
+  }
+
+  
+  
+  componentDidMount() {
+      
+    
+    // axios.get('http://localhost:8069/sms').then(response => {console.log('ssss', response)})
+    fetch('http://localhost:8069/sms', {
+      method: "GET", 
+      cache: "no-cache", 
+      // mode: "no-cors",
+      // headers: {
+      //     "Content-Type": "application/json",
+      //     'Access-Control-Allow-Origin':'*',
+      //     'Access-Control-Allow-Methods':'POST, GET, OPTIONS',
+      //     'Access-Control-Max-Age':1000,
+      //     'Access-Control-Allow-Headers':'origin, x-csrftoken, content-type, accept'
+      // }
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('data==========', data)
+      this.setState({data}) 
+    })
+    .catch(error=> console.log('error', error))
+  
+  }
+
+  componentDidMount() {
+    this.props.dispatch(requestStudent())
   }
 
   store_data(data, check_index) {
-    console.log(data);
     check_index.forEach(element => {
       data[data.findIndex(x => x.roll_number === element)].present = true;
       data[
@@ -89,7 +138,8 @@ class SessionTable extends Component {
       order = "asc";
     }
     this.setState({ order, orderBy });
-  };
+  }
+
   handleSelectAllClick = event => {
     if (event.target.checked) {
       this.setState(state => ({
@@ -98,7 +148,7 @@ class SessionTable extends Component {
       return;
     }
     this.setState({ selected: [] });
-  };
+  }
 
   handleClick = (event, roll_number) => {
     const { selected } = this.state;
@@ -118,13 +168,15 @@ class SessionTable extends Component {
       );
     }
     this.setState({ selected: newSelected });
-  };
+  }
+  
   isSelected = roll_number => this.state.selected.indexOf(roll_number) !== -1;
 
   render() {
-    const { classes } = this.props;
-    const { data, order, orderBy, selected } = this.state;
-
+    const { classes, studentData, batch } = this.props
+    const { order, orderBy, selected } = this.state
+    let data = batch in studentData ? studentData[batch] : []
+    
     return (
       <>
         <Paper className={classes.root}>
@@ -156,13 +208,13 @@ class SessionTable extends Component {
                       <TableCell padding="checkbox">
                         <Checkbox checked={isSelected} />
                       </TableCell>
-                      <TableCell className={classes.textRow} scope="row">
+                      <TableCell scope="row">
                         {n.roll_number}
                       </TableCell>
-                      <TableCell className={classes.textRow}>
-                        {n.name}
+                      <TableCell  align="left">
+                        {n.last_name + ' ' +n.name}
                       </TableCell>
-                      <TableCell className={classes.textRow}>
+                      <TableCell  align="center">
                         {isSelected ? (
                           <div>Yes</div>
                         ) : (
@@ -182,18 +234,12 @@ class SessionTable extends Component {
                       Total Present :
                     </Typography>
                   </TableCell>
-                  <TableCell>
-                    <Typography variant="subheading">
-                      {selected.length}
-                    </Typography>
-                  </TableCell>
+                  <TableCell >{selected.length}</TableCell>
                   <TableCell>
                     <Typography variant="subheading">Total Absent :</Typography>
                   </TableCell>
-                  <TableCell>
-                    <Typography variant="subheading">
-                      {data.length - selected.length}
-                    </Typography>
+                  <TableCell >
+                    {data.length - selected.length}
                   </TableCell>
                 </TableRow>
               </TableBody>
@@ -210,4 +256,4 @@ class SessionTable extends Component {
 SessionTable.propTypes = {
   classes: PropTypes.object.isRequired
 };
-export default withStyles(styles)(SessionTable);
+export default connect(mapStateToProps)(withStyles(styles)(SessionTable));

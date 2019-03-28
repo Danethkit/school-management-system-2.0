@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import './index.css'
 import TimebTableScreen from './screen/TimeTableScreen'
 import AttendancesScreen from './screen/AttendancesScreen'
@@ -29,4 +29,23 @@ export default () => (
     </>
 )
 
+
+class App extends Component {
+  render() {
+    return  <>
+            <Router history={hist} >
+              <Route path='/' component={NavigationBar} />
+              <Switch>
+                <Route exact path='/attendances' component={AttendancesScreen}/>
+                <Route path='/attendances/attendances_sheet' component={AttendancesScreen}/>
+                <Route path='/attendances/attendances_line' component={AttendanceLine} />
+                <Route path='/attendances/generate_attendances' component={GenerateAttendance} />
+                <Route path='/attendances/attendances_result' component={AttendanceResult} />
+                <Route path='/timetables' component={TimebTableScreen} />
+              </Switch>
+            </Router>
+            </>
+  }
+}
+export default App
 serviceWorker.register();

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { AppBar, Tabs, Tab, withStyles } from "@material-ui/core";
 import HeadPicker from "../components/Picker/HeadPicker";
 import SessionTable from "../components/Table/SessionTable";
+import { connect } from 'react-redux'
+import {requestStudent} from '../action';
 
 const styles = theme => ({
   root: {
@@ -9,6 +11,21 @@ const styles = theme => ({
     width: "100%"
   }
 });
+
+const mapStateToProps = (state) => {
+  return {
+      studentData: state.studentData,
+      isPending: state.isPending,
+      error: state.error
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    requestStudentData: () => dispatch(requestStudent())
+  }
+}
+
 class AttendancesSheet extends Component {
   state = {
     sessionNumber: 1
@@ -51,4 +68,4 @@ class AttendancesSheet extends Component {
     );
   }
 }
-export default withStyles(styles)(AttendancesSheet);
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(AttendancesSheet))
