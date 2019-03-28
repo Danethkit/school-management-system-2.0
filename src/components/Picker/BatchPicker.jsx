@@ -1,14 +1,11 @@
-import React, { Component } from "react";
-import { MenuItem, FormControl, Select, Grid } from "@material-ui/core/";
+import React, { Component } from "react"
+import { connect } from 'react-redux'
+import {onBatchChange} from '../../action'
+import { MenuItem, FormControl, Select, Grid } from "@material-ui/core/"
 
-export default class BatchPicker extends Component {
+class BatchPicker extends Component {
   state = {
-    batch: "4",
     open: false
-  };
-
-  handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
   };
 
   handleClose = () => {
@@ -20,6 +17,8 @@ export default class BatchPicker extends Component {
   };
 
   render() {
+    const { dispatch, changeBatch } = this.props
+
     return (
       <>
         <Grid container>
@@ -33,19 +32,19 @@ export default class BatchPicker extends Component {
                   open={this.state.open}
                   onClose={this.handleClose}
                   onOpen={this.handleOpen}
-                  value={this.state.batch}
-                  onChange={this.handleChange}
+                  value={changeBatch.batch}
+                  onChange={(event)=> {dispatch(onBatchChange(event.target.value))}}
                   inputProps={{
                     name: "batch",
                     id: "demo-controlled-open-select"
                   }}
                 >
-                  <MenuItem value={1}>Batch 1</MenuItem>
-                  <MenuItem value={2}>Batch 2</MenuItem>
-                  <MenuItem value={3}>Batch 3</MenuItem>
-                  <MenuItem value={4}>Batch 4</MenuItem>
-                  <MenuItem value={5}>Batch 5</MenuItem>
-                  <MenuItem value={6}>Batch 6</MenuItem>
+                  <MenuItem value={'Batch 1'}>Batch 1</MenuItem>
+                  <MenuItem value={'Batch 2'}>Batch 2</MenuItem>
+                  <MenuItem value={'Batch 3'}>Batch 3</MenuItem>
+                  <MenuItem value={'Batch 4'}>Batch 4</MenuItem>
+                  <MenuItem value={'Batch 5'}>Batch 5</MenuItem>
+                  <MenuItem value={'Batch 6'}>Batch 6</MenuItem>
                 </Select>
               </FormControl>
             </form>
@@ -55,3 +54,4 @@ export default class BatchPicker extends Component {
     );
   }
 }
+export default connect(state => state)(BatchPicker)

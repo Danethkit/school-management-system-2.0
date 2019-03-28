@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-// import axios from 'axios';
+import React, { Component } from "react"
+import PropTypes from "prop-types"
+import {requestStudent} from '../../action'
 import {
   Paper,
   TableBody,
@@ -11,26 +11,34 @@ import {
   withStyles,
   Typography,
   InputBase
-} from "@material-ui/core";
-import SessionTableHead from "./SessionTableHead";
-import SessionTableToolBar from "./SessionTableToolBar";
-import Data from "../../data/dataB4.json";
-import AttendanceButton from "../Button/AttendanceButton";
+} from "@material-ui/core"
+import SessionTableHead from "./SessionTableHead"
+import SessionTableToolBar from "./SessionTableToolBar"
+import Data from "../../data/dataB4.json"
+import AttendanceButton from "../Button/AttendanceButton"
+import { connect } from 'react-redux'
+import { error } from "util"
+
+
 
 // axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
 
 const styles = theme => ({
   root: {
     witdth: "100%",
-    marginTop: theme.spacing.unit * 3
+    marginTop: theme.spacing.unit 
   },
   table: {
     minWroll_numberth: 1020
   },
   tableWrapper: {
     overflowX: "auto"
+  },
+  size: {
+    textSize: 20
   }
 });
+
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -56,6 +64,16 @@ function getSorting(order, orderBy) {
     ? (a, b) => desc(a, b, orderBy)
     : (a, b) => -desc(a, b, orderBy);
 }
+
+const mapStateToProps = (state) => {
+  return {
+    studentData : state.requestStudentData.studentData ,
+    isPending: state.requestStudentData.isPending,
+    error: state.requestStudentData.error,
+    batch: state.changeBatch.batch
+  }
+}
+
 
 class SessionTable extends Component {
   constructor(props) {
@@ -96,11 +114,16 @@ class SessionTable extends Component {
   
   }
 
+  componentDidMount() {
+    this.props.dispatch(requestStudent())
+  }
+
   store_data(data, check_index) {
-    console.log(data);
     check_index.forEach(element => {
       data[data.findIndex(x => x.roll_number === element)].present = true;
-      data[data.findIndex(x => x.roll_number === element)].remark = !data.remark;
+      data[
+        data.findIndex(x => x.roll_number === element)
+      ].remark = !data.remark;
     });
 
     this.setState({ data });
@@ -114,7 +137,8 @@ class SessionTable extends Component {
       order = "asc";
     }
     this.setState({ order, orderBy });
-  };
+  }
+
   handleSelectAllClick = event => {
     if (event.target.checked) {
       this.setState(state => ({
@@ -123,7 +147,7 @@ class SessionTable extends Component {
       return;
     }
     this.setState({ selected: [] });
-  };
+  }
 
   handleClick = (event, roll_number) => {
     const { selected } = this.state;
@@ -143,13 +167,15 @@ class SessionTable extends Component {
       );
     }
     this.setState({ selected: newSelected });
-  };
+  }
+  
   isSelected = roll_number => this.state.selected.indexOf(roll_number) !== -1;
 
   render() {
-    const { classes } = this.props;
-    const { data, order, orderBy, selected } = this.state;
-
+    const { classes, studentData, batch } = this.props
+    const { order, orderBy, selected } = this.state
+    let data = batch in studentData ? studentData[batch] : []
+    
     return (
       <>
         <Paper className={classes.root}>
@@ -185,7 +211,7 @@ class SessionTable extends Component {
                         {n.roll_number}
                       </TableCell>
                       <TableCell  align="left">
-                        {n.name}
+                        {n.last_name + ' ' +n.name}
                       </TableCell>
                       <TableCell  align="center">
                         {isSelected ? (
@@ -194,7 +220,9 @@ class SessionTable extends Component {
                           <div style={{ color: "#E74C3C" }}>No</div>
                         )}
                       </TableCell>
-                      <TableCell align="left"><InputBase multiline/></TableCell>
+                      <TableCell align="left">
+                        <InputBase multiline />
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -227,4 +255,4 @@ class SessionTable extends Component {
 SessionTable.propTypes = {
   classes: PropTypes.object.isRequired
 };
-export default withStyles(styles)(SessionTable);
+export default connect(mapStateToProps)(withStyles(styles)(SessionTable));

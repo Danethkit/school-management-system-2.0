@@ -9,7 +9,7 @@ import Paper from "@material-ui/core/Paper";
 import { TableFooter, TablePagination } from "@material-ui/core";
 import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
 import AttendanceLineTableHead from "./AttendanceLineTableHead";
-import Data from "../data/attendaneLineData.json";
+import Data from "../../data/attendanceLineData.json";
 
 const styles = theme => ({
   root: {

@@ -1,9 +1,10 @@
-import React from "react";
-import classNames from "classnames";
-import PropTypes from "prop-types";
-import DuplicateSession from "../DuplicateSession/DuplicateSession";
-import { Toolbar, Typography, withStyles } from "@material-ui/core";
-import { lighten } from "@material-ui/core/styles/colorManipulator";
+import React from "react"
+import classNames from "classnames"
+import PropTypes from "prop-types"
+import DuplicateSession from "../DuplicateSession/DuplicateSession"
+import { Toolbar, Typography, withStyles } from "@material-ui/core"
+import { lighten } from "@material-ui/core/styles/colorManipulator"
+
 const toolbarStyles = theme => ({
   root: {
     paddingRight: theme.spacing.unit
@@ -28,7 +29,8 @@ const toolbarStyles = theme => ({
   title: {
     flex: "0 0 auto"
   }
-});
+})
+
 let SessionTableToolBar = props => {
   const { numSelected, classes } = props;
 
