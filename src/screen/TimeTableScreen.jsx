@@ -111,7 +111,6 @@ const bodyData = [
     createData("3:21m - 04:10pm","","Internship","Internship","Internship","Internship","Internship","",),
     createData("4:10pm - 5:00pm","","Internship","Internship","Internship","Internship","Internship","",),
 ];
-console.log(bodyData)
 
 function createTable(course, batch, group,semester, week) {
     id += 1;

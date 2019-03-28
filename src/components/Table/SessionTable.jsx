@@ -1,5 +1,6 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from "react"
+import PropTypes from "prop-types"
+import {requestStudent} from '../../action'
 import {
   Paper,
   TableBody,
@@ -10,11 +11,15 @@ import {
   withStyles,
   Typography,
   InputBase
-} from "@material-ui/core";
-import SessionTableHead from "./SessionTableHead";
-import SessionTableToolBar from "./SessionTableToolBar";
-import Data from "../../data/dataB4.json";
-import AttendanceButton from "../Button/AttendanceButton";
+} from "@material-ui/core"
+import SessionTableHead from "./SessionTableHead"
+import SessionTableToolBar from "./SessionTableToolBar"
+import Data from "../../data/dataB4.json"
+import AttendanceButton from "../Button/AttendanceButton"
+import { connect } from 'react-redux'
+import { error } from "util"
+
+
 
 const styles = theme => ({
   root: {
@@ -31,6 +36,7 @@ const styles = theme => ({
     textSize: 20
   }
 });
+
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -57,6 +63,16 @@ function getSorting(order, orderBy) {
     : (a, b) => -desc(a, b, orderBy);
 }
 
+const mapStateToProps = (state) => {
+  return {
+    studentData : state.requestStudentData.studentData ,
+    isPending: state.requestStudentData.isPending,
+    error: state.requestStudentData.error,
+    batch: state.changeBatch.batch
+  }
+}
+
+
 class SessionTable extends Component {
   constructor(props) {
     super(props);
@@ -68,8 +84,11 @@ class SessionTable extends Component {
     };
   }
 
+  componentDidMount() {
+    this.props.dispatch(requestStudent())
+  }
+
   store_data(data, check_index) {
-    console.log(data);
     check_index.forEach(element => {
       data[data.findIndex(x => x.roll_number === element)].present = true;
       data[
@@ -88,7 +107,8 @@ class SessionTable extends Component {
       order = "asc";
     }
     this.setState({ order, orderBy });
-  };
+  }
+
   handleSelectAllClick = event => {
     if (event.target.checked) {
       this.setState(state => ({
@@ -97,7 +117,7 @@ class SessionTable extends Component {
       return;
     }
     this.setState({ selected: [] });
-  };
+  }
 
   handleClick = (event, roll_number) => {
     const { selected } = this.state;
@@ -117,13 +137,15 @@ class SessionTable extends Component {
       );
     }
     this.setState({ selected: newSelected });
-  };
+  }
+  
   isSelected = roll_number => this.state.selected.indexOf(roll_number) !== -1;
 
   render() {
-    const { classes } = this.props;
-    const { data, order, orderBy, selected } = this.state;
-
+    const { classes, studentData, batch } = this.props
+    const { order, orderBy, selected } = this.state
+    let data = batch in studentData ? studentData[batch] : []
+    
     return (
       <>
         <Paper className={classes.root}>
@@ -158,11 +180,11 @@ class SessionTable extends Component {
                       <TableCell scope="row">
                       <Typography variant="subheading">
                       {n.roll_number}
-                    </Typography>
+                      </Typography>
                       </TableCell>
                       <TableCell align="left">
                       <Typography variant="subheading">
-                      {n.name}
+                      {n.last_name + ' ' + n.name }
                     </Typography>
                       </TableCell>
                       <TableCell align="center">
@@ -217,4 +239,4 @@ class SessionTable extends Component {
 SessionTable.propTypes = {
   classes: PropTypes.object.isRequired
 };
-export default withStyles(styles)(SessionTable);
+export default connect(mapStateToProps)(withStyles(styles)(SessionTable));
