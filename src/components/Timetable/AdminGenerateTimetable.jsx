@@ -1,16 +1,25 @@
 import React from 'react'
-import {FormControl, InputLabel, InputBase, OutlinedInput, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles} from "@material-ui/core";
-import ReactDOM from "react-dom";
+import { Divider, InputBase, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles, Button, Toolbar
+} from "@material-ui/core";
 import PropTypes from "prop-types";
-import HeaderForm from "../../table/header_form";
+import TimetableHeaderPicker from "../TimetablePicker/TimetableHeaderPicker";
+import DisplayTimetableHeader from "../TimetablePicker/DisplayTimetableHeader";
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+
 
 const CustomTableCell = withStyles(theme => ({
     head: {
-        backgroundColor: theme.palette.common.black,
-        color: theme.palette.common.white,
+        backgroundColor: '#000',
+        color: '#fff',
+        fontSize: 14,
+        paddingRight:5,
+        paddingLeft:5
     },
     body: {
         fontSize: 14,
+        paddingRight:5,
+        paddingLeft:5
 
     },
 }))(TableCell);
@@ -18,15 +27,19 @@ const CustomTableCell = withStyles(theme => ({
 const styles = theme => ({
     root: {
         width: '100%',
-        marginTop: theme.spacing.unit * 3,
-        overflowX: 'auto',
+        marginTop: theme.spacing.unit *3 ,
+        overflow: 'auto'
     },
     table: {
-        minWidth: 375,
+        minWidth: 540,
     },
     row: {
         '&:nth-of-type(odd)': {
-            backgroundColor: theme.palette.background.default,
+            backgroundColor: '#ddd',
+            fontSize: 14,
+            paddingRight:5,
+            paddingLeft:5
+
         },
     },
     generateTimetable:{
@@ -40,20 +53,10 @@ const styles = theme => ({
         marginLeft:3,
         marginBottom:5
     },
-
-    headContainer: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        marginTop:10,
-        marginBottom:-30,
-        marginLeft: 10,
-        marginRight:10,
-        borderWidth:1,
-    },
     container: {
         display: 'flex',
         flexWrap: 'wrap',
-        marginTop:15,
+        marginTop: -15,
         marginBottom:10,
         marginLeft: 15,
         marginRight:15,
@@ -70,35 +73,74 @@ const styles = theme => ({
     inputLabel:{
         fontSize: 14,
         lineHeight:0,
+        margin:0
 
     },
     outLinedInput:{
         color: 'primary'
     },
-    margin: {
-        margin: theme.spacing.unit,
-        width: '100%',
-        textAlign:'center',
-        fontSize:12,
+    heading: {
+        fontSize: theme.typography.pxToRem(15),
+        marginLeft:20,
+
     },
+
+    margin: {
+        width:'100%',
+        margin:0,
+        textRendering: 'auto',
+        letterSpacing: 'normal',
+        textAlign:'center',
+        fontSize:14,
+        wordSpacing: 'normal',
+        whiteSpace: 'pre-wrap',
+        overflowWrap: 'break-word',
+
+    },
+    submitButton: {
+        display:"flex",
+        justifyContent:"flex-end",
+        padding: " 10px 0 15px 0",
+    },
+    threeButton: {
+        display : '1'
+    },
+    left: {
+        flexGrow:1
+    },
+    right: {
+
+    },
+    middle: {
+        flexGrow:1
+    }
 
 })
 
 
+
+var moment = require("moment");
+const weekOfYear = moment.utc().week();
 let id = 0;
+
+function returnDate(i)
+{
+    return moment.utc().week(weekOfYear).weekday(i).format("ddd MM/DD")
+}
+
 // function to input value to table header
-function inputData(ses,sun,mon,tue,wen,thu,fri,sat) {
+function inputData(ses,sun,mon,tue,wed,thu,fri,sat) {
     id += 1;
-    return {id, ses,sun,mon,tue,wen,thu,fri,sat};
+    return {id, ses,sun,mon,tue,wed,thu,fri,sat};
 }
 const headData = [
-    inputData("Session","Sunday","Monday", "Tuesday", "Wenesday","Thursday", "Friday", "Satursday",)
+    inputData("Session",returnDate(0),returnDate(1),returnDate(2),returnDate(3),returnDate(4),returnDate(5),returnDate(6))
 ];
 
 // function to input value to table body
-function createData(ses,sun,mon,tue,wen,thu,fri,sat) {
+function createData(ses,sun,mon,tue,wed,thu,fri,sat) {
     id += 1;
-    return {id, ses,sun,mon,tue,wen,thu,fri,sat};
+    return {id, ses,sun,mon,tue,wed,thu,fri,sat};
 }
 const bodyData = [
     createData("8:00am - 8:50am",),
@@ -131,162 +173,132 @@ const numberTable = [
 
 
 
-class GenerateTimetable extends React.Component{
+class GenerateAttendance extends React.Component{
 
-
-
-    componentDidMount() {
-        this.forceUpdate();
+    state = {
+        week: weekOfYear
     }
 
+
+    handleLastWeek = () => {
+        this.setState(state =>({
+            week: state.week-1
+        }));
+    };
+    handleCurrentWeek = () => {
+        this.setState({week: weekOfYear});
+    }
+    handleNextWeek = () => {
+        this.setState(state =>({
+            week: state.week+1
+        }));
+    };
 
     render(){
         const {classes} = this.props;
 
         return(
-            <React.Fragment>
-                <HeaderForm/>
+            <>
+                <TimetableHeaderPicker/>
+                <Toolbar className={classes.threeButton}>
+                <span className={classes.left}>
+                <Button size="small" color="primary" className="button" variant="outlined" onClick={this.handleLastWeek} disabled={this.state.week === weekOfYear} >
+                    <KeyboardArrowLeft fontSize={'inherit'} />
+                    Last
+                </Button>
+
+                <Button size="small" color="primary" className="button" variant="outlined" onClick={this.handleCurrentWeek} disabled={this.state.week === weekOfYear} >
+                    Current
+                </Button>
+
+                <Button size="small"  color="primary" className="button" variant="outlined" onClick={this.handleNextWeek} >
+                    Next
+                    <KeyboardArrowRight fontSize={'inherit'}/>
+                </Button>
+
+                </span>
+                <span className={classes.middle}>
+                    <b>Week{moment.utc().week(this.state.week).format('w') -17}( {moment.utc().week(this.state.week).weekday(0).format("MMM/DD")} - {moment.utc().week(this.state.week).weekday(6).format("MMM/DD")})</b>
+                </span>
+                <span className={classes.right}>
+
+
+                <Button size="small" color="primary" className="button" variant="outlined" >
+                        Month
+                </Button>
+
+                <Button size="small" color="primary" className="button" variant="outlined" >
+                        Week
+                </Button>
+
+                <Button size="small"  color="primary" className="button" variant="outlined">
+                        Day
+                </Button>
+
+                <Button size="small"  color="primary" className="button" variant="outlined">
+                        Event
+                </Button>
+                </span>
+
+                </Toolbar>
+
+
                 {numberTable.map(table => (
                     <div className={classes.generateTimetable} key={table.id}>
-                        <div className={classes.headContainer}>
-                            <FormControl className={classes.formControl}  variant="outlined" >
-                                <InputLabel
-                                    className={classes.inputLabel}
-                                    ref={ref => {
-                                        this.labelRef1 = ReactDOM.findDOMNode(ref);
-                                    }}
-                                    htmlFor="component-outlined"
-
-                                >
-                                    Course
-                                </InputLabel>
-                                <OutlinedInput
-                                    value={table.course}
-                                    className={classes.outLinedInput}
-                                    labelWidth={this.labelRef1 ? this.labelRef1.offsetWidth : 0}
-                                />
-                            </FormControl>
-
-                            <FormControl className={classes.formControl} variant="outlined">
-                                <InputLabel
-                                    className={classes.inputLabel}
-                                    ref={ref => {
-                                        this.labelRef2 = ReactDOM.findDOMNode(ref);
-                                    }}
-                                    htmlFor="component-outlined"
-
-                                >
-                                    Batch
-                                </InputLabel>
-                                <OutlinedInput
-                                    value={table.batch}
-                                    className={classes.outLinedInput}
-                                    labelWidth={this.labelRef2 ? this.labelRef2.offsetWidth : 0}
-                                />
-                            </FormControl>
-
-                            <FormControl className={classes.formControl} variant="outlined">
-                                <InputLabel
-                                    className={classes.inputLabel}
-                                    ref={ref => {
-                                        this.labelRef3 = ReactDOM.findDOMNode(ref);
-                                    }}
-                                    htmlFor="component-outlined"
-
-                                >
-                                    Semester
-                                </InputLabel>
-                                <OutlinedInput
-                                    value={table.semester}
-                                    className={classes.outLinedInput}
-                                    labelWidth={this.labelRef3 ? this.labelRef3.offsetWidth : 0}
-                                />
-                            </FormControl>
-
-                            <FormControl className={classes.formControl} variant="outlined">
-                                <InputLabel
-                                    className={classes.inputLabel}
-                                    ref={ref => {
-                                        this.labelRef4 = ReactDOM.findDOMNode(ref);
-                                    }}
-                                    htmlFor="component-outlined"
-                                >
-                                    Group
-                                </InputLabel>
-                                <OutlinedInput
-                                    value={table.group}
-                                    className={classes.outLinedInput}
-                                    labelWidth={this.labelRef4 ? this.labelRef4.offsetWidth : 0}
-                                />
-                            </FormControl>
-
-                            <FormControl className={classes.formControl} variant="outlined">
-                                <InputLabel
-                                    label={"Week"}
-                                    className={classes.inputLabel}
-                                    ref={ref => {
-                                        this.labelRef5 = ReactDOM.findDOMNode(ref);
-                                    }}
-                                    htmlFor="component-outlined"
-                                >
-                                    Week
-                                </InputLabel>
-                                <OutlinedInput
-                                    value={table.week}
-                                    className={classes.outLinedInput}
-                                    labelWidth={this.labelRef5 ? this.labelRef5.offsetWidth : 0}
-                                />
-                            </FormControl>
-                        </div>
-
-
+                        <DisplayTimetableHeader course={table.course} batch={table.batch} group={table.group} semester={table.semester} week={table.week}/>
                         <div className={classes.container}>
                             <Paper className={classes.root}>
                                 <Table className={classes.table}>
                                     <TableHead>
                                         {headData.map(row => (
                                             <TableRow className={classes.row} key={row.id}>
-                                                <CustomTableCell align='center'>{row.ses}</CustomTableCell>
-                                                <CustomTableCell align='center'>{row.sun}</CustomTableCell>
-                                                <CustomTableCell align='center'>{row.mon}</CustomTableCell>
-                                                <CustomTableCell align='center'>{row.tue}</CustomTableCell>
-                                                <CustomTableCell align='center'>{row.wen}</CustomTableCell>
-                                                <CustomTableCell align='center'>{row.thu}</CustomTableCell>
-                                                <CustomTableCell align='center'>{row.fri}</CustomTableCell>
-                                                <CustomTableCell align='center'>{row.sat}</CustomTableCell>
+                                                <CustomTableCell align='center' multiline={"true"} >{row.ses}</CustomTableCell>
+                                                <CustomTableCell align='center' multiline={"true"}>{moment.utc().week(this.state.week).weekday(0).format("ddd MM/DD")}</CustomTableCell>
+                                                <CustomTableCell align='center' multiline={"true"}>{moment.utc().week(this.state.week).weekday(1).format("ddd MM/DD")}</CustomTableCell>
+                                                <CustomTableCell align='center' multiline={"true"}>{moment.utc().week(this.state.week).weekday(2).format("ddd MM/DD")}</CustomTableCell>
+                                                <CustomTableCell align='center' multiline={"true"}>{moment.utc().week(this.state.week).weekday(3).format("ddd MM/DD")}</CustomTableCell>
+                                                <CustomTableCell align='center' multiline={"true"}>{moment.utc().week(this.state.week).weekday(4).format("ddd MM/DD")}</CustomTableCell>
+                                                <CustomTableCell align='center' multiline={"true"}>{moment.utc().week(this.state.week).weekday(5).format("ddd MM/DD")}</CustomTableCell>
+                                                <CustomTableCell align='center' multiline={"true"}>{moment.utc().week(this.state.week).weekday(6).format("ddd MM/DD")}</CustomTableCell>
+
                                             </TableRow>
                                         ))}
                                     </TableHead>
                                     <TableBody>
                                         {bodyData.map(row => (
-                                                <TableRow className={classes.row} key={row.id}>
+                                            <TableRow className={classes.row} key={row.id}>
+                                                <CustomTableCell align='center'>{row.ses}</CustomTableCell>
 
-                                                    <CustomTableCell align='center'>{row.ses}</CustomTableCell>
-
-                                                    <CustomTableCell align='center'><InputBase className={classes.margin} multiline /></CustomTableCell>
-                                                    <CustomTableCell align='center'><InputBase className={classes.margin} multiline /></CustomTableCell>
-                                                    <CustomTableCell align='center'><InputBase className={classes.margin} multiline /></CustomTableCell>
-                                                    <CustomTableCell align='center'><InputBase className={classes.margin} multiline /></CustomTableCell>
-                                                    <CustomTableCell align='center'><InputBase className={classes.margin} multiline /></CustomTableCell>
-                                                    <CustomTableCell align='center'><InputBase className={classes.margin} multiline /></CustomTableCell>
-                                                    <CustomTableCell align='center'><InputBase className={classes.margin} multiline /></CustomTableCell>
-
-                                                </TableRow>
+                                                <CustomTableCell align="center"><InputBase className={classes.margin} /></CustomTableCell>
+                                                <CustomTableCell align="center"><InputBase className={classes.margin} /></CustomTableCell>
+                                                <CustomTableCell align="center"><InputBase className={classes.margin} /></CustomTableCell>
+                                                <CustomTableCell align="center"><InputBase className={classes.margin} /></CustomTableCell>
+                                                <CustomTableCell align="center"><InputBase className={classes.margin} /></CustomTableCell>
+                                                <CustomTableCell align="center"><InputBase className={classes.margin} /></CustomTableCell>
+                                                <CustomTableCell align="center"><InputBase className={classes.margin} /></CustomTableCell>
+                                            </TableRow>
                                         ))}
                                     </TableBody>
                                 </Table>
                             </Paper>
                         </div>
-
+                        <Divider style={{marginLeft:15,marginRight:15}}/>
+                        <div className={classes.submitButton} >
+                            <Button size="medium" variant="outlined" color="primary"  >Discard</Button>
+                            <Button size="medium"  color="primary" style={{marginLeft:15,marginRight:15}}  variant="contained">Save</Button>
+                        </div>
 
                     </div>
+
                 ))}
-            </React.Fragment>
+
+
+            </>
         )
     }
 }
-GenerateTimetable.propTypes = {
+GenerateAttendance.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(GenerateTimetable)
+export default withStyles(styles)(GenerateAttendance)
