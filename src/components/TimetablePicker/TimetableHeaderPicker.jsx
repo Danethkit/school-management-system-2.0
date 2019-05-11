@@ -4,7 +4,7 @@ import CoursePicker from "../Picker/CoursePicker";
 import BatchPicker from "../Picker/BatchPicker";
 import GroupPicker from "../Picker/GroupPicker";
 import SemesterPicker from "../Picker/SemesterPicker";
-import WeekPicker from "./WeekPicker";
+import WeekPicker from "../Picker/WeekPicker";
 
 const styles = theme => ({
   generateTimetable: {

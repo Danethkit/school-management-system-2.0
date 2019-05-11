@@ -10,6 +10,7 @@ import AttendanceLine from './components/Attendance/AttendanceLine';
 import GenerateAttendance from './components/Attendance/GenerateAttendance';
 import AttendanceResult from './components/Attendance/AttendanceResult';
 import GenerateReport from './components/Attendance/GenerateReport'
+import AdminGenerateTimetable from "./components/Timetable/AdminGenerateTimetable";
 const hist = createBrowserHistory()
 
 export default () => (
@@ -23,7 +24,7 @@ export default () => (
             <Route path='/attendances/generate_attendance' component={GenerateAttendance} />
             <Route path='/attendances/attendance_result' component={AttendanceResult} />
             <Route path='/attendances/generate_report' component={GenerateReport} />
-            <Route path='/timetables' component={TimebTableScreen} />
+            <Route path='/timetables/generate_timetable' component={AdminGenerateTimetable} />
           </Switch>
         </Router>
     </>
