@@ -24,7 +24,7 @@ export default () => (
             <Route path='/attendances/generate_attendance' component={GenerateAttendance} />
             <Route path='/attendances/attendance_result' component={AttendanceResult} />
             <Route path='/attendances/generate_report' component={GenerateReport} />
-            <Route path='/timetables/generate_timetable' component={AdminGenerateTimetable} />
+            <Route path='/timetables' component={AdminGenerateTimetable} />
           </Switch>
         </Router>
     </>
