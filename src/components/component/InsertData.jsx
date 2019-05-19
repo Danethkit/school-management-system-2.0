@@ -17,7 +17,7 @@ var con = [
 ];
 
 
-var data = [];
+
 class InsertData extends React.Component{
     state = {
         open: false,
@@ -40,8 +40,10 @@ class InsertData extends React.Component{
 
         this.filterList = this.filterList.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.data = [];
         this.state = {
-            initialItems: data,
+            // data : [],
+            initialItems:this. data,
             items: [],
             // open:false,
         }
@@ -62,7 +64,7 @@ class InsertData extends React.Component{
 
             con.map((con,index) =>
             {
-                return(data.push((con.url+ " by " +con.name)))
+                return(this.data.push((con.url+ " by " +con.name)))
             })
 
         }
