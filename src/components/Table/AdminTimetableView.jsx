@@ -6,7 +6,6 @@ import TimetableHeaderPicker from "../TimetablePicker/TimetableHeaderPicker";
 import DisplayTimetableHeader from "../TimetablePicker/DisplayTimetableHeader";
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import InsertData from "../component/InsertData";
 
 
 const CustomTableCell = withStyles(theme => ({
@@ -29,7 +28,7 @@ const styles = theme => ({
     root: {
         width: '100%',
         marginTop: theme.spacing.unit *3 ,
-        overflow: 'auto'
+        overflow: 'auto',
     },
     table: {
         minWidth: 540,
@@ -52,7 +51,7 @@ const styles = theme => ({
         borderWidth: 1,
         marginRight:3,
         marginLeft:3,
-        marginBottom:5
+        marginBottom:15
     },
     container: {
         display: 'flex',
@@ -144,15 +143,96 @@ function createData(ses,sun,mon,tue,wed,thu,fri,sat) {
     return {id, ses,sun,mon,tue,wed,thu,fri,sat};
 }
 const bodyData = [
-    createData("8:00am - 8:50am",),
-    createData("8:51am - 9:40am",),
-    createData("9:41am - 10:30am",),
-    createData("10:46am - 11:35am",),
-    createData("10:36am - 12:25am",),
-    createData("1:25pm - 2:15pm",),
-    createData("2:16pm - 3:05pm",),
-    createData("3:21m - 04:10pm",),
-    createData("4:10pm - 5:00pm",),
+    createData(
+        "8:00am - 8:50am",
+        "",
+        "",
+        "Software Engineering",
+        "Software Engineering",
+        "Software Engineering",
+        "Software Engineering",
+        "Software Engineering"
+    ),
+    createData(
+        "8:51am - 9:40am",
+        "",
+        "",
+        "Data Structure",
+        "Data Structure",
+        "Data Structure",
+        "Data Structure",
+        "Data Structure"
+    ),
+    createData(
+        "9:41am - 10:30am",
+        "",
+        "",
+        "Leadership & Communication",
+        "Leadership & Communication",
+        "Leadership & Communication",
+        "Leadership & Communication",
+        "Leadership & Communication"
+    ),
+    createData(
+        "10:46am - 11:35am",
+        "",
+        "",
+        "Leadership & Communication",
+        "Leadership & Communication",
+        "Leadership & Communication",
+        "Leadership & Communication",
+        "Leadership & Communication"
+    ),
+    createData(
+        "10:36am - 12:25am",
+        "",
+        "",
+        "Internship",
+        "Internship",
+        "Internship",
+        "Internship",
+        "Internship"
+    ),
+    createData(
+        "1:25pm - 2:15pm",
+        "",
+        "Internship",
+        "Internship",
+        "Internship",
+        "Internship",
+        "Internship",
+        ""
+    ),
+    createData(
+        "2:16pm - 3:05pm",
+        "",
+        "Internship",
+        "Internship",
+        "Internship",
+        "Internship",
+        "Internship",
+        ""
+    ),
+    createData(
+        "3:21m - 04:10pm",
+        "",
+        "Internship",
+        "Internship",
+        "Internship",
+        "Internship",
+        "Internship",
+        ""
+    ),
+    createData(
+        "4:10pm - 5:00pm",
+        "",
+        "Internship",
+        "Internship",
+        "Internship",
+        "Internship",
+        "Internship",
+        ""
+    )
 ];
 
 function createTable(course, batch, group,semester, week) {
@@ -218,10 +298,10 @@ class GenerateAttendance extends React.Component{
                 </Button>
 
                 </span>
-                <span className={classes.middle}>
+                    <span className={classes.middle}>
                     <b>Week{moment.utc().week(this.state.week).format('w') -17}( {moment.utc().week(this.state.week).weekday(0).format("MMM/DD")} - {moment.utc().week(this.state.week).weekday(6).format("MMM/DD")})</b>
                 </span>
-                <span className={classes.right}>
+                    <span className={classes.right}>
 
 
                 <Button size="small" color="primary" className="button" variant="outlined" >
@@ -268,26 +348,37 @@ class GenerateAttendance extends React.Component{
                                     <TableBody>
                                         {bodyData.map(row => (
                                             <TableRow className={classes.row} key={row.id}>
-                                                <CustomTableCell align='center'>{row.ses}</CustomTableCell>
-
-                                                <CustomTableCell align="center"><InsertData/></CustomTableCell>
-                                                <CustomTableCell align="center"><InsertData/></CustomTableCell>
-                                                <CustomTableCell align="center"><InsertData/></CustomTableCell>
-                                                <CustomTableCell align="center"><InsertData/></CustomTableCell>
-                                                <CustomTableCell align="center"><InsertData/></CustomTableCell>
-                                                <CustomTableCell align="center"><InsertData/></CustomTableCell>
-                                                <CustomTableCell align="center"><InsertData/></CustomTableCell>
+                                                <CustomTableCell align="center">
+                                                    {row.ses}
+                                                </CustomTableCell>
+                                                <CustomTableCell align="center">
+                                                    {row.sun}
+                                                </CustomTableCell>
+                                                <CustomTableCell align="center">
+                                                    {row.mon}
+                                                </CustomTableCell>
+                                                <CustomTableCell align="center">
+                                                    {row.tue}
+                                                </CustomTableCell>
+                                                <CustomTableCell align="center">
+                                                    {row.wed}
+                                                </CustomTableCell>
+                                                <CustomTableCell align="center">
+                                                    {row.thu}
+                                                </CustomTableCell>
+                                                <CustomTableCell align="center">
+                                                    {row.fri}
+                                                </CustomTableCell>
+                                                <CustomTableCell align="center">
+                                                    {row.sat}
+                                                </CustomTableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
                                 </Table>
                             </Paper>
                         </div>
-                        <Divider style={{marginLeft:15,marginRight:15}}/>
-                        <div className={classes.submitButton} >
-                            <Button size="medium" variant="outlined" color="primary"  >Discard</Button>
-                            <Button size="medium"  color="primary" style={{marginLeft:15,marginRight:15}}  variant="contained">Save</Button>
-                        </div>
+
 
                     </div>
 

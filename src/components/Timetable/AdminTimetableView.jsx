@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
-import TimetableHeaderPicker from "../components/TimetablePicker/TimetableHeaderPicker";
+import TimetableHeaderPicker from "../TimetablePicker/TimetableHeaderPicker";
 
 const CustomTableCell = withStyles(theme => ({
   head: {
