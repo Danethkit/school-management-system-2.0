@@ -13,6 +13,7 @@ import GenerateReport from './components/Attendance/GenerateReport'
 import AdminGenerateTimetable from "./components/Timetable/AdminGenerateTimetable";
 import TimetableReport from "./components/Timetable/TimetableReport";
 import StudentTimetableView from "./components/Timetable/StudentTimetableView";
+import FacultyTimetableView from "./components/Timetable/FacultyTimetableView";
 const hist = createBrowserHistory()
 
 export default () => (
@@ -30,6 +31,7 @@ export default () => (
             <Route path='/timetables/timetable_report' component={TimetableReport}/>
             <Route path='/timetables/timetable_view' component={TimebTableScreen}/>
             <Route path='/timetables/student_timetable_view' component={StudentTimetableView}/>
+            <Route path='/timetables/faculty_timetable_view' component={FacultyTimetableView}/>
           </Switch>
         </Router>
     </>
