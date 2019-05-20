@@ -1,12 +1,11 @@
 import React from 'react'
-import { Divider, InputBase, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles, Button, Toolbar
+import { Divider, InputBase,Grid, Paper, Table,Tooltip, TableBody, TableCell, TableHead, TableRow, withStyles, Button, Toolbar
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import TimetableHeaderPicker from "../TimetablePicker/TimetableHeaderPicker";
 import DisplayTimetableHeader from "../TimetablePicker/DisplayTimetableHeader";
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import InsertData from "../component/InsertData";
 
 
 const CustomTableCell = withStyles(theme => ({
@@ -29,7 +28,7 @@ const styles = theme => ({
     root: {
         width: '100%',
         marginTop: theme.spacing.unit *3 ,
-        overflow: 'auto'
+        overflow: 'auto',
     },
     table: {
         minWidth: 540,
@@ -52,9 +51,10 @@ const styles = theme => ({
         borderWidth: 1,
         marginRight:3,
         marginLeft:3,
-        marginBottom:5
+        marginBottom:15
     },
     container: {
+        display: 'flex',
         flexWrap: 'wrap',
         marginTop: -15,
         marginBottom:10,
@@ -102,6 +102,15 @@ const styles = theme => ({
         justifyContent:"flex-end",
         padding: " 10px 0 15px 0",
     },
+    threeButton: {
+        display : '1'
+    },
+    gridContainer:{
+        display:1,
+        marginBottom:-5,
+        marginTop:5
+    },
+
     left: {
         flexGrow:1
     },
@@ -126,30 +135,36 @@ function returnDate(i)
 }
 
 // function to input value to table header
-function inputData(ses,sun,mon,tue,wed,thu,fri,sat) {
+function inputData(dat,ses,time,sub,bat,gro,sem,cou,wee) {
     id += 1;
-    return {id, ses,sun,mon,tue,wed,thu,fri,sat};
+    return {id, dat,ses,time,sub,bat,gro,sem,cou,wee};
 }
+
 const headData = [
-    inputData("Session",returnDate(0),returnDate(1),returnDate(2),returnDate(3),returnDate(4),returnDate(5),returnDate(6))
+    inputData("Date", 'Session' ,'Time', 'Subject', 'Batch', 'Group', 'Semester', 'Course', 'Week')
 ];
 
 // function to input value to table body
-function createData(ses,sun,mon,tue,wed,thu,fri,sat) {
+function createData(dat,ses,time,sub,bat,gro,sem,cou,wee) {
     id += 1;
-    return {id, ses,sun,mon,tue,wed,thu,fri,sat};
+    return {id, dat,ses,time,sub,bat,gro,sem,cou,wee};
 }
 const bodyData = [
-    createData("8:00am - 8:50am",),
-    createData("8:51am - 9:40am",),
-    createData("9:41am - 10:30am",),
-    createData("10:46am - 11:35am",),
-    createData("10:36am - 12:25am",),
-    createData("1:25pm - 2:15pm",),
-    createData("2:16pm - 3:05pm",),
-    createData("3:21m - 04:10pm",),
-    createData("4:10pm - 5:00pm",),
-];
+    createData('Sun 05/19/19','1','8:00am - 8:50am','Software Engineering',4,1,3,'Software Engineering',20),
+    createData('Sun 05/19/19','2','8:50am - 9:40am','Software Engineering',4,1,3,'Software Engineering',20),
+    createData('Sun 05/19/19','3','9:40am - 10:30am','AI',3,1,5,'Software Engineering',20),
+    createData('Mon 05/20/19','2','8:50am - 9:40am','Software Engineering',4,1,3,'Software Engineering',20),
+    createData('Mon 05/20/19','4','10:45am - 11:35am','AI',3,1,5,'Software Engineering',20),
+    createData('Mon 05/20/19','5','11:35am - 12:25pm','AI',3,1,5,'Software Engineering',20),
+    createData('Tue 05/21/19','1','8:00am - 8:50am','Software Engineering',4,1,5,'Software Engineering',20),
+    createData('Wed 05/22/19','1','8:00am - 8:50am','Software Engineering',4,1,3,'Software Engineering',20),
+    createData('Wed 05/22/19','3','9:40am - 10:30am','AI',3,1,5,'Software Engineering',20),
+    createData('Thu 05/23/19','2','8:50am - 9:40am','Software Engineering',4,1,3,'Software Engineering',20),
+    createData('Thu 05/23/19','4','10:45am - 11:35am','AI',3,1,5,'Software Engineering',20),
+    createData('Thu 05/23/19','5','11:35am - 12:25pm','AI',3,1,5,'Software Engineering',20),
+    createData('Fri 05/24/19','1','8:00am - 8:50am','Software Engineering',4,1,5,'Software Engineering',20),
+
+]
 
 function createTable(course, batch, group,semester, week) {
     id += 1;
@@ -159,18 +174,13 @@ function createTable(course, batch, group,semester, week) {
 }
 const numberTable = [
     createTable("Software EE", 2,1,7,),
-    createTable("Software EE", 3,1,5,),
-    createTable("Software EE", 4,1,3,),
-    createTable("Software EE", 5,1,2,),
-    createTable("Software EE", 6,1,1,),
-    createTable("Software EE", 6,1,1,),
-    createTable("Software EE", 6,1,1,),
+
 ];
 
 
 
 
-class GenerateAttendance extends React.Component{
+class StudentView extends React.Component{
 
     state = {
         week: weekOfYear
@@ -195,9 +205,18 @@ class GenerateAttendance extends React.Component{
         const {classes} = this.props;
 
         return(
-            <>
-                <TimetableHeaderPicker/>
-                <Toolbar>
+            <React.Fragment>
+                <Grid container className={classes.gridContainer}>
+                    <Grid item  className={classes.left} style={{marginLeft:23}}>
+                        <b>Faculty: Shiraz Kaurana</b>
+
+                    </Grid>
+                    <Grid item style={{marginRight:23}}>
+                       <b>Faculty Code: 110101212</b>
+
+                    </Grid>
+                </Grid>
+                <Toolbar className={classes.threeButton}>
                 <span className={classes.left}>
                 <Button size="small" color="primary" className="button" variant="outlined" onClick={this.handleLastWeek} disabled={this.state.week === weekOfYear} >
                     <KeyboardArrowLeft fontSize={'inherit'} />
@@ -214,10 +233,10 @@ class GenerateAttendance extends React.Component{
                 </Button>
 
                 </span>
-                <span className={classes.middle}>
+                    <span className={classes.middle}>
                     <b>Week{moment.utc().week(this.state.week).format('w') -17}( {moment.utc().week(this.state.week).weekday(0).format("MMM/DD")} - {moment.utc().week(this.state.week).weekday(6).format("MMM/DD")})</b>
                 </span>
-                <span className={classes.right}>
+                    <span className={classes.right}>
 
 
                 <Button size="small" color="primary" className="button" variant="outlined" >
@@ -241,22 +260,23 @@ class GenerateAttendance extends React.Component{
 
 
                 {numberTable.map(table => (
-                    <div className={classes.generateTimetable} key={table.id}>
-                        <DisplayTimetableHeader course={table.course} batch={table.batch} group={table.group} semester={table.semester} week={table.week}/>
+                    <div className={classes.generateTimetable} >
+                        {/*<DisplayTimetableHeader course={table.course} batch={table.batch}  semester={table.semester} week={table.week}/>*/}
                         <div className={classes.container}>
                             <Paper className={classes.root}>
                                 <Table className={classes.table}>
                                     <TableHead>
                                         {headData.map(row => (
                                             <TableRow className={classes.row} key={row.id}>
+                                                <CustomTableCell align='center' multiline={"true"} >{row.dat}</CustomTableCell>
                                                 <CustomTableCell align='center' multiline={"true"} >{row.ses}</CustomTableCell>
-                                                <CustomTableCell align='center' multiline={"true"}>{moment.utc().week(this.state.week).weekday(0).format("ddd MM/DD")}</CustomTableCell>
-                                                <CustomTableCell align='center' multiline={"true"}>{moment.utc().week(this.state.week).weekday(1).format("ddd MM/DD")}</CustomTableCell>
-                                                <CustomTableCell align='center' multiline={"true"}>{moment.utc().week(this.state.week).weekday(2).format("ddd MM/DD")}</CustomTableCell>
-                                                <CustomTableCell align='center' multiline={"true"}>{moment.utc().week(this.state.week).weekday(3).format("ddd MM/DD")}</CustomTableCell>
-                                                <CustomTableCell align='center' multiline={"true"}>{moment.utc().week(this.state.week).weekday(4).format("ddd MM/DD")}</CustomTableCell>
-                                                <CustomTableCell align='center' multiline={"true"}>{moment.utc().week(this.state.week).weekday(5).format("ddd MM/DD")}</CustomTableCell>
-                                                <CustomTableCell align='center' multiline={"true"}>{moment.utc().week(this.state.week).weekday(6).format("ddd MM/DD")}</CustomTableCell>
+                                                <CustomTableCell align='center' multiline={"true"} >{row.time}</CustomTableCell>
+                                                <CustomTableCell align='center' multiline={"true"} >{row.sub}</CustomTableCell>
+                                                <CustomTableCell align='center' multiline={"true"} >{row.bat}</CustomTableCell>
+                                                <CustomTableCell align='center' multiline={"true"} >{row.gro}</CustomTableCell>
+                                                <CustomTableCell align='center' multiline={"true"} >{row.sem}</CustomTableCell>
+                                                <CustomTableCell align='center' multiline={"true"} >{row.cou}</CustomTableCell>
+                                                <CustomTableCell align='center' multiline={"true"} >{row.wee}</CustomTableCell>
 
                                             </TableRow>
                                         ))}
@@ -264,38 +284,50 @@ class GenerateAttendance extends React.Component{
                                     <TableBody>
                                         {bodyData.map(row => (
                                             <TableRow className={classes.row} key={row.id}>
-                                                <CustomTableCell align='center'>{row.ses}</CustomTableCell>
-
-                                                <CustomTableCell align="center"><InsertData/></CustomTableCell>
-                                                <CustomTableCell align="center"><InsertData/></CustomTableCell>
-                                                <CustomTableCell align="center"><InsertData/></CustomTableCell>
-                                                <CustomTableCell align="center"><InsertData/></CustomTableCell>
-                                                <CustomTableCell align="center"><InsertData/></CustomTableCell>
-                                                <CustomTableCell align="center"><InsertData/></CustomTableCell>
-                                                <CustomTableCell align="center"><InsertData/></CustomTableCell>
+                                                <CustomTableCell align="center">
+                                                    {row.dat}
+                                                </CustomTableCell>
+                                                <CustomTableCell align="center">
+                                                    {row.ses}
+                                                </CustomTableCell>
+                                                <CustomTableCell align="center">
+                                                    {row.time}
+                                                </CustomTableCell>
+                                                <CustomTableCell align="center">
+                                                    {row.sub}
+                                                </CustomTableCell>
+                                                <CustomTableCell align="center">
+                                                    {row.bat}
+                                                </CustomTableCell>
+                                                <CustomTableCell align="center">
+                                                    {row.gro}
+                                                </CustomTableCell>
+                                                <CustomTableCell align="center">
+                                                    {row.sem}
+                                                </CustomTableCell>
+                                                <CustomTableCell align="center">
+                                                    {row.cou}
+                                                </CustomTableCell>
+                                                <CustomTableCell align="center">
+                                                    {row.wee}
+                                                </CustomTableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
                                 </Table>
                             </Paper>
                         </div>
-                        <Divider style={{marginLeft:15,marginRight:15}}/>
-                        <div className={classes.submitButton} >
-                            <Button size="medium" variant="outlined" color="primary"  >Discard</Button>
-                            <Button size="medium"  color="primary" style={{marginLeft:15,marginRight:15}}  variant="contained">Save</Button>
-                        </div>
+
 
                     </div>
 
                 ))}
-
-
-            </>
+            </React.Fragment>
         )
     }
 }
-GenerateAttendance.propTypes = {
+StudentView.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(GenerateAttendance)
+export default withStyles(styles)(StudentView)

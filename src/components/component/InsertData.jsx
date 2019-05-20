@@ -21,8 +21,8 @@ var con = [
 class InsertData extends React.Component{
     state = {
         open: false,
+        value: ""
     };
-
     handleToggle = () => {
         this.setState(state => ({ open: !state.open }));
     };
@@ -84,9 +84,10 @@ class InsertData extends React.Component{
                     aria-owns={open ? 'menu-list-grow' : undefined}
                     aria-haspopup="true"
                     onClick={this.handleToggle}
+                    value={this.state.value}
                     onChange={this.filterList}
                 />
-                <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
+                <Popper open={this.state.open} anchorEl={this.anchorEl} transition disablePortal>
                     {({ TransitionProps, placement }) => (
                         <Grow
                             {...TransitionProps}
@@ -117,7 +118,7 @@ class Cell extends React.Component {
                     <MenuList>
                         {
                             this.props.items.map((item, index) => {
-                                return <MenuItem key={index}>{item}</MenuItem>
+                                return <MenuItem key={index} onClick={this.setState.value ={item}}>{item}</MenuItem>
                             })
                         }
                     </MenuList>
