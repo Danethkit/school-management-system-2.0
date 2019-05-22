@@ -1,129 +1,90 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Snackbar from "@material-ui/core/Snackbar";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
-import Grid from "@material-ui/core/Grid";
+import {
+  Button,
+  Grid,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle
+} from "@material-ui/core";
 
 const styles = theme => ({
-  button: {
-    margin: theme.spacing.unit
+  root: {
+    textAlign: "center"
   },
-  close: {
-    padding: theme.spacing.unit / 2
+  icon: {
+    width: 150,
+    height: 150,
+    marginTop: 10,
+    marginLeft: 100,
+    marginBottom: 20,
+    marginRight: 100
+  },
+  button: {
+    marginRight: 60
   }
 });
 
 class AttendanceButton extends React.Component {
-  queue = [];
-
   state = {
-    open: false,
-    messageInfo: {}
+    open: false
+  };
+  handleClickOpen = () => {
+    this.setState({ open: true });
   };
 
-  handleClick = message => () => {
-    this.queue.push({
-      message,
-      key: new Date().getTime()
-    });
-
-    if (this.state.open) {
-      // immediately begin dismissing current message
-      // to start showing new one
-      this.setState({ open: false });
-    } else {
-      this.processQueue();
-    }
-  };
-
-  processQueue = () => {
-    if (this.queue.length > 0) {
-      this.setState({
-        messageInfo: this.queue.shift(),
-        open: true
-      });
-    }
-  };
-
-  handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
+  handleClose = () => {
     this.setState({ open: false });
-  };
-
-  handleExited = () => {
-    this.processQueue();
   };
 
   render() {
     const { classes } = this.props;
-    const { messageInfo } = this.state;
 
     return (
       <>
-        <Grid
-          container
-          direction="row"
-          justify="flex-end"
-          alignItems="flex-end"
+      <Grid container justify="flex-end" alignItems="flex-end">
+      <Button
+          color="secondary"
+          variant="outlined"
+          onClick={this.handleClickOpen}
+          
         >
-          <Button
-            className={classes.button}
-            variant="outlined"
-            color="secondary"
-            onClick={this.handleClick("Data is discard.")}
-          >
-            Discard
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            className={classes.button}
-            onClick={() => this.props.onSave()}
-            //onClick={this.handleClick("Data is save.")}
-          >
-            Save
-          </Button>
-        </Grid>
-
-        <Snackbar
-          key={messageInfo.key}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left"
-          }}
+          Save
+        </Button>
+      </Grid>
+       
+        <Dialog
+          disableEscapeKeyDown
           open={this.state.open}
-          autoHideDuration={2000}
           onClose={this.handleClose}
-          onExited={this.handleExited}
-          ContentProps={{
-            "aria-describedby": "message-id"
-          }}
-          message={<span id="message-id">{messageInfo.message}</span>}
-          action={[
+          className={classes.root}
+        >
+          <DialogTitle>Saved!</DialogTitle>
+          <img src={require("./Done.png")} className={classes.icon} />
+          <DialogContent>You have saved it successfully!</DialogContent>
+          <DialogActions>
             <Button
-              key="undo"
+              className={classes.button}
+              onClick={this.handleClose}
+              size="large"
+              variant="outlined"
               color="secondary"
-              size="small"
-              onClick={this.handleClose}
             >
-              UNDO
-            </Button>,
-            <IconButton
-              key="close"
-              aria-label="Close"
-              color="inherit"
-              className={classes.close}
+              OK
+            </Button>
+            <Button
+              className={classes.button}
               onClick={this.handleClose}
+              size="large"
+              variant="outlined"
+              color="primary"
             >
-              <CloseIcon />
-            </IconButton>
-          ]}
-        />
+              VIEW
+            </Button>
+          </DialogActions>
+        </Dialog>
       </>
     );
   }
