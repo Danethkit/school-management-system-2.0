@@ -1,78 +1,26 @@
-import React, { Component } from "react";
-import {
-  MenuItem,
-  TextField,
-  InputAdornment,
-  withStyles
-} from "@material-ui/core/";
-import classNames from "classnames";
+import React,{ useEffect} from "react";
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { requestSemester } from '../../redux/ActionCreator/apiRequest' 
+import { onSemesterChange } from '../../redux/ActionCreator/userBehavior' 
+import DefaultPicker from './DefaultPicker'
 
-const styles = theme => ({
-  margin: {
-    margin: theme.spacing.unit
-  },
-  textFile: {
-    fontSize: 14
+const SemesterPicker = ({dispatch, semester, semesterData, batch}) => {
+  let actions = bindActionCreators({requestSemester, onSemesterChange}, dispatch) 
+  useEffect(()=> { actions.requestSemester()}, [])
+  let names = []
+  if(semesterData[batch] !== undefined){
+    semesterData[batch].map(e => names.push(e.name))
   }
-});
-
-let id = 0;
-
-function inputSemester(id, semester) {
-  id += 1;
-  return { id, semester };
+  return <DefaultPicker 
+          value ={semester}
+          handleOnChange ={actions.onSemesterChange}
+          label = "Semester"
+          menuItem = {{...names}}
+        />
 }
-const semesterData = [
-  inputSemester(id, "Semester 1"),
-  inputSemester(id, "Semester 2"),
-  inputSemester(id, "Semester 3"),
-  inputSemester(id, "Semester 4"),
-  inputSemester(id, "Semester 5"),
-  inputSemester(id, "Semester 6"),
-  inputSemester(id, "Semester 7"),
-  inputSemester(id, "Semester 8")
-];
-
-class SemesterPicker extends Component {
-  handleChange = prop => event => {
-    this.setState({ [prop]: event.target.value });
-  };
-  state = {
-    Semester: ""
-  };
-
-  render() {
-    const { classes } = this.props;
-    return (
-      <div>
-        <TextField
-          select
-          fullWidth
-          autoFocus
-          className={classNames(classes.margin)}
-          value={this.state.Semester}
-          onChange={this.handleChange("Semester")}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment
-                disableTypography={true}
-                className={classes.textFile}
-                position="start"
-              >
-                <b>Semester:</b>{" "}
-              </InputAdornment>
-            )
-          }}
-        >
-          {semesterData.map(option => (
-            <MenuItem key={option.id} value={option.semester}>
-              {option.semester}
-            </MenuItem>
-          ))}
-        </TextField>
-      </div>
-    );
-  }
-}
-
-export default withStyles(styles)(SemesterPicker);
+export default connect(state => ({
+  semester:state.changePicker.semester,
+  semesterData: state.requestStudentData.semesterData,
+  batch : state.changePicker.batch
+}))(SemesterPicker)

@@ -1,13 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
 import AttendanceLineTable from "../Table/AttendanceLineTable";
+import SearchBox from '../Attendance/SearchBox'
 
-export default class AttendanceLine extends Component {
-  render() {
-    return (
-      <div>
+const AttendanceLine = () => (
+      <>
         <h1>Attendance Line</h1>
+        <SearchBox />
+        <br/>
         <AttendanceLineTable/>
-      </div>
-    );
-  }
-}
+      </>);
+export default AttendanceLine 

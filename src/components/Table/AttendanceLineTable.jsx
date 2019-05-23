@@ -9,7 +9,8 @@ import Paper from "@material-ui/core/Paper";
 import { TableFooter, TablePagination } from "@material-ui/core";
 import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
 import AttendanceLineTableHead from "./AttendanceLineTableHead";
-import Data from "../../data/attendanceLineData.json";
+import { connect } from 'react-redux'
+import {getAttendanceLine} from '../../redux/ActionCreator/apiRequest'
 
 const styles = theme => ({
   root: {
@@ -54,7 +55,6 @@ class AttendanceLineTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: Data.sort((a, b) => (a.student < b.student ? -1 : 1)),
       page: 0,
       rowsPerPage: 20,
       order: "asc",
@@ -76,12 +76,15 @@ class AttendanceLineTable extends Component {
     }
     this.setState({ order, orderBy });
   };
-
+  componentDidMount() {
+    this.props.dispatch(getAttendanceLine())
+  }
   render() {
-    const { classes } = this.props;
-    const { data, rowsPerPage, page, order, orderBy } = this.state;
+    const { classes, attendanceLine, searchField } = this.props;
+    const { rowsPerPage, page, order, orderBy } = this.state;
+    let filteredData = attendanceLine.filter(line => line.student.toLowerCase().includes(searchField.toLowerCase()))
     const emptyRows =
-      rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+      rowsPerPage - Math.min(rowsPerPage, filteredData.length - page * rowsPerPage);
     return (
       <Paper className={classes.root}>
         <div className={classes.tableWrapper}>
@@ -92,11 +95,11 @@ class AttendanceLineTable extends Component {
               onRequestSort={this.handleRequestSort}
             />
             <TableBody>
-              {stableSort(data, getSorting(order, orderBy))
+              {stableSort(filteredData, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(row => {
+                .map((row, index) => {
                   return (
-                    <TableRow hover key={row.id}>
+                    <TableRow hover key={index}>
                       <TableCell
                         component="th"
                         className={classes.textRow}
@@ -140,7 +143,7 @@ class AttendanceLineTable extends Component {
                 <TablePagination
                   rowsPerPageOptions={[20, 30, 40, 50]}
                   colSpan={9}
-                  count={data.length}
+                  count={filteredData.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   SelectProps={{
@@ -163,4 +166,9 @@ AttendanceLineTable.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(AttendanceLineTable);
+export default connect(state => ({
+  attendanceLine: state.requestStudentData.attendanceLine,
+  requestAttendanceLinePending: state.requestStudentData.requestAttendanceLinePending,
+  requestAttendanceLineFalied: state.requestStudentData.requestAttendanceLineFalied,
+  searchField: state.changePicker.searchField
+}))(withStyles(styles)(AttendanceLineTable))

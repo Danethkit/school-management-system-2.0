@@ -121,6 +121,7 @@ class GenerateReportTable extends Component {
                                             <TableCell className={classes.textRow}>
                                                 {row.subject4}
                                             </TableCell>
+                                            
                                             <TableCell className={classes.textRow}>
                                                 {row.total}
                                             </TableCell>
