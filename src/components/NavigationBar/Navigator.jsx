@@ -76,21 +76,22 @@ class NavigationBar extends React.Component {
 
   render() {
     var items = [];
-    if (this.props.history.location.pathname.includes("/attendances")) {
-      items = [
-        {path: "attendances/attendance_sheet", label: "Attendance Sheet"},
-        {path: "attendances/attendance_lines", label: "Attendance Lines"},
-        {path: "attendances/generate_attendance", label: "Generate Attendance"},
-        {path: "attendances/attendance_result", label: "Attendance Result"},
-        {path: "attendances/generate_report", label: "Generate Report"}
-      ];
-    } else if(this.props.history.location.pathname.includes("/timetable")){
+    if(this.props.history.location.pathname.includes("/timetable")){
       items = [
         {path: "timetables", label: "Current Timetable"},
         {path: "timetables", label: "Timetable Record"},
         {path: "timetables", label: "Generate Timetable"}
       ];
     }
+    else {
+      items = [
+        {path: "attendance/attendance_sheet", label: "Attendance Sheet"},
+        {path: "attendance/attendance_line", label: "Attendance Lines"},
+        {path: "attendance/generate_attendance", label: "Generate Attendance"},
+        {path: "attendance/attendance_result", label: "Attendance Result"},
+        {path: "attendance/generate_report", label: "Generate Report"}
+      ];
+    } 
     
     const { classes } = this.props;
 

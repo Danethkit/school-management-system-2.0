@@ -1,73 +1,24 @@
-import React, { Component } from "react";
-import {
-  MenuItem,
-  TextField,
-  InputAdornment,
-  withStyles
-} from "@material-ui/core/";
-import classNames from "classnames";
+import React,{ useEffect} from "react";
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { requestGroup } from '../../redux/ActionCreator/apiRequest' 
+import { onGroupChange } from '../../redux/ActionCreator/userBehavior' 
+import DefaultPicker from './DefaultPicker'
 
-const styles = theme => ({
-  margin: {
-    margin: theme.spacing.unit
-  },
-  textFile: {
-    fontSize: 14
-  }
-});
-
-let id = 0;
-
-function inputGroup(id, group) {
-  id += 1;
-  return { id, group };
+const SemesterPicker = ({dispatch, group, groupData}) => {
+  let actions = bindActionCreators({requestGroup, onGroupChange}, dispatch) 
+  useEffect(()=> { actions.requestGroup()}, [])
+  let names = []
+  groupData.map(e => names.push(e.name))
+  return <DefaultPicker 
+          value ={group}
+          handleOnChange ={actions.onGroupChange}
+          label = "Group"
+          menuItem = {{...names}}
+        />
 }
-const groupData = [
-  inputGroup(id, "Group 1"),
-  inputGroup(id, "Group 2"),
-  inputGroup(id, "Group 2")
-];
-
-class GroupPicker extends Component {
-  handleChange = prop => event => {
-    this.setState({ [prop]: event.target.value });
-  };
-  state = {
-    Group: ""
-  };
-
-  render() {
-    const { classes } = this.props;
-    return (
-      <div>
-        <TextField
-          fullWidth
-          select
-          autoFocus
-          className={classNames(classes.margin)}
-          value={this.state.Group}
-          onChange={this.handleChange("Group")}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment
-                disableTypography={true}
-                className={classes.textFile}
-                position="start"
-              >
-                <b>Group:</b>{" "}
-              </InputAdornment>
-            )
-          }}
-        >
-          {groupData.map(option => (
-            <MenuItem key={option.id} value={option.group}>
-              {option.group}
-            </MenuItem>
-          ))}
-        </TextField>
-      </div>
-    );
-  }
-}
-
-export default withStyles(styles)(GroupPicker);
+export default connect(state => ({
+  group:state.changePicker.group,
+  groupData: state.requestStudentData.groupData,
+  batch : state.changePicker.batch
+}))(SemesterPicker)

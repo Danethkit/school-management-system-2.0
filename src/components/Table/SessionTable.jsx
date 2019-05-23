@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
-import {requestStudent} from '../../action'
+import {requestStudent, createAttendanceSheet} from '../../redux/ActionCreator/apiRequest'
+import {onRemarkChange} from '../../redux/ActionCreator/userBehavior'
 import {
   Paper,
   TableBody,
@@ -14,11 +15,10 @@ import {
 } from "@material-ui/core"
 import SessionTableHead from "./SessionTableHead"
 import SessionTableToolBar from "./SessionTableToolBar"
-import Data from "../../data/dataB4.json"
 import AttendanceButton from "../Button/AttendanceButton"
 import { connect } from 'react-redux'
 import { error } from "util"
-
+import { store } from '../../redux/store'
 
 const styles = theme => ({
   root: {
@@ -68,7 +68,15 @@ const mapStateToProps = (state) => {
     studentData : state.requestStudentData.studentData ,
     isPending: state.requestStudentData.isPending,
     error: state.requestStudentData.error,
-    batch: state.changeBatch.batch
+    batch: state.changePicker.batch,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    requestStudent: () => dispatch(requestStudent()),
+    createAttendanceSheet: (data) => dispatch(createAttendanceSheet(data)),
+    onChangeRemark: (data) => dispatch(onRemarkChange(data))
   }
 }
 
@@ -77,27 +85,15 @@ class SessionTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
       order: "asc",
       orderBy: "name",
-      selected: []
+      selected: [],
     };
 
   }
 
   componentDidMount() {
-    this.props.dispatch(requestStudent())
-  }
-
-  store_data(data, check_index) {
-    check_index.forEach(element => {
-      data[data.findIndex(x => x.roll_number === element)].present = true;
-      data[
-        data.findIndex(x => x.roll_number === element)
-      ].remark = !data.remark;
-    });
-
-    this.setState({ data });
+    this.props.requestStudent()
   }
 
   handleRequestSort = (event, property) => {
@@ -110,21 +106,26 @@ class SessionTable extends Component {
     this.setState({ order, orderBy });
   }
 
-  handleSelectAllClick = event => {
+  handleSelectAllClick = (event, data) => {
     if (event.target.checked) {
-      this.setState(state => ({
-        selected: state.data.map(n => n.roll_number)
-      }));
+      this.setState({selected: data.map(n => n.roll_number)})
       return;
     }
     this.setState({ selected: [] });
+  }
+
+  onChangeRemark = (event, roll_number) => {
+    let storeData = store.getState()
+    let { remark } = storeData.changePicker
+    remark[roll_number] = event.target.value
+    let { onChangeRemark } = this.props
+    onChangeRemark(remark)
   }
 
   handleClick = (event, roll_number) => {
     const { selected } = this.state;
     const selectedIndex = selected.indexOf(roll_number);
     let newSelected = [];
-
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, roll_number);
     } else if (selectedIndex === 0) {
@@ -139,8 +140,25 @@ class SessionTable extends Component {
     }
     this.setState({ selected: newSelected });
   }
-  
+
   isSelected = roll_number => this.state.selected.indexOf(roll_number) !== -1;
+
+  createAttendanceSheet = () => {
+    let storeData = store.getState()
+    let {subject, date, session, batch, remark} = storeData.changePicker
+    let { subjectData } = storeData.requestStudentData
+    let subjectId = subjectData[batch].find((e) => `${e.name} [${e.code}]` === subject).id
+    let selectedStu = this.state.selected
+    let data = {
+      subject_id: subjectId,
+      date: date.toDateString(),
+      session: session,
+      batch: batch,
+      lines: selectedStu,
+      remark: remark
+    }
+    this.props.createAttendanceSheet(data)
+  }
 
   render() {
     const { classes, studentData, batch } = this.props
@@ -157,11 +175,10 @@ class SessionTable extends Component {
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
-                onSelectAllClick={this.handleSelectAllClick}
+                onSelectAllClick={event => this.handleSelectAllClick(event, data)}
                 onRequestSort={this.handleRequestSort}
                 rowCount={data.length}
               />
-
               <TableBody>
                 {stableSort(data, getSorting(order, orderBy)).map(n => {
                   const isSelected = this.isSelected(n.roll_number);
@@ -192,7 +209,7 @@ class SessionTable extends Component {
                         )}
                       </TableCell>
                       <TableCell className={classes.textRow}>
-                        <InputBase multiline />
+                        <InputBase multiline onChange={event => this.onChangeRemark(event, n.roll_number)}/>
                       </TableCell>
                     </TableRow>
                   );
@@ -216,9 +233,7 @@ class SessionTable extends Component {
             </Table>
           </div>
         </Paper>
-        <AttendanceButton
-          onSave={() => this.store_data(Data, this.state.selected)}
-        />
+        <AttendanceButton onSave={this.createAttendanceSheet}/>
       </>
     );
   }
@@ -226,4 +241,4 @@ class SessionTable extends Component {
 SessionTable.propTypes = {
   classes: PropTypes.object.isRequired
 };
-export default connect(mapStateToProps)(withStyles(styles)(SessionTable));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(SessionTable));
