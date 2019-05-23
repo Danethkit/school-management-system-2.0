@@ -34,6 +34,7 @@ function DisplayTimetableHeader(props)
 
                 <TextField
                     autoFocus
+                    text-align-last= "center"
                     className={classes.label}
                     value={props.course}
                     InputProps={{
@@ -41,6 +42,7 @@ function DisplayTimetableHeader(props)
                     }}
                 />
                 <TextField
+                    text-align-last= "center"
                     autoFocus
                     className={classes.label}
                     value={props.batch}
@@ -58,13 +60,15 @@ function DisplayTimetableHeader(props)
                 />
                 <TextField
                     autoFocus
+                    text-align-last= "center"
                     className={classes.label}
                     value={props.semester}
                     InputProps={{
-                        startAdornment: <InputAdornment  disableTypography={true} className={classes.textFile} position="start">Semester: </InputAdornment>,
+                        startAdornment: <InputAdornment   disableTypography={true} className={classes.textFile} position="start">Semester: </InputAdornment>,
                     }}
                 />
                 <TextField
+
                     autoFocus
                     className={classes.label}
                     value={props.week}

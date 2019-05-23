@@ -190,7 +190,7 @@ const bodyData = [
     "Internship",
     "Internship",
     "Internship",
-    "Internship",
+    "In",
     "Internship",
     ""
   ),
