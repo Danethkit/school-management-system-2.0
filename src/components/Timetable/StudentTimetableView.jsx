@@ -351,7 +351,8 @@ class StudentView extends React.Component{
                                                 <CustomTableCell align="center">
                                                     {row.mon}
                                                 </CustomTableCell>
-                                                <CustomTableCell align="center">
+                                                <CustomTableCell align="center"
+                                                >
                                                     {row.tue}
                                                 </CustomTableCell>
                                                 <CustomTableCell align="center">

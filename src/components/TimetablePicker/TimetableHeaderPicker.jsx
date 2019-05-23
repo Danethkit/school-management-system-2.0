@@ -55,7 +55,7 @@ class TimetableHeaderPicker extends React.Component {
               <SemesterPicker />
             </div>
             <div className={classes.label}>
-              <WeekPicker />
+              <WeekPicker name={'Week'} />
             </div>
           </div>
         </div>

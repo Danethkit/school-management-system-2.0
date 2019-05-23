@@ -1,5 +1,5 @@
 import React from 'react'
-import {Popper, Grow, Paper, MenuItem,MenuList,InputBase} from '@material-ui/core'
+import {Popper, Grow, Paper,Menu,ClickAwayListener, MenuItem,MenuList,InputBase} from '@material-ui/core'
 
 
 var con = [
@@ -21,12 +21,17 @@ var con = [
 class InsertData extends React.Component{
     state = {
         open: false,
-        value: ""
+
+        // value1: ""
     };
     handleToggle = () => {
         this.setState(state => ({ open: !state.open }));
     };
+    changeValue=(e)=>
+    {
+        this.setState({value1: e.target.value})
 
+    }
     handleClose = event => {
         if (this.anchorEl.contains(event.target)) {
             return;
@@ -34,6 +39,7 @@ class InsertData extends React.Component{
 
         this.setState({ open: false });
     };
+
 
     constructor(props) {
         super(props);
@@ -43,8 +49,10 @@ class InsertData extends React.Component{
         this.data = [];
         this.state = {
             // data : [],
+            value1: "",
             initialItems:this. data,
             items: [],
+
             // open:false,
         }
     }
@@ -73,32 +81,57 @@ class InsertData extends React.Component{
     render()
     {
         const { classes } = this.props;
-        const { open } = this.state;
+        const { open, value1 } = this.state;
+        console.log(('value ======', value1))
         return (
             <div className="filter-list">
 
                 <InputBase
-                    buttonRef={node => {
+
+                    inputRef={node => {
                         this.anchorEl = node;
                     }}
+                    text-align-last= "center"
                     aria-owns={open ? 'menu-list-grow' : undefined}
                     aria-haspopup="true"
                     onClick={this.handleToggle}
-                    value={this.state.value}
-                    onChange={this.filterList}
+                    value={value1}
+                    onChange={this.filterList }
                 />
-                <Popper open={this.state.open} anchorEl={this.anchorEl} transition disablePortal>
+                <Popper open={this.state.open} onClose={this.handleClose} anchorEl={this.anchorEl} transition disablePortal>
                     {({ TransitionProps, placement }) => (
                         <Grow
                             {...TransitionProps}
                             id="menu-list-grow"
                             style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
                         >
-                            <Cell items={this.state.items}/>
+                            <Paper >
+                                <ClickAwayListener onClickAway={this.handleClose}>
+                                <MenuList>
+                                    {
+                                        this.state.items.map((item, index) => {
+                                            return <MenuItem
+                                                        key={index}
+                                                        value={{item}}
+                                                        onChange={ this.handleClose}
+                                                        onClick={()=>{
+                                                            console.log('=========', item)
+                                                            this.setState({value1:item});
+
+
+                                                            this.setState({ open: false });
+                                                        }} >
+                                                        {item}
+                                                    </MenuItem>
+                                        })
+                                    }
+                                </MenuList>
+                                </ClickAwayListener>
+                            </Paper>
+
                         </Grow>
                     )}
                 </Popper>
-                {/* <input type="text" placeholder="Search" onChange={this.filterList}/> */}
 
             </div>
         )
@@ -106,26 +139,5 @@ class InsertData extends React.Component{
 }
 
 
-class Cell extends React.Component {
-    // props={
-    //   boo : flase,
-    // }
-    render() {
-        return (
-            <React.Fragment>
 
-                <Paper>
-                    <MenuList>
-                        {
-                            this.props.items.map((item, index) => {
-                                return <MenuItem key={index} onClick={this.setState.value ={item}}>{item}</MenuItem>
-                            })
-                        }
-                    </MenuList>
-                </Paper>
-
-            </React.Fragment>
-        )
-    }
-}
 export default InsertData

@@ -61,9 +61,10 @@ class WeekPicker extends Component {
               <InputAdornment
                 disableTypography={true}
                 className={classes.textFile}
-                position="start"
+                position="middle"
+
               >
-                <b>Week:</b>{" "}
+                <b>{this.props.name}:</b>{" "}
               </InputAdornment>
             )
           }}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Divider, InputBase, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles, Button, Toolbar
+import { Divider, InputBase,Dialog,DialogActions,DialogContent,DialogTitle, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles, Button, Toolbar
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import TimetableHeaderPicker from "../TimetablePicker/TimetableHeaderPicker";
@@ -7,6 +7,7 @@ import DisplayTimetableHeader from "../TimetablePicker/DisplayTimetableHeader";
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import InsertData from "../component/InsertData";
+import WeekPicker from '../Picker/WeekPicker'
 
 
 const CustomTableCell = withStyles(theme => ({
@@ -20,7 +21,8 @@ const CustomTableCell = withStyles(theme => ({
     body: {
         fontSize: 14,
         paddingRight:5,
-        paddingLeft:5
+        paddingLeft:5,
+        textAlign: 'center'
 
     },
 }))(TableCell);
@@ -83,6 +85,17 @@ const styles = theme => ({
         fontSize: theme.typography.pxToRem(15),
         marginLeft:20,
 
+    },
+    container1: {
+        display: "flex",
+        flexWrap: "wrap"
+    },
+    formControl1:{
+        minWidth: 120
+    },
+    piker:{
+        margin:15,
+        // margin: theme.spacing.unit*2,
     },
 
     margin: {
@@ -158,13 +171,13 @@ function createTable(course, batch, group,semester, week) {
     }
 }
 const numberTable = [
-    createTable("Software EE", 2,1,7,),
-    createTable("Software EE", 3,1,5,),
-    createTable("Software EE", 4,1,3,),
-    createTable("Software EE", 5,1,2,),
-    createTable("Software EE", 6,1,1,),
-    createTable("Software EE", 6,1,1,),
-    createTable("Software EE", 6,1,1,),
+    createTable("Software EE", 2,1,7, 19),
+    createTable("Software EE", 3,1,5,19),
+    createTable("Software EE", 4,1,3,19),
+    createTable("Software EE", 5,1,2,19),
+    createTable("Software EE", 6,1,1,19),
+    createTable("Software EE", 6,1,1,19),
+    createTable("Software EE", 6,1,1,19),
 ];
 
 
@@ -173,9 +186,17 @@ const numberTable = [
 class GenerateAttendance extends React.Component{
 
     state = {
-        week: weekOfYear
+        week: weekOfYear,
+        open1: false
     }
 
+    handleClickOpen = () => {
+        this.setState({ open1: true });
+    };
+
+    handleToClose = () => {
+        this.setState({ open1: false });
+    };
 
     handleLastWeek = () => {
         this.setState(state =>({
@@ -220,21 +241,33 @@ class GenerateAttendance extends React.Component{
                 <span className={classes.right}>
 
 
-                <Button size="small" color="primary" className="button" variant="outlined" >
-                        Month
+                <Button size="small" color="primary" className="button" variant="contained" onClick={this.handleClickOpen} >
+                        Duplicate
                 </Button>
+                    <Dialog
+                        disableBackdropClick
+                        disableEscapeKeyDown
+                        open={this.state.open1}
+                        onClose={this.handleClose}
+                        aria-labelledby='Dialog-content'
+                                >
+                      <DialogTitle>Duplicate Timetable</DialogTitle>
+                      <DialogContent id ='Dialog-content'>
+                        <form className={classes.container1}>
+                         <WeekPicker name ='Duplicate_from' className={classes.piker}/>
+                         <WeekPicker name ='Duplicate_to' className={classes.piker}/>
+                        </form>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={this.handleToClose} color="secondary">
+                          Cancel
+                        </Button>
+                        <Button onClick={this.handleToClose} color="primary">
+                          Ok
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
 
-                <Button size="small" color="primary" className="button" variant="outlined" >
-                        Week
-                </Button>
-
-                <Button size="small"  color="primary" className="button" variant="outlined">
-                        Day
-                </Button>
-
-                <Button size="small"  color="primary" className="button" variant="outlined">
-                        Event
-                </Button>
                 </span>
 
                 </Toolbar>
@@ -266,13 +299,13 @@ class GenerateAttendance extends React.Component{
                                             <TableRow className={classes.row} key={row.id}>
                                                 <CustomTableCell align='center'>{row.ses}</CustomTableCell>
 
-                                                <CustomTableCell align="center"><InsertData/></CustomTableCell>
-                                                <CustomTableCell align="center"><InsertData/></CustomTableCell>
-                                                <CustomTableCell align="center"><InsertData/></CustomTableCell>
-                                                <CustomTableCell align="center"><InsertData/></CustomTableCell>
-                                                <CustomTableCell align="center"><InsertData/></CustomTableCell>
-                                                <CustomTableCell align="center"><InsertData/></CustomTableCell>
-                                                <CustomTableCell align="center"><InsertData/></CustomTableCell>
+                                                <CustomTableCell text-align= "center"><InsertData/></CustomTableCell>
+                                                <CustomTableCell text-align= "center"><InsertData/></CustomTableCell>
+                                                <CustomTableCell text-align= "center"><InsertData/></CustomTableCell>
+                                                <CustomTableCell text-align= "center"><InsertData/></CustomTableCell>
+                                                <CustomTableCell text-align= "center"><InsertData/></CustomTableCell>
+                                                <CustomTableCell text-align= "center"><InsertData/></CustomTableCell>
+                                                <CustomTableCell text-align= "center"><InsertData/></CustomTableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
@@ -281,6 +314,7 @@ class GenerateAttendance extends React.Component{
                         </div>
                         <Divider style={{marginLeft:15,marginRight:15}}/>
                         <div className={classes.submitButton} >
+                            <Button size="medium" variant="outlined" color="primary" disabled={true} style={{marginLeft:15,marginRight:15}} >Edit</Button>
                             <Button size="medium" variant="outlined" color="primary"  >Discard</Button>
                             <Button size="medium"  color="primary" style={{marginLeft:15,marginRight:15}}  variant="contained">Save</Button>
                         </div>
