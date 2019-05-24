@@ -1,11 +1,12 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux'
 import PropTypes from "prop-types";
-import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
-import { Button, Grid, Paper, Table, TableBody, TableCell, TableRow } from "@material-ui/core";
+import { Paper, Table, TableBody, TableCell, TableRow } from "@material-ui/core";
 import GenerateReportTableHead from "./GenerateReportTableHead";
 import Data from "../../data/generateReport.json";
-import SaveIcon from "@material-ui/icons/Save";
+import DownloadButton from '../Button/DownloadButton'
+import { getSubjectData } from '../../redux/ActionCreator/apiRequest'
 
 const styles = theme => ({
     root: {
@@ -80,6 +81,11 @@ class GenerateReportTable extends Component {
         this.setState({ order, orderBy });
     };
 
+    componentDidMount(){
+        let { dispatch } = this.props
+        dispatch(getSubjectData())
+    }
+
     render() {
         const { classes } = this.props;
         const { data, order, orderBy } = this.state;
@@ -129,22 +135,12 @@ class GenerateReportTable extends Component {
                                     );
                                 })}
                             </TableBody>
-                            <p style={{ display: "none" }}>{(i = 0)}</p>
+                            {/* <p style={{ display: "none" }}>{(i = 0)}</p> */}
                         </Table>
                     </div>
                 </Paper>
-                <Grid container justify="flex-end" alignItems="flex-end">
-                    <Button
-                        variant="contained"
-                        color="default"
-                        className={classes.button}
-                    >
-                        <SaveIcon
-                            className={classNames(classes.leftIcon, classes.iconSmall)}
-                        />
-                        Download
-                    </Button>
-                </Grid>
+                <DownloadButton classes ={classes}/>
+                
             </>
         );
     }
@@ -154,4 +150,5 @@ GenerateReportTable.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(GenerateReportTable);
+export default connect(state => ({semSubjectData: state.requestStudentData.semSubjectData})) 
+(withStyles(styles)(GenerateReportTable))

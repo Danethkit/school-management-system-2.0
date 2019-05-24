@@ -9,7 +9,9 @@ import {
     REQUEST_GROUP_SUCCESS,
     REQUEST_ATTENDANCE_LINE_SUCCESS,
     REQUEST_ATTENDANCE_LINE_PENDING,
-    REQUEST_ATTENDANCE_LINE_FAILED
+    REQUEST_ATTENDANCE_LINE_FAILED,
+    TOGGLE_DIALOG,
+    REQUEST_SUBJECT_DATA
 } from '../../constants/env'
 import {odooRequest} from '../api'
 
@@ -100,15 +102,22 @@ export const createAttendanceSheet= (data) => (dispatch) => {
             params : data
         })
        })
-    .then(response => console.log('============', response))
-    .catch(err => console.log('err', err))
+    .then(response => response.json())
+    .then(data => dispatch({type: TOGGLE_DIALOG, payload: data}))
+    .catch(err => dispatch({type: TOGGLE_DIALOG, payload: err}))
 }
 
 export const getAttendanceLine = () => (dispatch) => {
-    console.log('request')
     dispatch({type: REQUEST_ATTENDANCE_LINE_PENDING})
     fetch('http://localhost:8069/get-attendance-line')
     .then(res => res.json())
     .then( data => dispatch({type: REQUEST_ATTENDANCE_LINE_SUCCESS, payload:data.data}))
     .catch(err => dispatch({type:REQUEST_ATTENDANCE_LINE_FAILED, payload:err}))
+}
+
+export const getSubjectData = () => (dispatch) => {
+    fetch('http://localhost:8069/get-subject-data')
+    .then(res => res.json())
+    .then(data => dispatch({type:REQUEST_SUBJECT_DATA}))
+    .catch( err => console.log(err))
 }

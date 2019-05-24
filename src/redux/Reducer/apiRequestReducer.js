@@ -9,7 +9,8 @@ import {
     REQUEST_GROUP_SUCCESS,
     REQUEST_ATTENDANCE_LINE_SUCCESS,
     REQUEST_ATTENDANCE_LINE_PENDING,
-    REQUEST_ATTENDANCE_LINE_FAILED
+    REQUEST_ATTENDANCE_LINE_FAILED,
+    REQUEST_SUBJECT_DATA
 } from '../../constants/env'
 
 const initData = {
@@ -24,7 +25,7 @@ const initData = {
     attendanceLine : [],
     requestStudentDataPending: false,
     requestAttendanceLinePending: false,
-    requestAttendanceLineFalied: false,
+    semSubjectData : {}
 }
 
 export const requestStudentData = (state=initData, action={}) => {
@@ -46,12 +47,13 @@ export const requestStudentData = (state=initData, action={}) => {
         case REQUEST_GROUP_SUCCESS:
             return Object.assign({}, state, {groupData: action.payload})
         case REQUEST_ATTENDANCE_LINE_SUCCESS:
-            console.log('action . payload', action.payload)
             return {...state, ...{attendanceLine:action.payload}}
         case REQUEST_ATTENDANCE_LINE_PENDING:
             return {...state, ...{requestAttendanceLinePending:true}}
         case REQUEST_ATTENDANCE_LINE_FAILED:
             return {...state, ...{requestAttendanceLineFalied:true}}
+        case REQUEST_SUBJECT_DATA:
+            return { ...state, ...{semSubjectData:action.payload}}
         default:
             return state
     }

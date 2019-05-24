@@ -9,6 +9,7 @@ import {
     CHANGE_SESSION,
     CHANGE_DATE,
     CHANGE_SEARCH_FIELD,
+    TOGGLE_DIALOG,
 } from '../../constants/env'
 
 const initialPicker = {
@@ -21,7 +22,8 @@ const initialPicker = {
     faculty: '',
     semester : '',
     course: '',
-    searchField: ''
+    searchField: '',
+    createAttendanceRequested : false
 }
 
 export const changePicker = (state=initialPicker, action={}) => {
@@ -46,6 +48,8 @@ export const changePicker = (state=initialPicker, action={}) => {
             return Object.assign({}, state, {group:action.payload})
         case CHANGE_SEARCH_FIELD:
             return { ...state, ...{searchField:action.payload}}
+        case TOGGLE_DIALOG:
+            return { ...state, ...{createAttendanceRequested:action.payload}}
         default:
             return state
     }
