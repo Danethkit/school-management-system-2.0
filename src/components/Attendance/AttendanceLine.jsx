@@ -16,5 +16,5 @@ const AttendanceLine = ({attendanceLine}) => {
         <br/>
         <AttendanceLineTable/>
       </>}
-export default connect(state =>({attendanceLine: state.requestStudentData.attendanceLine,
+export default connect(state =>({attendanceLine: state.initData.attendanceLine,
 }))(AttendanceLine)

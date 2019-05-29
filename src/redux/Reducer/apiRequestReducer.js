@@ -13,7 +13,7 @@ import {
     REQUEST_SUBJECT_DATA
 } from '../../constants/env'
 
-const initData = {
+const initialData = {
     studentData : [],
     error: '',
     subjectData :[],
@@ -23,17 +23,17 @@ const initData = {
     groupData: [],
     facultyData: [],
     attendanceLine : [],
-    requestStudentDataPending: false,
+    initDataPending: false,
     requestAttendanceLinePending: false,
-    semSubjectData : {}
+    subjectInfo : {}
 }
 
-export const requestStudentData = (state=initData, action={}) => {
+export const initData = (state= initialData, action={}) => {
     switch(action.type){
         case REQUEST_FAILED:
             return Object.assign({}, state, {error: action.payload})
         case REQUEST_STUDENTS_SUCCESS:
-            return Object.assign({}, state, {studentData: action.payload, requestStudentDataPending:false})
+            return Object.assign({}, state, {studentData: action.payload, initDataPending:false})
         case REQUEST_SUBJECT_SUCCESS:
             return Object.assign({}, state, {subjectData: action.payload})
         case REQUEST_SESSION_SUCCESS:
@@ -53,7 +53,7 @@ export const requestStudentData = (state=initData, action={}) => {
         case REQUEST_ATTENDANCE_LINE_FAILED:
             return {...state, ...{requestAttendanceLineFalied:true}}
         case REQUEST_SUBJECT_DATA:
-            return { ...state, ...{semSubjectData:action.payload}}
+            return { ...state, ...{subjectInfo:action.payload}}
         default:
             return state
     }

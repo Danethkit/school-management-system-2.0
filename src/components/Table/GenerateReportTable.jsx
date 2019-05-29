@@ -6,18 +6,18 @@ import { Paper, Table, TableBody, TableCell, TableRow } from "@material-ui/core"
 import GenerateReportTableHead from "./GenerateReportTableHead";
 import Data from "../../data/generateReport.json";
 import DownloadButton from '../Button/DownloadButton'
-import { getSubjectData } from '../../redux/ActionCreator/apiRequest'
+import {getAttendanceLine} from '../../redux/ActionCreator/apiRequest'
+
 
 const styles = theme => ({
     root: {
-        width: "100%"
+        width: "100%",
+        overflowX: 'auto'
     },
     table: {
         minWidth: 1020
     },
-    tableWrapper: {
-        overflowX: "auto"
-    },
+   
     textRow: {
         fontSize: 13,
 
@@ -82,18 +82,34 @@ class GenerateReportTable extends Component {
     };
 
     componentDidMount(){
-        let { dispatch } = this.props
-        dispatch(getSubjectData())
+        let { attendanceLine, dispatch } = this.props
+        if(attendanceLine.length === 0){
+            dispatch(getAttendanceLine())
+        }
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, course, batch, semester, group, subjects, attendanceLine, endDate, startDate } = this.props;
+        let filterLine = attendanceLine.filter(line => new Date(line.date) >= startDate && new Date(line.date) <= endDate && line.present && subjects.includes(line.subject))
+        let res = {}
+        attendanceLine.forEach(line => {
+            if(line.subject in res){
+                if(line.student in res[line.subject]){
+                    res[line.subject][line.student] += 1
+                }else {
+                    res[line.subject][line.student] = 1
+                }
+            }else {
+                res[line.subject][line.student] = 1
+            }
+        })
+        console.log('attendnace filterline============>', res)
         const { data, order, orderBy } = this.state;
 
         return (
             <>
                 <Paper className={classes.root}>
-                    <div className={classes.tableWrapper}>
+                    {/* <div className={classes.tableWrapper}> */}
                         <Table className={classes.table}>
                             <GenerateReportTableHead
                                 order={order}
@@ -137,9 +153,9 @@ class GenerateReportTable extends Component {
                             </TableBody>
                             {/* <p style={{ display: "none" }}>{(i = 0)}</p> */}
                         </Table>
-                    </div>
+                    {/* </div> */}
                 </Paper>
-                <DownloadButton classes ={classes}/>
+                <DownloadButton classes ={classes} />
                 
             </>
         );
@@ -150,5 +166,9 @@ GenerateReportTable.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default connect(state => ({semSubjectData: state.requestStudentData.semSubjectData})) 
-(withStyles(styles)(GenerateReportTable))
+export default connect(state => ({
+    subjects: state.changePicker.subjects,
+    endDate: state.changePicker.endDate,
+    startDate: state.changePicker.startDate,
+    attendanceLine: state.initData.attendanceLine
+})) (withStyles(styles)(GenerateReportTable))

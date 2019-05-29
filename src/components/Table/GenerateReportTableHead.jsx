@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { connect } from 'react-redux'
 import {
     TableHead,
     TableRow,
-    TableCell,
-    Tooltip,
-    TableSortLabel,
     withStyles
 } from "@material-ui/core";
+import TableColumn from './TableColumn'
 const styles = theme => ({
     text: {
         fontWeight: "bold",
@@ -15,21 +14,6 @@ const styles = theme => ({
     }
 });
 
-const rows = [
-    { id: "no", label: "S.No", numeric: true, disablePadding: false },
-    {
-        id: "roll_number",
-        label: "Roll Number",
-        numeric: true,
-        disablePadding: true
-    },
-    { id: "name", label: "Student Name", numeric: true, disablePadding: true },
-    { id: "subject1", label: "Subject 1", numeric: true, disablePadding: true },
-    { id: "subject2", label: "Subject 2", numeric: true, disablePadding: true },
-    { id: "subject3", label: "Subject 3", numeric: true, disablePadding: true },
-    { id: "subject4", label: "Subject 4", numeric: true, disablePadding: true },
-    { id: "total", label: "Total", numeric: false, disablePadding: true }
-];
 
 class GenerateReportTableHead extends Component {
     createSortHandler = property => event => {
@@ -37,33 +21,23 @@ class GenerateReportTableHead extends Component {
     };
 
     render() {
-        const { order, orderBy, classes } = this.props;
-
+        const { order, orderBy, classes, subjects } = this.props;        
+       
         return (
             <TableHead>
                 <TableRow>
-                    {rows.map(
-                        row => (
-                            <TableCell
-                                key={row.id}
-                                align={row.numeric ? "left" : "center"}
-                                sortDirection={orderBy === row.id ? order : false}
-                                padding={row.disablePadding ? "none" : "default"}
-                            >
-                                <Tooltip title="Sort" enterDelay={300}>
-                                    <TableSortLabel
-                                        className={classes.text}
-                                        active={orderBy === row.id}
-                                        direction={order}
-                                        onClick={this.createSortHandler(row.id)}
-                                    >
-                                        {row.label}
-                                    </TableSortLabel>
-                                </Tooltip>
-                            </TableCell>
-                        ),
-                        this
-                    )}
+                    <TableColumn numeric={true} disablePadding={false} id ="no"
+                     label="S.no" order={order} orderBy={orderBy} classes={classes} />
+                    <TableColumn numeric={true} disablePadding={true} id ="roll_number"
+                     label="Roll Number" order={order} orderBy={orderBy} classes={classes} />
+                    <TableColumn numeric={true} disablePadding={true} id ="name"
+                     label="Subject Name" order={order} orderBy={orderBy} classes={classes} />
+                    {
+                        subjects.map(subject => <TableColumn numeric={true} disablePadding={true} order={order} orderBy={orderBy} 
+                        classes={classes} label={subject} id={subject} />)
+                    }
+                    <TableColumn numeric={false} disablePadding={true} id ="total"
+                     label="Total" order={order} orderBy={orderBy} classes={classes} />
                 </TableRow>
             </TableHead>
         );
@@ -74,4 +48,11 @@ GenerateReportTableHead.propTypes = {
     order: PropTypes.string.isRequired,
     orderBy: PropTypes.string.isRequired
 };
-export default withStyles(styles)(GenerateReportTableHead);
+export default connect(state => ({
+  group:state.changePicker.group,
+  batch : state.changePicker.batch,
+  course : state.changePicker.course,
+  semester : state.changePicker.semester,
+  subjectInfo : state.initData.subjectInfo,
+  subjects: state.changePicker.subjects
+})) (withStyles(styles)(GenerateReportTableHead))

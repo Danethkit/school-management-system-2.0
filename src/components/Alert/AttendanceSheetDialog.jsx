@@ -13,7 +13,6 @@ const AttendanceSheetDialog = ({createAttendanceRequested, dispatch}) =>{
   let detail = ''
   let error = ''
   if (createAttendanceRequested !==  false){
-    console.log('check==========', createAttendanceRequested)
     if (createAttendanceRequested.result === 'ok') {
       title = 'Success'
       detail = 'Data has been saved to Databse'

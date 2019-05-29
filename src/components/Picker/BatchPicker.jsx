@@ -4,12 +4,16 @@ import { connect } from 'react-redux'
 import { onBatchChange } from '../../redux/ActionCreator/userBehavior'
 import DefaultPicker from './DefaultPicker'
 
-const BatchPicker = ({dispatch, changePicker, requestStudentData}) => {
-  const allBatch = Object.keys(requestStudentData.studentData).sort((a, b)=> a.split(" ")[1] - b.split(" ")[1])
+const BatchPicker = ({dispatch, batch, subjectInfo, course}) => {
+  let allBatch = []
+  if(Object.keys(subjectInfo).length !== 0){
+    let batches = subjectInfo[course]
+    allBatch = Object.keys(batches).sort((a, b)=> a.split(" ")[1] - b.split(" ")[1])
+  }
   let action = bindActionCreators(onBatchChange, dispatch)
+  
   return <DefaultPicker 
-          value ={changePicker.batch}
-          dispatch ={ dispatch }
+          value ={batch}
           handleOnChange ={action}
           label = "Batch"
           menuItem = {{...allBatch}}
@@ -17,6 +21,7 @@ const BatchPicker = ({dispatch, changePicker, requestStudentData}) => {
 }
 
 export default connect(state => ({
-  changePicker:state.changePicker,
-  requestStudentData: state.requestStudentData
+  batch:state.changePicker.batch,
+  course: state.changePicker.course,
+  subjectInfo: state.initData.subjectInfo
 }))(BatchPicker)

@@ -82,6 +82,7 @@ class AttendanceLineTable extends Component {
   render() {
     const { classes, attendanceLine, searchField } = this.props;
     const { rowsPerPage, page, order, orderBy } = this.state;
+    console.log('attendance line', attendanceLine)
     let filteredData = attendanceLine.filter(line => line.student.toLowerCase().includes(searchField.toLowerCase()))
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, filteredData.length - page * rowsPerPage);
@@ -167,8 +168,8 @@ AttendanceLineTable.propTypes = {
 };
 
 export default connect(state => ({
-  attendanceLine: state.requestStudentData.attendanceLine,
-  requestAttendanceLinePending: state.requestStudentData.requestAttendanceLinePending,
-  requestAttendanceLineFalied: state.requestStudentData.requestAttendanceLineFalied,
+  attendanceLine: state.initData.attendanceLine,
+  requestAttendanceLinePending: state.initData.requestAttendanceLinePending,
+  requestAttendanceLineFalied: state.initData.requestAttendanceLineFalied,
   searchField: state.changePicker.searchField
 }))(withStyles(styles)(AttendanceLineTable))

@@ -10,25 +10,23 @@ import { Card, CardContent, Grid } from "@material-ui/core";
 
 export default function GenerateReportHeadPicker() {
     return (
-        <div>
-            <Card>
-                <CardContent>
-                    <Grid container spacing={16}>
-                        <Grid item sm>
-                            <CoursePicker />
-                            <SemesterPicker />
-                        </Grid>
-                        <Grid item sm>
-                            <BatchPicker />
-                            <GroupPicker />
-                        </Grid>
-                        <Grid item sm>
-                            <StartDatePicker/>
-                            <EndDatePicker />
-                        </Grid>
+        <Card>
+            <CardContent>
+                <Grid container spacing={16}>
+                    <Grid item sm>
+                        <CoursePicker />
+                        <BatchPicker />
                     </Grid>
-                </CardContent>
-            </Card>
-        </div>
+                    <Grid item sm>
+                        <SemesterPicker />
+                        <GroupPicker />
+                    </Grid>
+                    <Grid item sm>
+                        <StartDatePicker/>
+                        <EndDatePicker />
+                    </Grid>
+                </Grid>
+            </CardContent>
+        </Card>
     );
 }

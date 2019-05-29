@@ -25,7 +25,7 @@ const groupByBatch = (data) =>  {
         if(batch in res){
             res[batch].push(e)
         }else {
-            res[batch] = []
+            res[batch] = [e]
         }
     })
     return res
@@ -95,7 +95,7 @@ export const requestGroup = () => (dispatch) => {
 }
 
 export const createAttendanceSheet= (data) => (dispatch) => {
-    fetch('http://localhost:8069/create-attendance-sheet',{
+    fetch('http://192.168.7.222:8069/create-attendance-sheet',{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -109,15 +109,15 @@ export const createAttendanceSheet= (data) => (dispatch) => {
 
 export const getAttendanceLine = () => (dispatch) => {
     dispatch({type: REQUEST_ATTENDANCE_LINE_PENDING})
-    fetch('http://localhost:8069/get-attendance-line')
+    fetch('http://192.168.7.222:8069/get-attendance-line')
     .then(res => res.json())
     .then( data => dispatch({type: REQUEST_ATTENDANCE_LINE_SUCCESS, payload:data.data}))
     .catch(err => dispatch({type:REQUEST_ATTENDANCE_LINE_FAILED, payload:err}))
 }
 
 export const getSubjectData = () => (dispatch) => {
-    fetch('http://localhost:8069/get-subject-data')
+    fetch('http://192.168.7.222:8069/get-subject-data')
     .then(res => res.json())
-    .then(data => dispatch({type:REQUEST_SUBJECT_DATA}))
+    .then(data => dispatch({type:REQUEST_SUBJECT_DATA, payload:data}))
     .catch( err => console.log(err))
 }

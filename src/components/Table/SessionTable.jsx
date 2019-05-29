@@ -66,9 +66,9 @@ function getSorting(order, orderBy) {
 
 const mapStateToProps = (state) => {
   return {
-    studentData : state.requestStudentData.studentData ,
-    isPending: state.requestStudentData.isPending,
-    error: state.requestStudentData.error,
+    studentData : state.initData.studentData ,
+    isPending: state.initData.isPending,
+    error: state.initData.error,
     batch: state.changePicker.batch,
   }
 }
@@ -100,10 +100,9 @@ class SessionTable extends Component {
     let selectedStu = this.state.selected
     let storeData = store.getState()
     let {subject, date, session, batch, remark} = storeData.changePicker
-    let { subjectData } = storeData.requestStudentData
-    let subjectId = subjectData[batch].find((e) => `${e.name} [${e.code}]` === subject).id
+    // let { subjectData } = storeData.initData
     let data = {
-      subject_id: subjectId,
+      subject: subject,
       date: date.toDateString(),
       session: session,
       batch: batch,
