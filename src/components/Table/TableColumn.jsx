@@ -6,12 +6,12 @@ import {
 } from "@material-ui/core"
 
 const TableColumn = ({id, numeric, orderBy, order, classes, label, disablePadding}) => {
-    return <TableCell
-    key={id}
-    align={numeric ? "left" : "center"}
-    sortDirection={orderBy === id ? order : false}
-    padding={disablePadding ? "none" : "default"}
->
+    return (
+    <TableCell
+            key={id}
+            align={numeric ? "left" : "center"}
+            sortDirection={orderBy === id ? order : false}
+            padding={disablePadding ? "none" : "default"}>
     <Tooltip title="Sort" enterDelay={300}>
         <TableSortLabel
             className={classes.text}
@@ -22,6 +22,6 @@ const TableColumn = ({id, numeric, orderBy, order, classes, label, disablePaddin
             {label}
         </TableSortLabel>
     </Tooltip>
-</TableCell>
+</TableCell>);
 }
 export default TableColumn

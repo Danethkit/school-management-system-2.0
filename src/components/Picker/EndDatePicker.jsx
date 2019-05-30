@@ -6,7 +6,7 @@ import {changeReportEndDate} from '../../redux/ActionCreator/userBehavior'
 
 
 const EndDatePicker = ({endDate, dispatch}) => {
- return <DefaultDatePicker value={endDate} label="End Date:" onChange={(date)=> dispatch(changeReportEndDate(date))}/>
+ return <DefaultDatePicker value={endDate} label="EndDate" onChange={(date)=> dispatch(changeReportEndDate(date))}/>
 }
 
 export default connect(state=> ({endDate: state.changePicker.endDate}))(EndDatePicker)

@@ -17,7 +17,6 @@ const styles = theme => ({
 });
 
 const DefaultDatePicker = ({classes, value, onChange , label}) =>{
-
     return (
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <DatePicker
@@ -32,9 +31,8 @@ const DefaultDatePicker = ({classes, value, onChange , label}) =>{
               <InputAdornment
                 disableTypography={true}
                 className={classes.textFile}
-                position="start"
-              >
-                <b>{label}:</b>
+                position="start">
+                <b>{label}</b>
               </InputAdornment>
             )
           }}

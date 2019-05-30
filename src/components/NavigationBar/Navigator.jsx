@@ -7,16 +7,15 @@ import {
   Tabs,
   Toolbar
 } from "@material-ui/core";
-import CheeseburgerMenu from "cheeseburger-menu";
-import HamburgerMenu from "react-hamburger-menu";
+import MenuIcon from '@material-ui/icons/Menu';
 import { withStyles } from "@material-ui/core";
 import { AccountCircle, Chat, AlternateEmail } from "@material-ui/icons";
-import MenuContent from "./MenuContent";
+import SideBarDrawer from '../NavigationBar/SideBarDrawer'
 
 const styles = theme => ({
   root: {
     flexGrow: 0,
-    backgroundColor: "#000",
+    // backgroundColor: "#000",
     padding: -10,
     paddingLeft: -10
   },
@@ -28,7 +27,11 @@ const styles = theme => ({
 
   menuButton: {
     marginRight: 0,
-    marginLeft: 0
+    marginLeft: 0,  
+    // marginRight: theme.spacing(2),
+  },
+  hide : {
+    display: 'none'
   },
   tabs: {
     flexGrow: 0
@@ -61,17 +64,16 @@ class NavigationBar extends React.Component {
     };
   }
 
-  openMenu() {
-    this.setState({ menuOpen: true });
-  }
-
-  closeMenu() {
-    this.setState({ menuOpen: false });
-  }
-
-  ChangeNavigateRoute = (event, route) => {
+  changeNavigateRoute = (event, route) => {
     this.setState({ route });
     this.props.history.push(route);
+  };
+
+  toggleDrawer = (open) => event => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+    this.setState({ ...this.state, menuOpen: open });
   };
 
   render() {
@@ -94,37 +96,27 @@ class NavigationBar extends React.Component {
     } 
     
     const { classes } = this.props;
+    const { menuOpen } = this.state
 
     return (
       <>
         <AppBar position="static">
-          <Toolbar variant="dense" display="flex" className={classes.root}>
-            <CheeseburgerMenu
-              className={classes.menuButton}
-              color="inherit"
-              isOpen={this.state.menuOpen}
-              closeCallback={this.closeMenu.bind(this)}
-              width={200}
-            >
-              <MenuContent items={items} />
-            </CheeseburgerMenu>
-            <HamburgerMenu
-              isOpen={this.state.menuOpen}
-              menuClicked={this.openMenu.bind(this)}
-              width={28}
-              height={12}
-              strokeWidth={1}
-              rotate={0}
-              color="white"
-              borderRadius={0}
-              animationDuration={0.4}
-            />
+          <Toolbar variant="dense" display="flex" className={classes.root} color='primary'>
+            <SideBarDrawer open={menuOpen} toggleDrawer={this.toggleDrawer} items={items}/>
+            <IconButton
+            color="inherit"
+            aria-label="Open drawer"
+            onClick={this.toggleDrawer(true)}
+            edge="start"
+            className={menuOpen ? classes.hide : classes.menuButton}>
+                <MenuIcon />
+            </IconButton>
             <Tabs
               variant="scrollable"
               scrollButtons="off"
               className={classes.tabs}
               value={this.state.route}
-              onChange={this.ChangeNavigateRoute}
+              onChange={this.changeNavigateRoute}
             >
               {navBar.map(label => (
                 <Tab

@@ -1,4 +1,4 @@
-import React,{ useEffect} from "react";
+import React, {useEffect} from "react";
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { requestGroup } from '../../redux/ActionCreator/apiRequest' 
@@ -7,7 +7,11 @@ import DefaultPicker from './DefaultPicker'
 import { setSubjects } from '../../redux/ActionCreator/userBehavior'
 
 
+
 const GroupPicker = ({dispatch, group, batch, course, subjectInfo, semester}) => {
+  if(semester===''){
+    semester = 'Semester 1'
+  }
   let actions = bindActionCreators({requestGroup, onGroupChange}, dispatch) 
   useEffect(()=> { 
     let subjects =[]
@@ -16,6 +20,7 @@ const GroupPicker = ({dispatch, group, batch, course, subjectInfo, semester}) =>
     }
     dispatch(setSubjects(subjects))  
   })
+
   let groups = []
   if (Object.keys(subjectInfo).length !== 0 && semester !== ''){
     groups = Object.keys(subjectInfo[course][batch][semester])

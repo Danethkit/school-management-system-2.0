@@ -6,11 +6,10 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 
 
 const AttendanceLine = ({attendanceLine}) => {
-      console.log('attendance line')
       return <>
         <h1>Attendance Line</h1>
         {
-          attendanceLine.length==0 ? <LinearProgress /> : null
+          attendanceLine.length===0 ? <LinearProgress /> : null
         }        
         <SearchBox />
         <br/>

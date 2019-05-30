@@ -82,7 +82,6 @@ class AttendanceLineTable extends Component {
   render() {
     const { classes, attendanceLine, searchField } = this.props;
     const { rowsPerPage, page, order, orderBy } = this.state;
-    console.log('attendance line', attendanceLine)
     let filteredData = attendanceLine.filter(line => line.student.toLowerCase().includes(searchField.toLowerCase()))
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, filteredData.length - page * rowsPerPage);

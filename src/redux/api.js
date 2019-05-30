@@ -27,3 +27,18 @@ export const  odooRequest = (model, operation='search_read',fields =[], domain =
         })
     })
 }
+
+export const  odooPrintReport = (report_id, value)=>{
+    console.log('check check')
+    return new Promise ((resolve, reject)=> {
+        odoo.connect((err) => {
+            if(err) return reject('request error')
+            let params = []
+            params.push(value)
+            odoo.render_report(report_id, params, function (err, value) {
+                if (err) { return reject('report error') }
+                resolve(value)
+            });   
+        })
+    })
+}

@@ -4,9 +4,9 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { Paper, Table, TableBody, TableCell, TableRow } from "@material-ui/core";
 import GenerateReportTableHead from "./GenerateReportTableHead";
-import Data from "../../data/generateReport.json";
 import DownloadButton from '../Button/DownloadButton'
-import {getAttendanceLine} from '../../redux/ActionCreator/apiRequest'
+import {getAttendanceLine,requestStudent, printAttendanceReport } from '../../redux/ActionCreator/apiRequest'
+
 
 
 const styles = theme => ({
@@ -45,6 +45,7 @@ function desc(a, b, orderBy) {
 }
 
 function stableSort(array, cmp) {
+    if(!array) return []
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
         const order = cmp(a[0], b[0]);
@@ -59,13 +60,11 @@ function getSorting(order, orderBy) {
         ? (a, b) => desc(a, b, orderBy)
         : (a, b) => -desc(a, b, orderBy);
 }
-let i = 0;
 
 class GenerateReportTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: Data.sort((a, b) => (a.roll_number < b.roll_number ? -1 : 1)),
             order: "asc",
             orderBy: "roll_number",
         };
@@ -82,68 +81,75 @@ class GenerateReportTable extends Component {
     };
 
     componentDidMount(){
-        let { attendanceLine, dispatch } = this.props
+        let { attendanceLine, dispatch, studentData } = this.props
         if(attendanceLine.length === 0){
             dispatch(getAttendanceLine())
+        }
+        if(Object.keys(studentData).length === 0){
+            dispatch(requestStudent())
         }
     }
 
     render() {
-        const { classes, course, batch, semester, group, subjects, attendanceLine, endDate, startDate } = this.props;
-        let filterLine = attendanceLine.filter(line => new Date(line.date) >= startDate && new Date(line.date) <= endDate && line.present && subjects.includes(line.subject))
+
+        const { classes, batch, group, subjects, attendanceLine, endDate, startDate, studentData, dispatch } = this.props;
+
+        let filterLine = attendanceLine.filter(line => {
+            return new Date(line.date) >= startDate && new Date(line.date) <= endDate && line.present && subjects.includes(line.subject) && line.group === group && line.batch === batch
+        } )
         let res = {}
-        attendanceLine.forEach(line => {
-            if(line.subject in res){
-                if(line.student in res[line.subject]){
-                    res[line.subject][line.student] += 1
+        filterLine.forEach(line => {
+            if(line.student in res){
+                if(line.subject in res[line.student]){
+                    res[line.student][line.subject] += 1
                 }else {
-                    res[line.subject][line.student] = 1
+                    res[line.student][line.subject] = 1
                 }
             }else {
-                res[line.subject][line.student] = 1
+                let temp = {}
+                temp[line.subject] = 1
+                res[line.student] = temp
             }
         })
-        console.log('attendnace filterline============>', res)
-        const { data, order, orderBy } = this.state;
+        const { order, orderBy } = this.state;
+        let i =0
+        let subj = []
+        
+        Object.values(res).forEach(e => {
+           let diff = Object.keys(e).filter(x => !subj.includes(x));
+           if(diff){
+               subj = [...subj, ...diff]
+           }
+        })
 
         return (
             <>
                 <Paper className={classes.root}>
-                    {/* <div className={classes.tableWrapper}> */}
                         <Table className={classes.table}>
                             <GenerateReportTableHead
+                                subjects = {subj }
                                 order={order}
                                 orderBy={orderBy}
                                 onRequestSort={this.handleRequestSort}
                             />
                             <TableBody>
-                                {stableSort(data, getSorting(order, orderBy)).map(row => {
+                                {stableSort(studentData[batch], getSorting(order, orderBy)).map(row => {
                                     return (
-                                        <TableRow hover key={row.id}>
+                                        <TableRow hover key={row.roll_number}>
                                             <TableCell className={classes.textRow}>
-
-                                                {(i += 1)}
+                                               {++i}
                                             </TableCell>
-                                            <TableCell className={classes.textRow} padding="none">
+                                            <TableCell className={classes.textRow} >
                                                 {row.roll_number}
                                             </TableCell>
                                             <TableCell className={classes.textRow} padding="none">
-                                                {row.name}
-                                            </TableCell>
-
-                                            <TableCell className={classes.textRow}>
-                                                {row.subject1}
-                                            </TableCell>
-                                            <TableCell className={classes.textRow} padding="none">
-                                                {row.subject2}
-                                            </TableCell>
-                                            <TableCell className={classes.textRow} padding="none">
-                                                {row.subject3}
-                                            </TableCell>
-                                            <TableCell className={classes.textRow}>
-                                                {row.subject4}
-                                            </TableCell>
-                                            
+                                                {row.last_name +' '+ row.name}
+                                            </TableCell> 
+                                            {
+                                                subj.map((e, i)=> {
+                                                    return <TableCell  className={classes.textRow} padding="none" key={i}>{res[row.last_name +' '+ row.name][e]}</TableCell>
+                                                })
+                                            }
                                             <TableCell className={classes.textRow}>
                                                 {row.total}
                                             </TableCell>
@@ -151,11 +157,9 @@ class GenerateReportTable extends Component {
                                     );
                                 })}
                             </TableBody>
-                            {/* <p style={{ display: "none" }}>{(i = 0)}</p> */}
                         </Table>
-                    {/* </div> */}
                 </Paper>
-                <DownloadButton classes ={classes} />
+                <DownloadButton classes ={classes} handleClick={()=> dispatch(printAttendanceReport())} />
                 
             </>
         );
@@ -170,5 +174,8 @@ export default connect(state => ({
     subjects: state.changePicker.subjects,
     endDate: state.changePicker.endDate,
     startDate: state.changePicker.startDate,
-    attendanceLine: state.initData.attendanceLine
+    batch: state.changePicker.batch,
+    group: state.changePicker.group,
+    attendanceLine: state.initData.attendanceLine,
+    studentData : state.initData.studentData
 })) (withStyles(styles)(GenerateReportTable))

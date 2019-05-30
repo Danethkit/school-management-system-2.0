@@ -21,7 +21,7 @@ const initialPicker = {
     session: '09:10am-10:00am',
     date : new Date(),
     remark: {},
-    group : '',
+    group : 'Group 1',
     faculty: '',
     semester : '',
     course: 'Software Engineering',

@@ -7,13 +7,7 @@ import {
 const AttendanceButton = ({onClick}) =>{
   return <>
   <Grid container justify="flex-end" alignItems="flex-end">
-  <Button
-      color="secondary"
-      variant="outlined"
-      onClick={onClick}
-    >
-      Save
-    </Button>
+  <Button color="primary" onClick={onClick} style={{margin:'10px'}}variant="contained"> Save </Button>
   </Grid>
   </>
 }

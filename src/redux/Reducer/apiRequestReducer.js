@@ -10,7 +10,10 @@ import {
     REQUEST_ATTENDANCE_LINE_SUCCESS,
     REQUEST_ATTENDANCE_LINE_PENDING,
     REQUEST_ATTENDANCE_LINE_FAILED,
-    REQUEST_SUBJECT_DATA
+    REQUEST_SUBJECT_DATA,
+    PRINT_ATTENDANCE_REPORT,
+    TOGGLE_DIALOG,
+    SET_REPORT_B64
 } from '../../constants/env'
 
 const initialData = {
@@ -25,7 +28,9 @@ const initialData = {
     attendanceLine : [],
     initDataPending: false,
     requestAttendanceLinePending: false,
-    subjectInfo : {}
+    subjectInfo : {},
+    report: false,
+    b64Report : ''
 }
 
 export const initData = (state= initialData, action={}) => {
@@ -54,6 +59,10 @@ export const initData = (state= initialData, action={}) => {
             return {...state, ...{requestAttendanceLineFalied:true}}
         case REQUEST_SUBJECT_DATA:
             return { ...state, ...{subjectInfo:action.payload}}
+        case PRINT_ATTENDANCE_REPORT:
+            return {...state,...{report:action.payload}}
+        case SET_REPORT_B64:
+            return {...state,...{b64Report:action.payload}}
         default:
             return state
     }

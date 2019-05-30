@@ -80,10 +80,8 @@ class DuplicateTo extends React.Component {
 
   render() {
     const { classes } = this.props;
-
     return (
       <div className={classes.root}>
-        
         <FormControl className={classes.formControl}>
         <InputLabel htmlFor="select-multiple-checkbox">
           Duplicate to:

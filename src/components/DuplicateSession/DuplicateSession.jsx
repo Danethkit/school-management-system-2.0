@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux"
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import {
@@ -8,8 +9,7 @@ import {
   DialogContent,
   DialogTitle
 } from "@material-ui/core";
-import DuplicateTo from "./DuplicateTo";
-import DuplicateFrom from "./DuplicateFrom";
+import DropBox from './DropBox'
 
 const styles = theme => ({
   container: {
@@ -21,9 +21,12 @@ const styles = theme => ({
     minWidth: 120
   }
 });
+
 class DuplicateSession extends React.Component {
   state = {
-    open: false
+    open: false,
+    startSession: '',
+    endSession: ''
   };
   handleClickOpen = () => {
     this.setState({ open: true });
@@ -32,9 +35,13 @@ class DuplicateSession extends React.Component {
   handleClose = () => {
     this.setState({ open: false });
   };
+  onChangeSession = (value) =>{
+    console.log('value')
+  }
+
 
   render() {
-    const { classes } = this.props;
+    const { classes, sessionData } = this.props;
 
     return (
       <div>
@@ -50,8 +57,8 @@ class DuplicateSession extends React.Component {
           <DialogTitle>Fill the session to duplicate:</DialogTitle>
           <DialogContent>
             <form className={classes.container}>
-              <DuplicateFrom />
-              <DuplicateTo />
+              <DropBox placeholder="From" items={sessionData} handleChange={this.onChangeSession} />
+              <DropBox placeholder="To" items={sessionData} handleChange={this.onChangeSession} />
             </form>
           </DialogContent>
           <DialogActions>
@@ -72,4 +79,4 @@ DuplicateSession.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(DuplicateSession);
+export default connect(state=>({sessionData: state.initData.sessionData}))(withStyles(styles)(DuplicateSession))

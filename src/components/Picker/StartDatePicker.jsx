@@ -15,7 +15,7 @@ const styles = theme => ({
 });
 
 const StartDatePicker = ({startDate, dispatch}) => {
- return <DefaultDatePicker value={startDate} label="Start Date:" onChange={(date) => dispatch(changeReportStartDate(date))}/>
+ return <DefaultDatePicker value={startDate} label="StartDate" onChange={(date) => dispatch(changeReportStartDate(date))}/>
 }
 
 export default connect(state=> ({startDate: state.changePicker.startDate}))(withStyles(styles)(StartDatePicker))

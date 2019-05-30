@@ -11,9 +11,12 @@ import {
     REQUEST_ATTENDANCE_LINE_PENDING,
     REQUEST_ATTENDANCE_LINE_FAILED,
     TOGGLE_DIALOG,
-    REQUEST_SUBJECT_DATA
+    REQUEST_SUBJECT_DATA,
+    PRINT_ATTENDANCE_REPORT,
+    SET_REPORT_B64
 } from '../../constants/env'
-import {odooRequest} from '../api'
+import {odooRequest, odooPrintReport} from '../api'
+import React from 'react'
 
 // Helper functino 
 
@@ -120,4 +123,14 @@ export const getSubjectData = () => (dispatch) => {
     .then(res => res.json())
     .then(data => dispatch({type:REQUEST_SUBJECT_DATA, payload:data}))
     .catch( err => console.log(err))
+}
+
+export const printAttendanceReport = () => (dispatch) => {
+    odooPrintReport('sms2.attendance_report_qweb', [12,3])
+    .then(value =>{
+        const b64 = value.result
+        dispatch({type:PRINT_ATTENDANCE_REPORT, payload:b64})
+        dispatch({type:SET_REPORT_B64, payload:b64})
+    })
+    .catch(err => console.log(err))
 }
