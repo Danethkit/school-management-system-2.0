@@ -79,8 +79,8 @@ function Option(props) {
 function AutoComplete(props) {
   const classes = useStyles();
   const theme = useTheme();
-  const {suggestions, value, onChange} = props
-
+  const {suggestions, value, onChange, selectedFaculty} = props
+  // console.log('check ', selectedFaculty);
   const selectStyles = {
     input: base => ({
       ...base,

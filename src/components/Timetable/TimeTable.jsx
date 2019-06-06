@@ -53,7 +53,8 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const TimeTable = memo(({header, week, onDataInsert, sessions, facultyData}) => {
+const TimeTable = memo(({header, week, onDataInsert, sessions, facultyData, selectedFaculty}) => {
+    console.log('selectedFaculty',selectedFaculty);
     const sortedSession = useMemo(()=> sessions.sort((a,b)=> {
         let timeA = [a.slice(0,5), ' ', a.slice(5,7)].join('')
         let timeB = [b.slice(0,5), ' ', b.slice(5,7)].join('')
@@ -83,8 +84,17 @@ const TimeTable = memo(({header, week, onDataInsert, sessions, facultyData}) => 
                             {sortedSession.map(row => (
                                 <TableRow className={classes.row} key={row} >
                                     {
-                                        columns.map((cell,i)=> cell === 'Session' ? <CustomTableCell  align='center' component="th" scope="row" key={i}>{row}</CustomTableCell>
-                                        : <CustomTableCell text-align= "center" key={i}><InsertData onChange={onDataInsert} row={row} col={cell} header={header} facultyData={facultyData}/></CustomTableCell>)
+                                        columns.map((cell,i)=> {
+                                         return   cell === 'Session' ? <CustomTableCell  align='center' component="th" scope="row" key={i}>{row}</CustomTableCell>
+                                        : <CustomTableCell text-align= "center" key={i}>
+                                            <InsertData
+                                            onChange={onDataInsert}
+                                            row={row} col={cell}
+                                            header={header}
+                                            facultyData={facultyData}
+                                            selectedFaculty={selectedFaculty[cell] !== undefined && row in selectedFaculty[cell] ? selectedFaculty[cell][row] : false  }/>
+                                        </CustomTableCell>
+                                        })
                                     }
                                 </TableRow>
                             ))}

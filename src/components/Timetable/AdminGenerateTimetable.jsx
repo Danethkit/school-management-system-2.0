@@ -5,8 +5,17 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import TimeTable from './TimeTable'
 
-
-
+// helper functoin to asign nested key object
+function assign(obj, keyPath, value) {
+    const lastKeyIndex = keyPath.length-1;
+    for (var i = 0; i < lastKeyIndex; ++ i) {
+      let key = keyPath[i];
+      if (!(key in obj))
+        obj[key] = {}
+      obj = obj[key];
+    }
+    obj[keyPath[lastKeyIndex]] = value;
+ }
 
 const weekOfYear = moment.utc().week();
 
@@ -77,39 +86,39 @@ const AdminTimeTable = memo(({sessionData, course, batch, semester, group, subje
     const handleNextWeek = () => {
         setWeek(week+1)
     };
-
+    var res = data.res || {}
     const onFacultyInsert = (row, col, value, header) => {
-        let res = {}
+        let temp = {}
+        let temp2 = {}
+        temp2[row] = value.value
         let {course, batch, semester, group} = header
-        
         if(course in res){
             if(batch in res[course]){
                 if(semester in res[course][batch]){
                     if(group in res[course][batch][semester]){
                         if(col in res[course][batch][semester][group]){
-                            res[course][batch][semester][group][col].push(value)
+                            res[course][batch][semester][group][col][row] = value.value
                         }else {
-                            res[course][batch][semester][group][col] = [value]
+                            res[course][batch][semester][group][col] = temp2
                         }
                     }else {
-                        res[course][batch][semester][group]={col:[value]}
+                        assign(temp, [col, row], value.value)
+                        res[course][batch][semester][group] = temp
                     }
                 }else{
-                    res[course][batch][semester] = {group:{col:[value]}}
+                    assign(temp, [group, col, row], value.value)
+                    res[course][batch][semester] = temp
                 }
             }else{
-                res[course][batch] = {semester:{group:{col:[value]}}}
+                assign(temp, [semester, group, col, row], value.value)
+                res[course][batch] = temp
             }
         }else{
-            let temp = {}
-            temp[batch] = {semester:{}}
-            temp[batch][semester] = {group:null}
-            temp[batch][semester][group] = {col:null}
-            temp[batch][semester][group][col] = [value]
-            res[course] = temp
+            assign(res, [course, batch, semester, group, col,row], value.value)
         }
-        console.log('chekc res ++++++++++++++',res)
+        setData({res})
     };
+
     // useMemo is for performance improvement, if the dependencies still the same function won't execute, instead it directly return the cached reasult
     const allTables = useMemo(() => {
         return filterTable(sessionData, course, batch, semester, group)
@@ -133,6 +142,7 @@ const AdminTimeTable = memo(({sessionData, course, batch, semester, group, subje
         {
             allTables.map((table,i) => {
                 let faculties = []
+                let selectedFaculty = {}
                 try{
                     faculties = subjectInfo[table.course][table.batch][table.semester][table.group].map(e => {
                         if(e.faculty){
@@ -141,13 +151,17 @@ const AdminTimeTable = memo(({sessionData, course, batch, semester, group, subje
                         return null
                     })
                 }catch{}
+                try{
+                    selectedFaculty = data['res'][table.course][table.batch][table.semester][table.group]
+                }catch{}
                 return <TimeTable 
                         week={week} 
                         header={table} 
                         onDataInsert={onFacultyInsert}
-                        sessions={table.session} key={i} 
-                        facultyData={faculties}/>
-            }) 
+                        sessions={table.session} key={i}
+                        facultyData={faculties}
+                        selectedFaculty={selectedFaculty}/>
+            })
         }
         </>
         )
