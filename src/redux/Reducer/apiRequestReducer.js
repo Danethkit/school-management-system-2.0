@@ -40,7 +40,7 @@ export const initData = (state= initialData, action={}) => {
             return Object.assign({}, state, {studentData: action.payload, initDataPending:false})
         case REQUEST_SUBJECT_SUCCESS:
             return Object.assign({}, state, {subjectData: action.payload})
-        case REQUEST_COURSE_SUCCESS:   
+        case REQUEST_COURSE_SUCCESS:
             return Object.assign({}, state, {courseData: action.payload})
         case REQUEST_SEMESTER_SUCCESS:
             return Object.assign({}, state, {semesterData: action.payload})

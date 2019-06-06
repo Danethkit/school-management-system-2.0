@@ -11,6 +11,9 @@ const styles = theme => ({
     text: {
         fontWeight: "bold",
         fontSize: 13
+    },
+    header: {
+        backgroundColor: theme.palette.secondary.light
     }
 });
 
@@ -23,7 +26,7 @@ class GenerateReportTableHead extends Component {
     render() {
         const { order, orderBy, classes, subjects } = this.props;
         return (
-            <TableHead>
+            <TableHead className={classes.header}>
                 <TableRow>
                     <TableColumn numeric={true} disablePadding={false} id ="no"
                      label="No." order={order} orderBy={orderBy} classes={classes} />
@@ -32,8 +35,8 @@ class GenerateReportTableHead extends Component {
                     <TableColumn numeric={true} disablePadding={true} id ="name"
                      label="Name" order={order} orderBy={orderBy} classes={classes} />
                     {
-                        subjects.map(subject => <TableColumn numeric={true} disablePadding={true} order={order} orderBy={orderBy} 
-                        classes={classes} label={subject} id={subject} key={subject}/>)
+                        subjects.map(subject => <TableColumn numeric={true} disablePadding={true} order={order} orderBy={orderBy}
+                        classes={classes} label={subject} key={subject}/>)
                     }
                     <TableColumn numeric={false} disablePadding={true} id ="total"
                      label="Total" order={order} orderBy={orderBy} classes={classes} />
@@ -52,5 +55,5 @@ export default connect(state => ({
   batch : state.changePicker.batch,
   course : state.changePicker.course,
   semester : state.changePicker.semester,
-  subjectInfo : state.initData.subjectInfo,
+  subjects : state.changePicker.subjects,
 })) (withStyles(styles)(GenerateReportTableHead))

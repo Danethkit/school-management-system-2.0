@@ -13,20 +13,20 @@ import {Grid, Box } from "@material-ui/core";
 export default function HeadPicker() {
   return (
     <Box boxShadow={2} display='flex' >
-          <Grid container spacing={10} >
-            <Grid item sm container>
+          <Grid container spacing={10} style={{padding:30}} justify='space-around'>
+            <Grid item sm>
               <DatePicker />
               <SessionPicker />
             </Grid>
-            <Grid item sm  container>
+            <Grid item sm  >
               <FacultyPicker />
               <SubjectPicker />
             </Grid>
-            <Grid item sm container>
+            <Grid item sm >
               <CoursePicker />
               <SemesterPicker />
             </Grid>
-            <Grid item sm container >
+            <Grid item sm  >
               <BatchPicker />
               <GroupPicker />
             </Grid>

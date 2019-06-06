@@ -5,26 +5,26 @@ import BatchPicker from "./BatchPicker";
 import GroupPicker from "./GroupPicker";
 import StartDatePicker from "./StartDatePicker";
 import EndDatePicker from "./EndDatePicker";
-import { Card, Grid } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 
 
 export default function GenerateReportHeadPicker() {
     return (
-        <Card>
-            <Grid container spacing={10}>
-                <Grid item sm container>
+        <Box display='flex' boxShadow={3}>
+            <Grid container spacing={10} style={{padding:50}}>
+                <Grid item sm >
                     <CoursePicker />
                     <BatchPicker />
                 </Grid>
-                <Grid item sm container>
+                <Grid item sm >
                     <SemesterPicker />
                     <GroupPicker />
                 </Grid>
-                <Grid item sm container>
+                <Grid item sm >
                     <StartDatePicker/>
                     <EndDatePicker />
                 </Grid>
             </Grid>
-        </Card>
+        </Box>
     );
 }

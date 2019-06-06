@@ -14,6 +14,9 @@ const styles = theme => ({
   text: {
     fontWeight: "bold",
     fontSize: 13,
+  },
+  tableHead: {
+    backgroundColor: theme.palette.secondary.light
   }
 });
 const rows = [
@@ -43,7 +46,7 @@ class SessionTableHead extends Component {
       classes,
     } = this.props;
     return (
-      <TableHead >
+      <TableHead className={classes.tableHead}>
         <TableRow> 
           <TableCell padding="checkbox">
             <Checkbox
