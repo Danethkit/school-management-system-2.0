@@ -2,22 +2,20 @@ import React, { Component } from "react";
 import { connect } from 'react-redux'
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import { Paper, Table, TableBody, TableCell, TableRow } from "@material-ui/core";
+import { Box, Table, TableBody, TableCell, TableRow } from "@material-ui/core";
 import GenerateReportTableHead from "./GenerateReportTableHead";
 import DownloadButton from '../Button/DownloadButton'
 import {getAttendanceLine,requestStudent, printAttendanceReport } from '../../redux/ActionCreator/apiRequest'
 
-
-
 const styles = theme => ({
     root: {
         width: "100%",
-        overflowX: 'auto'
+        overflowX: 'auto',
+        marginTop: 10,
     },
     table: {
         minWidth: 1020
     },
-   
     textRow: {
         fontSize: 13,
 
@@ -93,10 +91,10 @@ class GenerateReportTable extends Component {
     render() {
 
         const { classes, batch, group, subjects, attendanceLine, endDate, startDate, studentData, dispatch } = this.props;
-
         let filterLine = attendanceLine.filter(line => {
-            return new Date(line.date) >= startDate && new Date(line.date) <= endDate && line.present && subjects.includes(line.subject) && line.group === group && line.batch === batch
+            return new Date(line.date) >=  startDate && new Date(line.date) <= endDate && line.present && subjects.includes(line.subject) && line.group === group.value && line.batch === batch.value
         } )
+
         let res = {}
         filterLine.forEach(line => {
             if(line.student in res){
@@ -112,28 +110,19 @@ class GenerateReportTable extends Component {
             }
         })
         const { order, orderBy } = this.state;
-        let i =0
-        let subj = []
-        
-        Object.values(res).forEach(e => {
-           let diff = Object.keys(e).filter(x => !subj.includes(x));
-           if(diff){
-               subj = [...subj, ...diff]
-           }
-        })
-
         return (
+            Object.keys(res).length !== 0 ?
             <>
-                <Paper className={classes.root}>
+                <Box className={classes.root} boxShadow={3}>
                         <Table className={classes.table}>
                             <GenerateReportTableHead
-                                subjects = {subj }
+                                subjects = {subjects }
                                 order={order}
                                 orderBy={orderBy}
                                 onRequestSort={this.handleRequestSort}
                             />
                             <TableBody>
-                                {stableSort(studentData[batch], getSorting(order, orderBy)).map(row => {
+                                {stableSort(studentData[batch.value], getSorting(order, orderBy)).map((row,i) => {
                                     return (
                                         <TableRow hover key={row.roll_number}>
                                             <TableCell className={classes.textRow}>
@@ -144,10 +133,12 @@ class GenerateReportTable extends Component {
                                             </TableCell>
                                             <TableCell className={classes.textRow} padding="none">
                                                 {row.last_name +' '+ row.name}
-                                            </TableCell> 
+                                            </TableCell>
                                             {
-                                                subj.map((e, i)=> {
-                                                    return <TableCell  className={classes.textRow} padding="none" key={i}>{res[row.last_name +' '+ row.name][e]}</TableCell>
+                                                subjects.map((e, i)=> {
+                                                    return <TableCell  className={classes.textRow} padding="none" key={i}>{
+                                                        e in res[row.last_name +' '+ row.name] ? res[row.last_name +' '+ row.name][e]: 0}
+                                                        </TableCell>
                                                 })
                                             }
                                             <TableCell className={classes.textRow}>
@@ -158,10 +149,9 @@ class GenerateReportTable extends Component {
                                 })}
                             </TableBody>
                         </Table>
-                </Paper>
+                </Box>
                 <DownloadButton classes ={classes} handleClick={()=> dispatch(printAttendanceReport())} />
-                
-            </>
+            </>: <h1>No Record...</h1>
         );
     }
 }

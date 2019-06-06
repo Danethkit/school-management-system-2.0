@@ -58,7 +58,7 @@ const filterTable=(data, course=false, batch=false,semester =false,group=false)=
 }
 
 
-const AdminTimeTable = memo(({sessionData, course, batch, semester, group, facultyData})=> {
+const AdminTimeTable = memo(({sessionData, course, batch, semester, group, subjectInfo})=> {
     const [week, setWeek] = useState(weekOfYear)
     const [open, setOpen] = useState(false)
     const [data, setData] = useState({})
@@ -81,12 +81,34 @@ const AdminTimeTable = memo(({sessionData, course, batch, semester, group, facul
     const onFacultyInsert = (row, col, value, header) => {
         let res = {}
         let {course, batch, semester, group} = header
-        // if(course in res){
-        //     if()
-        // }else{
-        //     res
-        // }
-        // console.log('check check',row, col,value, header)
+        
+        if(course in res){
+            if(batch in res[course]){
+                if(semester in res[course][batch]){
+                    if(group in res[course][batch][semester]){
+                        if(col in res[course][batch][semester][group]){
+                            res[course][batch][semester][group][col].push(value)
+                        }else {
+                            res[course][batch][semester][group][col] = [value]
+                        }
+                    }else {
+                        res[course][batch][semester][group]={col:[value]}
+                    }
+                }else{
+                    res[course][batch][semester] = {group:{col:[value]}}
+                }
+            }else{
+                res[course][batch] = {semester:{group:{col:[value]}}}
+            }
+        }else{
+            let temp = {}
+            temp[batch] = {semester:{}}
+            temp[batch][semester] = {group:null}
+            temp[batch][semester][group] = {col:null}
+            temp[batch][semester][group][col] = [value]
+            res[course] = temp
+        }
+        console.log('chekc res ++++++++++++++',res)
     };
     // useMemo is for performance improvement, if the dependencies still the same function won't execute, instead it directly return the cached reasult
     const allTables = useMemo(() => {
@@ -109,9 +131,23 @@ const AdminTimeTable = memo(({sessionData, course, batch, semester, group, facul
             setOpen = {setOpen}
         />
         {
-            allTables.map((table,i) => (
-                <TimeTable week={week} header={table} onDataInsert={onFacultyInsert} sessions={table.session} key={i} facultyData={facultyData}/>
-            )) 
+            allTables.map((table,i) => {
+                let faculties = []
+                try{
+                    faculties = subjectInfo[table.course][table.batch][table.semester][table.group].map(e => {
+                        if(e.faculty){
+                            return `${e.subject} (${e.faculty})`
+                        }
+                        return null
+                    })
+                }catch{}
+                return <TimeTable 
+                        week={week} 
+                        header={table} 
+                        onDataInsert={onFacultyInsert}
+                        sessions={table.session} key={i} 
+                        facultyData={faculties}/>
+            }) 
         }
         </>
         )
@@ -119,7 +155,7 @@ const AdminTimeTable = memo(({sessionData, course, batch, semester, group, facul
 
 export default connect(state =>({
     sessionData:state.initData.sessionData,
-    facultyData: state.initData.facultyData,
+    subjectInfo: state.initData.subjectInfo,
     course: state.changePicker.course,
     batch: state.changePicker.batch,
     semester: state.changePicker.semester,

@@ -113,10 +113,7 @@ class InsertData extends React.Component{
                                                         value={{item}}
                                                         onChange={ this.handleClose}
                                                         onClick={()=>{
-                                                            console.log('=========', item)
                                                             this.setState({value1:item});
-
-
                                                             this.setState({ open: false });
                                                         }} >
                                                         {item}

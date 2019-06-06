@@ -101,10 +101,10 @@ class SessionTable extends Component {
     let {subject, date, session, batch, remark} = storeData.changePicker
     // let { subjectData } = storeData.initData
     let data = {
-      subject: subject,
+      subject: subject.value,
       date: date.toDateString(),
-      session: session,
-      batch: batch,
+      session: session.value,
+      batch: batch.value,
       lines: selectedStu,
       remark: remark
     }

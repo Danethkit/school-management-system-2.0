@@ -17,7 +17,7 @@ import {
 
 const initialPicker = {
     batch : {label:'Batch 4', value:'Batch 4'},
-    subject : {label:'Common [SE B 111]', value:'Common [SE B 111]'},
+    subject : {label:'Common', value:'Common'},
     session: {label:'09:10am-10:00am',value: '09:10am-10:00am'},
     date : new Date(),
     remark: {},
