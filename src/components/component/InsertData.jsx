@@ -52,8 +52,7 @@ class InsertData extends React.Component{
             value1: "",
             initialItems:this. data,
             items: [],
-
-            // open:false,
+            open:false,
         }
     }
     filterList(event) {
@@ -69,7 +68,6 @@ class InsertData extends React.Component{
     componentWillMount() {
         this.setState({items: this.state.initialItems});
         {
-
             con.map((con,index) =>
             {
                 return(this.data.push((con.url+ " by " +con.name)))

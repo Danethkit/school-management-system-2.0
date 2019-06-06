@@ -1,26 +1,30 @@
 import React,{ useEffect} from "react";
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { requestSemester } from '../../redux/ActionCreator/apiRequest' 
-import { onSemesterChange } from '../../redux/ActionCreator/userBehavior' 
-import DefaultPicker from './DefaultPicker'
+import { requestSemester } from '../../redux/ActionCreator/apiRequest'
+import { onSemesterChange, onGroupChange } from '../../redux/ActionCreator/userBehavior'
+import AutoComplete from './AutoComplete'
+
 
 const SemesterPicker = ({dispatch, semester, subjectInfo, batch, course}) => {
-  let actions = bindActionCreators({requestSemester, onSemesterChange}, dispatch) 
+  let actions = bindActionCreators({requestSemester, onSemesterChange}, dispatch)
   let semesters = []
-  if(Object.keys(subjectInfo).length !== 0){
-    semesters = Object.keys(subjectInfo[course][batch])
-    if(!(semesters.includes(semester))){
-      semester = semesters[0]
+  try{
+    semesters = Object.keys(subjectInfo[course.value][batch.value])
+  }catch(err){}
+
+  useEffect(()=> {
+    if(!semester) {
+      dispatch(onGroupChange(null))
     }
-  }
-  
+  })
+
   useEffect(()=> { actions.requestSemester()}, [])
-  return <DefaultPicker 
+  return <AutoComplete
           value ={semester}
-          handleOnChange ={actions.onSemesterChange}
+          onChange ={actions.onSemesterChange}
           label = "Semester"
-          menuItem = {{...semesters}}
+          suggestions = {semesters}
         />
 }
 export default connect(state => ({

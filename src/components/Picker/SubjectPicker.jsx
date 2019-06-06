@@ -3,20 +3,17 @@ import { connect } from 'react-redux'
 import { requestSubject } from '../../redux/ActionCreator/apiRequest' 
 import { onSubjectChange } from '../../redux/ActionCreator/userBehavior' 
 import { bindActionCreators } from "redux";
-import DefaultPicker from './DefaultPicker'
+import AutoComplete from './AutoComplete'
 
-const SubjectPicker = ({dispatch, batch, subject, subjects}) => {
+const SubjectPicker = ({dispatch, subject, subjects}) => {
   let actions = bindActionCreators({requestSubject, onSubjectChange},dispatch)
   useEffect(()=>{ actions.requestSubject()}, [])
-  // let filteredData = batch in subjects ? subjects[batch] : []
-  // let res = []
-  // filteredData.map(e => res.push(`${e.name} [${e.code}]`))
 
-  return <DefaultPicker 
+  return <AutoComplete
           value ={subject}
-          handleOnChange={actions.onSubjectChange}
+          onChange={actions.onSubjectChange}
           label="Subject"
-          menuItem={{...subjects}}/>
+          suggestions={subjects}/>
 }
 export default connect(state => ({
   subjects: state.changePicker.subjects,

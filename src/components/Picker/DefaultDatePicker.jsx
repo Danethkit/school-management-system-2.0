@@ -1,38 +1,29 @@
 import "date-fns";
 import React from "react";
-import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
 import DateFnsUtils from "@date-io/date-fns";
-import { MuiPickersUtilsProvider, DatePicker } from "material-ui-pickers";
-import { InputAdornment } from "@material-ui/core";
-import classNames from "classnames";
+import { InputAdornment } from '@material-ui/core'
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 
-const styles = theme => ({
-  margin: {
-    margin: theme.spacing.unit
-  },
-  textFile: {
-    fontSize: 14
-  }
-});
-
-const DefaultDatePicker = ({classes, value, onChange , label}) =>{
+export default ({value, onChange , label}) =>{
     return (
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <DatePicker
+        <KeyboardDatePicker
+          autoOk
+          inputVariant='outlined'
           autoFocus
-          disableFuture
           fullWidth
+          variant="inline"
           value={value}
-          onChange={date => onChange(date)}
-          className={classNames(classes.margin, classes.textField)}
+          onChange={onChange}
+          style={{margin:30, width:'100%', padding:0}}
           InputProps={{
             startAdornment: (
               <InputAdornment
                 disableTypography={true}
-                className={classes.textFile}
-                position="start">
-                <b>{label}</b>
+                position="start"
+                style={{fontSize:14,height:10}}
+              >
+                <b>{label}:</b>
               </InputAdornment>
             )
           }}
@@ -42,8 +33,3 @@ const DefaultDatePicker = ({classes, value, onChange , label}) =>{
 }
 
 
-DefaultDatePicker.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(styles)(DefaultDatePicker)

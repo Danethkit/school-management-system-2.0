@@ -2,7 +2,7 @@ import React from 'react'
 import { Divider, InputBase, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles, Button, Toolbar
 } from "@material-ui/core";
 import PropTypes from "prop-types";
-import TimetableHeaderPicker from "../TimetablePicker/TimetableHeaderPicker";
+import TimeTableSearchBox from "../TimetablePicker/TimeTableSearchBox";
 import DisplayTimetableHeader from "../TimetablePicker/DisplayTimetableHeader";
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
@@ -27,7 +27,7 @@ const CustomTableCell = withStyles(theme => ({
 const styles = theme => ({
     root: {
         width: '100%',
-        marginTop: theme.spacing.unit *3 ,
+        marginTop: theme.spacing(3) *3 ,
         overflow: 'auto',
     },
     table: {
@@ -62,7 +62,7 @@ const styles = theme => ({
         marginRight:15,
     },
     formControl: {
-        margin: theme.spacing.unit,
+        margin: theme.spacing(3),
         flexGrow:1,
         fullWidth:1,
         textColor:'secondary',

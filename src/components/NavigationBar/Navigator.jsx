@@ -27,7 +27,7 @@ const styles = theme => ({
 
   menuButton: {
     marginRight: 0,
-    marginLeft: 0,  
+    marginLeft: -20,
     // marginRight: theme.spacing(2),
   },
   hide : {
@@ -80,9 +80,9 @@ class NavigationBar extends React.Component {
     var items = [];
     if(this.props.history.location.pathname.includes("/timetable")){
       items = [
-        {path: "timetables", label: "Current Timetable"},
-        {path: "timetables", label: "Timetable Record"},
-        {path: "timetables", label: "Generate Timetable"}
+        {path: "timetable/admin-view", label: "Current Timetable"},
+        {path: "timetable/admin-create", label: "Timetable Record"},
+        {path: "timetable/student", label: "Generate Timetable"}
       ];
     }
     else {
@@ -93,8 +93,8 @@ class NavigationBar extends React.Component {
         {path: "attendance/attendance_result", label: "Attendance Result"},
         {path: "attendance/generate_report", label: "Generate Report"}
       ];
-    } 
-    
+    }
+
     const { classes } = this.props;
     const { menuOpen } = this.state
 
@@ -102,7 +102,6 @@ class NavigationBar extends React.Component {
       <>
         <AppBar position="static">
           <Toolbar variant="dense" display="flex" className={classes.root} color='primary'>
-            <SideBarDrawer open={menuOpen} toggleDrawer={this.toggleDrawer} items={items}/>
             <IconButton
             color="inherit"
             aria-label="Open drawer"
@@ -111,6 +110,7 @@ class NavigationBar extends React.Component {
             className={menuOpen ? classes.hide : classes.menuButton}>
                 <MenuIcon />
             </IconButton>
+            <SideBarDrawer open={menuOpen} toggleDrawer={this.toggleDrawer} items={items}/>
             <Tabs
               variant="scrollable"
               scrollButtons="off"

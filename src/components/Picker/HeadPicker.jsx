@@ -7,33 +7,30 @@ import BatchPicker from "./BatchPicker";
 import GroupPicker from "./GroupPicker";
 import SubjectPicker from "./SubjectPicker";
 import FacultyPicker from "./FacultyPicker";
-import { Card, CardContent, Grid } from "@material-ui/core";
+import {Grid, Box } from "@material-ui/core";
+
 
 export default function HeadPicker() {
   return (
-    <div>
-      <Card>
-        <CardContent>
-          <Grid container spacing={16}>
-            <Grid item sm>
+    <Box boxShadow={2} display='flex' >
+          <Grid container spacing={10} >
+            <Grid item sm container>
               <DatePicker />
               <SessionPicker />
             </Grid>
-            <Grid item sm>
+            <Grid item sm  container>
               <FacultyPicker />
               <SubjectPicker />
             </Grid>
-            <Grid item sm>
+            <Grid item sm container>
               <CoursePicker />
               <SemesterPicker />
             </Grid>
-            <Grid item sm>
+            <Grid item sm container >
               <BatchPicker />
               <GroupPicker />
             </Grid>
           </Grid>
-        </CardContent>
-      </Card>
-    </div>
+    </Box>
   );
 }

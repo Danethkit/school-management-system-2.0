@@ -17,7 +17,7 @@ const styles = theme => ({
     flexWrap: "wrap"
   },
   formControl: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(3),
     minWidth: 120
   }
 });
@@ -45,7 +45,7 @@ class DuplicateSession extends React.Component {
 
     return (
       <div>
-        <Button onClick={this.handleClickOpen}>
+        <Button onClick={this.handleClickOpen} color='primary' variant='outlined'>
           Select to duplicate session
         </Button>
         <Dialog

@@ -21,7 +21,7 @@ class GenerateReportTableHead extends Component {
     };
 
     render() {
-        const { order, orderBy, classes, subjects } = this.props;           
+        const { order, orderBy, classes, subjects } = this.props;
         return (
             <TableHead>
                 <TableRow>

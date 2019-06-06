@@ -13,7 +13,7 @@ import {
 const styles = theme => ({
   text: {
     fontWeight: "bold",
-    fontSize: 13
+    fontSize: 13,
   }
 });
 const rows = [
@@ -40,12 +40,11 @@ class SessionTableHead extends Component {
       orderBy,
       numSelected,
       rowCount,
-      classes
+      classes,
     } = this.props;
-
     return (
-      <TableHead>
-        <TableRow>
+      <TableHead >
+        <TableRow> 
           <TableCell padding="checkbox">
             <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -91,4 +90,4 @@ SessionTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired
 };
 
-export default withStyles(styles)(SessionTableHead);
+export default withStyles(styles)(SessionTableHead)

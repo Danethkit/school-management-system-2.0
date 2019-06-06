@@ -24,7 +24,10 @@ export const onDateChange = (data) => ({type:CHANGE_DATE, payload:data})
 export const onRemarkChange = (data) => ({type:CHANGE_REMARK, payload:data}) 
 
 export const onSemesterChange = (data) => ({type:CHANGE_SEMESTER, payload:data})   
-export const onCourseChange = (data) => ({type:CHANGE_COURSE, payload:data})   
+export const onCourseChange = (data) => {
+    console.log('data',data)
+    return  {type:CHANGE_COURSE, payload:data}
+}  
 export const onFacultyChange = (data) => ({type:CHANGE_FACULTY, payload:data}) 
 export const onGroupChange = (data) => ({type:CHANGE_GROUP, payload:data}) 
 export const onSearchFieldChange = (data) => ({type:CHANGE_SEARCH_FIELD, payload:data})

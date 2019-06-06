@@ -1,17 +1,13 @@
 import "date-fns";
 import React from "react";
-import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import DateFnsUtils from "@date-io/date-fns";
-import { MuiPickersUtilsProvider, DatePicker } from "material-ui-pickers";
-import { InputAdornment } from "@material-ui/core";
-import classNames from "classnames";
 import { connect } from 'react-redux'
 import { onDateChange } from '../../redux/ActionCreator/userBehavior'
+import DefaultDatePicker from './DefaultDatePicker'
 
 const styles = theme => ({
   margin: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(3),
   },
   textFile: {
     fontSize: 14
@@ -30,33 +26,7 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const datePicker = ({classes, date, onChangeDate}) => {
-    return (
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <DatePicker
-          autoFocus
-          fullWidth
-          value={date}
-          onChange={date => onChangeDate(date)}
-          className={classNames(classes.margin, classes.textField)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment
-                disableTypography={true}
-                className={classes.textFile}
-                position="start"
-              >
-                <b>Date:</b>
-              </InputAdornment>
-            )
-          }}
-        />
-      </MuiPickersUtilsProvider>
-    );
-  }
-
-datePicker.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(datePicker))
+const AttendanceDate = ({date, onChangeDate}) => {
+    return <DefaultDatePicker value={date} onChange={onChangeDate} label = "Date"/>
+}
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(AttendanceDate))

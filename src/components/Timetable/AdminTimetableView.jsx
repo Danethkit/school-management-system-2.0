@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
-import TimetableHeaderPicker from "../TimetablePicker/TimetableHeaderPicker";
+import TimeTableSearchBox from "../TimetablePicker/TimeTableSearchBox";
 
 const CustomTableCell = withStyles(theme => ({
   head: {
@@ -28,7 +28,7 @@ const CustomTableCell = withStyles(theme => ({
 const styles = theme => ({
   root: {
     width: "100%",
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3) * 3,
     overflowX: "auto"
   },
   table: {
@@ -69,7 +69,7 @@ const styles = theme => ({
     marginRight: 15
   },
   formControl: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(3),
     flexGrow: 1,
     fullWidth: 1,
     textColor: "secondary",
@@ -241,7 +241,7 @@ class ViewTimetable extends React.Component {
 
     return (
       <>
-        <TimetableHeaderPicker />
+        <TimeTableSearchBox />
         {numberTable.map(table => (
           <div className={classes.generateTimetable} key={table.id}>
             <div className={classes.headContainer}>
