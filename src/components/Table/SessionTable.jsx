@@ -191,23 +191,23 @@ class SessionTable extends Component {
                   return (
                     <TableRow
                       hover
-                      onClick={event => this.handleClick(event, n.roll_number)}
+                      // onClick={event => this.handleClick(event, n.roll_number)}
                       role="checkbox"
                       aria-checked={isSelected}
                       tabIndex={-1}
                       key={n.roll_number}
                       selected={isSelected}
                     >
-                      <TableCell padding="checkbox">
+                      <TableCell padding="checkbox" onClick={event => this.handleClick(event, n.roll_number)}>
                         <Checkbox checked={isSelected} />
                       </TableCell>
-                      <TableCell scope="row">
+                      <TableCell scope="row" onClick={event => this.handleClick(event, n.roll_number)}>
                         {n.roll_number}
                       </TableCell>
-                      <TableCell  align="left">
+                      <TableCell  align="left" onClick={event => this.handleClick(event, n.roll_number)}>
                         {n.last_name + ' ' +n.name}
                       </TableCell>
-                      <TableCell  align="center">
+                      <TableCell  align="left" onClick={event => this.handleClick(event, n.roll_number)}>
                         {isSelected ? (
                           <div>Yes</div>
                         ) : (
