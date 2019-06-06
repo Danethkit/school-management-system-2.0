@@ -9,6 +9,10 @@ import {
     CHANGE_SESSION,
     CHANGE_DATE,
     CHANGE_SEARCH_FIELD,
+    TOGGLE_DIALOG,
+    SET_SUBJECTS,
+    CHANGE_REPORT_END_DATE,
+    CHANGE_REPORT_START_DATE,
 } from '../../constants/env'
 
 const initialPicker = {
@@ -17,11 +21,15 @@ const initialPicker = {
     session: '09:10am-10:00am',
     date : new Date(),
     remark: {},
-    group : '',
+    group : 'Group 1',
     faculty: '',
     semester : '',
-    course: '',
-    searchField: ''
+    course: 'Software Engineering',
+    searchField: '',
+    createAttendanceRequested : false,
+    subjects : [],
+    endDate : new Date(),
+    startDate : new Date(),
 }
 
 export const changePicker = (state=initialPicker, action={}) => {
@@ -46,6 +54,14 @@ export const changePicker = (state=initialPicker, action={}) => {
             return Object.assign({}, state, {group:action.payload})
         case CHANGE_SEARCH_FIELD:
             return { ...state, ...{searchField:action.payload}}
+        case TOGGLE_DIALOG:
+            return { ...state, ...{createAttendanceRequested:action.payload}}
+        case SET_SUBJECTS:
+            return {...state, ...{subjects:action.payload}}
+        case CHANGE_REPORT_END_DATE:
+            return {...state, ...{endDate:action.payload}}
+        case CHANGE_REPORT_START_DATE:
+            return {...state,...{startDate:action.payload}}
         default:
             return state
     }

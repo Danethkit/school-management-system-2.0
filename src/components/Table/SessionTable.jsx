@@ -19,6 +19,7 @@ import AttendanceButton from "../Button/AttendanceButton"
 import { connect } from 'react-redux'
 import { error } from "util"
 import { store } from '../../redux/store'
+import AttendanceSheetDialog from '../Alert/AttendanceSheetDialog'
 
 const styles = theme => ({
   root: {
@@ -65,9 +66,9 @@ function getSorting(order, orderBy) {
 
 const mapStateToProps = (state) => {
   return {
-    studentData : state.requestStudentData.studentData ,
-    isPending: state.requestStudentData.isPending,
-    error: state.requestStudentData.error,
+    studentData : state.initData.studentData ,
+    isPending: state.initData.isPending,
+    error: state.initData.error,
     batch: state.changePicker.batch,
   }
 }
@@ -80,7 +81,6 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-
 class SessionTable extends Component {
   constructor(props) {
     super(props);
@@ -89,7 +89,28 @@ class SessionTable extends Component {
       orderBy: "name",
       selected: [],
     };
-
+  }
+// close success dialog when request success
+  closeSuccessDialog = () => {
+    this.setState({successDialog:false})
+  }
+  // get all inputed data and request for create attendance sheet
+  createAttendanceSheet = () => {
+    let { createAttendanceSheet } = this.props
+    let selectedStu = this.state.selected
+    let storeData = store.getState()
+    let {subject, date, session, batch, remark} = storeData.changePicker
+    // let { subjectData } = storeData.initData
+    let data = {
+      subject: subject,
+      date: date.toDateString(),
+      session: session,
+      batch: batch,
+      lines: selectedStu,
+      remark: remark
+    }
+    createAttendanceSheet(data)
+    
   }
 
   componentDidMount() {
@@ -105,7 +126,7 @@ class SessionTable extends Component {
     }
     this.setState({ order, orderBy });
   }
-
+// select all students at one
   handleSelectAllClick = (event, data) => {
     if (event.target.checked) {
       this.setState({selected: data.map(n => n.roll_number)})
@@ -113,7 +134,7 @@ class SessionTable extends Component {
     }
     this.setState({ selected: [] });
   }
-
+// user input remark data
   onChangeRemark = (event, roll_number) => {
     let storeData = store.getState()
     let { remark } = storeData.changePicker
@@ -142,23 +163,6 @@ class SessionTable extends Component {
   }
 
   isSelected = roll_number => this.state.selected.indexOf(roll_number) !== -1;
-
-  createAttendanceSheet = () => {
-    let storeData = store.getState()
-    let {subject, date, session, batch, remark} = storeData.changePicker
-    let { subjectData } = storeData.requestStudentData
-    let subjectId = subjectData[batch].find((e) => `${e.name} [${e.code}]` === subject).id
-    let selectedStu = this.state.selected
-    let data = {
-      subject_id: subjectId,
-      date: date.toDateString(),
-      session: session,
-      batch: batch,
-      lines: selectedStu,
-      remark: remark
-    }
-    this.props.createAttendanceSheet(data)
-  }
 
   render() {
     const { classes, studentData, batch } = this.props
@@ -233,7 +237,8 @@ class SessionTable extends Component {
             </Table>
           </div>
         </Paper>
-        <AttendanceButton onSave={this.createAttendanceSheet}/>
+        <AttendanceButton  onClick={this.createAttendanceSheet}/>
+        <AttendanceSheetDialog />
       </>
     );
   }

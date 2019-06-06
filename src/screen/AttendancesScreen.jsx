@@ -1,12 +1,17 @@
-import React from "react";
+import React, {useEffect} from "react";
 import AttendancesSheet from '../components/Attendance/AttendanceSheet'
 import AttendanceLine from '../components/Attendance/AttendanceLine'
 import GenerateAttendance from '../components/Attendance/GenerateAttendance'
 import GenerateReport from '../components/Attendance/GenerateReport'
 import AttendanceResult from '../components/Attendance/AttendanceResult'
 import { Route, Switch } from "react-router-dom"
+import {connect} from 'react-redux'
+import {getSubjectData } from '../redux/ActionCreator/apiRequest'
 
-const AttendanceScreen = (props) => {
+const AttendanceScreen = ({dispatch}) => {
+  useEffect(() => {
+    dispatch(getSubjectData())
+  }, [])
   let route = '/attendance'
   return <Switch>
       <Route path = {`${route}/attendance_line`} component={AttendanceLine} />
@@ -17,4 +22,4 @@ const AttendanceScreen = (props) => {
       <Route  component={AttendancesSheet} />
   </Switch>
 }
-export default AttendanceScreen
+export default connect(state => ({subjectInfo: state.initData.subjectInfo}))(AttendanceScreen)

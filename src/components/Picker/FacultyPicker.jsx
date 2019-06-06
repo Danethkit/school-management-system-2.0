@@ -9,7 +9,7 @@ const FacultyPicker = ({dispatch, faculty, facultyData}) => {
   let actions = bindActionCreators({requestFaculty, onFacultyChange}, dispatch)
   useEffect(()=> { actions.requestFaculty()}, [])
   let names = []
-  facultyData.map(e => {names.push(e.name)})
+  facultyData.map(e => names.push(e.name))
   return <DefaultPicker 
           value ={faculty}
           handleOnChange ={actions.onFacultyChange}
@@ -19,5 +19,5 @@ const FacultyPicker = ({dispatch, faculty, facultyData}) => {
 }
 export default connect(state => ({
   faculty:state.changePicker.faculty,
-  facultyData: state.requestStudentData.facultyData
+  facultyData: state.initData.facultyData
 }))(FacultyPicker)

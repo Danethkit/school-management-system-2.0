@@ -21,5 +21,5 @@ const CoursePicker = ({ course, courseData, dispatch}) => {
 }
 export default connect(state => ({
   course : state.changePicker.course, 
-  courseData:state.requestStudentData.courseData
+  courseData:state.initData.courseData
 }))(CoursePicker)

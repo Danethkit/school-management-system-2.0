@@ -29,4 +29,4 @@ const sortSessionTime = (session) => {
 
 export default connect(state => ({
     session: state.changePicker.session,
-    sessionData: state.requestStudentData.sessionData}))(SessionPicker)
+    sessionData: state.initData.sessionData}))(SessionPicker)

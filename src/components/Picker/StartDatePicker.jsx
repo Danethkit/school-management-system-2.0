@@ -1,17 +1,9 @@
 import "date-fns";
 import React from "react";
-import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import DateFnsUtils from "@date-io/date-fns";
-import { MuiPickersUtilsProvider, DatePicker } from "material-ui-pickers";
-import { InputAdornment } from "@material-ui/core";
-import classNames from "classnames";
-
-var moment = require("moment");
-var today = moment();
-var from_date = today.startOf("week");
-var start = new Date(from_date.toString());
-var defaultStart = moment(start.valueOf());
+import DefaultDatePicker from './DefaultDatePicker'
+import { connect } from 'react-redux' 
+import {changeReportStartDate} from '../../redux/ActionCreator/userBehavior'
 
 const styles = theme => ({
   margin: {
@@ -22,46 +14,8 @@ const styles = theme => ({
   }
 });
 
-class StartDatePicker extends React.Component {
-  state = {
-    selectedDate: defaultStart
-  };
-
-  handleDateChange = date => {
-    this.setState({ selectedDate: date });
-  };
-
-  render() {
-    const { classes } = this.props;
-
-    return (
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <DatePicker
-          autoFocus
-          fullWidth
-          disableFuture
-          value={this.state.selectedDate}
-          onChange={this.handleDateChange}
-          className={classNames(classes.margin, classes.textField)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment
-                disableTypography={true}
-                className={classes.textFile}
-                position="start"
-              >
-                <b>StartDate:</b>
-              </InputAdornment>
-            )
-          }}
-        />
-      </MuiPickersUtilsProvider>
-    );
-  }
+const StartDatePicker = ({startDate, dispatch}) => {
+ return <DefaultDatePicker value={startDate} label="StartDate" onChange={(date) => dispatch(changeReportStartDate(date))}/>
 }
 
-StartDatePicker.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(styles)(StartDatePicker);
+export default connect(state=> ({startDate: state.changePicker.startDate}))(withStyles(styles)(StartDatePicker))

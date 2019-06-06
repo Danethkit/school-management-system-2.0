@@ -9,9 +9,14 @@ import {
     REQUEST_GROUP_SUCCESS,
     REQUEST_ATTENDANCE_LINE_SUCCESS,
     REQUEST_ATTENDANCE_LINE_PENDING,
-    REQUEST_ATTENDANCE_LINE_FAILED
+    REQUEST_ATTENDANCE_LINE_FAILED,
+    TOGGLE_DIALOG,
+    REQUEST_SUBJECT_DATA,
+    PRINT_ATTENDANCE_REPORT,
+    SET_REPORT_B64
 } from '../../constants/env'
-import {odooRequest} from '../api'
+import {odooRequest, odooPrintReport} from '../api'
+import React from 'react'
 
 // Helper functino 
 
@@ -23,7 +28,7 @@ const groupByBatch = (data) =>  {
         if(batch in res){
             res[batch].push(e)
         }else {
-            res[batch] = []
+            res[batch] = [e]
         }
     })
     return res
@@ -93,22 +98,39 @@ export const requestGroup = () => (dispatch) => {
 }
 
 export const createAttendanceSheet= (data) => (dispatch) => {
-    fetch('http://localhost:8069/create-attendance-sheet',{
+    fetch('http://192.168.7.222:8069/create-attendance-sheet',{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
             params : data
         })
        })
-    .then(response => console.log('============', response))
-    .catch(err => console.log('err', err))
+    .then(response => response.json())
+    .then(data => dispatch({type: TOGGLE_DIALOG, payload: data}))
+    .catch(err => dispatch({type: TOGGLE_DIALOG, payload: err}))
 }
 
 export const getAttendanceLine = () => (dispatch) => {
-    console.log('request')
     dispatch({type: REQUEST_ATTENDANCE_LINE_PENDING})
-    fetch('http://localhost:8069/get-attendance-line')
+    fetch('http://192.168.7.222:8069/get-attendance-line')
     .then(res => res.json())
     .then( data => dispatch({type: REQUEST_ATTENDANCE_LINE_SUCCESS, payload:data.data}))
     .catch(err => dispatch({type:REQUEST_ATTENDANCE_LINE_FAILED, payload:err}))
+}
+
+export const getSubjectData = () => (dispatch) => {
+    fetch('http://192.168.7.222:8069/get-subject-data')
+    .then(res => res.json())
+    .then(data => dispatch({type:REQUEST_SUBJECT_DATA, payload:data}))
+    .catch( err => console.log(err))
+}
+
+export const printAttendanceReport = () => (dispatch) => {
+    odooPrintReport('sms2.attendance_report_qweb', [12,3])
+    .then(value =>{
+        const b64 = value.result
+        dispatch({type:PRINT_ATTENDANCE_REPORT, payload:b64})
+        dispatch({type:SET_REPORT_B64, payload:b64})
+    })
+    .catch(err => console.log(err))
 }

@@ -22,7 +22,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    requestStudentData: () => dispatch(requestStudent())
+    initData: () => dispatch(requestStudent())
   }
 }
 
