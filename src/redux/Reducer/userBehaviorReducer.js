@@ -16,15 +16,15 @@ import {
 } from '../../constants/env'
 
 const initialPicker = {
-    batch : 'Batch 4',
-    subject : 'Common [SE B 111]',
-    session: '09:10am-10:00am',
+    batch : {label:'Batch 4', value:'Batch 4'},
+    subject : {label:'Common [SE B 111]', value:'Common [SE B 111]'},
+    session: {label:'09:10am-10:00am',value: '09:10am-10:00am'},
     date : new Date(),
     remark: {},
-    group : 'Group 1',
-    faculty: '',
-    semester : '',
-    course: 'Software Engineering',
+    group : {label:'Group 1', value:'Group 1'},
+    faculty: {label:'',value:''},
+    semester : {label:'Semester 1',value:'Semester 1'},
+    course: {label:'Software Engineering', value:'Software Engineering'},
     searchField: '',
     createAttendanceRequested : false,
     subjects : [],

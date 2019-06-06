@@ -1,23 +1,27 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { onBatchChange } from '../../redux/ActionCreator/userBehavior'
-import DefaultPicker from './DefaultPicker'
+import { onBatchChange, onSemesterChange } from '../../redux/ActionCreator/userBehavior'
+import AutoComplete from './AutoComplete'
 
 const BatchPicker = ({dispatch, batch, subjectInfo, course}) => {
+  useEffect(()=>{
+    if(!batch){
+      dispatch(onSemesterChange(null))
+    }
+  })
   let allBatch = []
-  if(Object.keys(subjectInfo).length !== 0){
-    let batches = subjectInfo[course]
+  try{
+    let batches = subjectInfo[course.value]
     allBatch = Object.keys(batches).sort((a, b)=> a.split(" ")[1] - b.split(" ")[1])
-  }
+  }catch(err){}
   let action = bindActionCreators(onBatchChange, dispatch)
-  
-  return <DefaultPicker 
-          value ={batch}
-          handleOnChange ={action}
+
+  return  <AutoComplete
+          value={batch}
+          onChange={action}
           label = "Batch"
-          menuItem = {{...allBatch}}
-        />
+          suggestions={allBatch} />
 }
 
 export default connect(state => ({

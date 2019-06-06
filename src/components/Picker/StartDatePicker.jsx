@@ -7,7 +7,7 @@ import {changeReportStartDate} from '../../redux/ActionCreator/userBehavior'
 
 const styles = theme => ({
   margin: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(3)
   },
   textFile: {
     fontSize: 14

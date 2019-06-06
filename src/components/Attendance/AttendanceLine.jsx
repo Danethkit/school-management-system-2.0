@@ -10,7 +10,7 @@ const AttendanceLine = ({attendanceLine}) => {
         <h1>Attendance Line</h1>
         {
           attendanceLine.length===0 ? <LinearProgress /> : null
-        }        
+        }
         <SearchBox />
         <br/>
         <AttendanceLineTable/>

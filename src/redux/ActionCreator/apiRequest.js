@@ -13,11 +13,10 @@ import {
     TOGGLE_DIALOG,
     REQUEST_SUBJECT_DATA,
     PRINT_ATTENDANCE_REPORT,
-    SET_REPORT_B64
+    SET_REPORT_B64,
+    GET_SESSION_DATA
 } from '../../constants/env'
 import {odooRequest, odooPrintReport} from '../api'
-import React from 'react'
-
 // Helper functino 
 
 // group data based on batch name 
@@ -122,6 +121,13 @@ export const getSubjectData = () => (dispatch) => {
     fetch('http://192.168.7.222:8069/get-subject-data')
     .then(res => res.json())
     .then(data => dispatch({type:REQUEST_SUBJECT_DATA, payload:data}))
+    .catch( err => console.log(err))
+}
+
+export const getSessionData = () => (dispatch) => {
+    fetch('http://192.168.7.222:8069/get-session-data')
+    .then(res => res.json())
+    .then(data => dispatch({type:GET_SESSION_DATA, payload:data}))
     .catch( err => console.log(err))
 }
 

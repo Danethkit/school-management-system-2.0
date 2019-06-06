@@ -3,7 +3,6 @@ import PropTypes from "prop-types"
 import {requestStudent, createAttendanceSheet} from '../../redux/ActionCreator/apiRequest'
 import {onRemarkChange} from '../../redux/ActionCreator/userBehavior'
 import {
-  Paper,
   TableBody,
   TableRow,
   TableCell,
@@ -11,20 +10,20 @@ import {
   Checkbox,
   withStyles,
   Typography,
-  InputBase
+  InputBase,
+  Box
 } from "@material-ui/core"
 import SessionTableHead from "./SessionTableHead"
 import SessionTableToolBar from "./SessionTableToolBar"
 import AttendanceButton from "../Button/AttendanceButton"
 import { connect } from 'react-redux'
-import { error } from "util"
 import { store } from '../../redux/store'
 import AttendanceSheetDialog from '../Alert/AttendanceSheetDialog'
 
 const styles = theme => ({
   root: {
     witdth: "100%",
-    marginTop: theme.spacing.unit
+    marginTop: theme.spacing(3),
   },
   table: {
     minWroll_numberth: 1020
@@ -167,14 +166,17 @@ class SessionTable extends Component {
   render() {
     const { classes, studentData, batch } = this.props
     const { order, orderBy, selected } = this.state
-    let data = batch in studentData ? studentData[batch] : []
-    
+    let data = []
+    try{
+      data = batch.value in studentData ? studentData[batch.value] : []
+    }catch(err){data = []}
+
     return (
       <>
-        <Paper className={classes.root}>
+        <Box className={classes.root} boxShadow={2}>
           <SessionTableToolBar numSelected={selected.length} />
           <div className={classes.tableWrapper}>
-            <Table aria-labelledby="tableTitle">
+            <Table aria-labelledby="tableTitle"  >
               <SessionTableHead
                 numSelected={selected.length}
                 order={order}
@@ -221,13 +223,13 @@ class SessionTable extends Component {
                 <TableRow>
                   <TableCell />
                   <TableCell>
-                    <Typography variant="subheading">
+                    <Typography variant="subtitle2">
                       Total Present :
                     </Typography>
                   </TableCell>
                   <TableCell >{selected.length}</TableCell>
                   <TableCell>
-                    <Typography variant="subheading">Total Absent :</Typography>
+                    <Typography variant="subtitle2">Total Absent :</Typography>
                   </TableCell>
                   <TableCell >
                     {data.length - selected.length}
@@ -236,7 +238,7 @@ class SessionTable extends Component {
               </TableBody>
             </Table>
           </div>
-        </Paper>
+        </Box>
         <AttendanceButton  onClick={this.createAttendanceSheet}/>
         <AttendanceSheetDialog />
       </>

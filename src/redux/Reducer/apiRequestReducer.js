@@ -1,5 +1,4 @@
 import {
-    REQUEST_SESSION_SUCCESS,
     REQUEST_STUDENTS_SUCCESS,
     REQUEST_FAILED,
     REQUEST_SUBJECT_SUCCESS,
@@ -12,7 +11,7 @@ import {
     REQUEST_ATTENDANCE_LINE_FAILED,
     REQUEST_SUBJECT_DATA,
     PRINT_ATTENDANCE_REPORT,
-    TOGGLE_DIALOG,
+    GET_SESSION_DATA,
     SET_REPORT_B64
 } from '../../constants/env'
 
@@ -20,7 +19,6 @@ const initialData = {
     studentData : [],
     error: '',
     subjectData :[],
-    sessionData : [],
     courseData: [],
     semesterData: {},
     groupData: [],
@@ -30,7 +28,8 @@ const initialData = {
     requestAttendanceLinePending: false,
     subjectInfo : {},
     report: false,
-    b64Report : ''
+    b64Report : '',
+    sessionData: {}
 }
 
 export const initData = (state= initialData, action={}) => {
@@ -41,8 +40,6 @@ export const initData = (state= initialData, action={}) => {
             return Object.assign({}, state, {studentData: action.payload, initDataPending:false})
         case REQUEST_SUBJECT_SUCCESS:
             return Object.assign({}, state, {subjectData: action.payload})
-        case REQUEST_SESSION_SUCCESS:
-            return Object.assign({}, state, {sessionData: action.payload})
         case REQUEST_COURSE_SUCCESS:   
             return Object.assign({}, state, {courseData: action.payload})
         case REQUEST_SEMESTER_SUCCESS:
@@ -63,6 +60,8 @@ export const initData = (state= initialData, action={}) => {
             return {...state,...{report:action.payload}}
         case SET_REPORT_B64:
             return {...state,...{b64Report:action.payload}}
+        case GET_SESSION_DATA:
+            return {...state, ...{sessionData:action.payload}}
         default:
             return state
     }

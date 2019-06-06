@@ -8,7 +8,7 @@ import {
 
 const styles = theme => ({
   margin: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(3)
   },
   textFile: {
     fontSize: 14

@@ -1,36 +1,36 @@
 import React, {useEffect} from "react";
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { requestGroup } from '../../redux/ActionCreator/apiRequest' 
-import { onGroupChange } from '../../redux/ActionCreator/userBehavior' 
-import DefaultPicker from './DefaultPicker'
+import { requestGroup } from '../../redux/ActionCreator/apiRequest'
+import { onGroupChange } from '../../redux/ActionCreator/userBehavior'
 import { setSubjects } from '../../redux/ActionCreator/userBehavior'
+import AutoComplete from './AutoComplete'
+
 
 
 
 const GroupPicker = ({dispatch, group, batch, course, subjectInfo, semester}) => {
-  if(semester===''){
-    semester = 'Semester 1'
-  }
-  let actions = bindActionCreators({requestGroup, onGroupChange}, dispatch) 
-  useEffect(()=> { 
+  let actions = bindActionCreators({requestGroup, onGroupChange}, dispatch)
+  useEffect(()=> {
     let subjects =[]
-    if(course && batch && semester && group && Object.keys(subjectInfo).length !== 0){
-        subjects = subjectInfo[course][batch][semester][group]
-    }
-    dispatch(setSubjects(subjects))  
-  })
+    try{
+        subjects = subjectInfo[course.value][batch.value][semester.value][group.value]
+    }catch(err){ subjects = []}
+    dispatch(setSubjects(subjects))
 
+  })
   let groups = []
-  if (Object.keys(subjectInfo).length !== 0 && semester !== ''){
-    groups = Object.keys(subjectInfo[course][batch][semester])
+  try{
+    groups = Object.keys(subjectInfo[course.value][batch.value][semester.value])
+  }catch(err){
+    groups = []
   }
-  
-  return <DefaultPicker 
+
+  return <AutoComplete
           value ={group}
-          handleOnChange ={actions.onGroupChange}
+          onChange ={actions.onGroupChange}
           label = "Group"
-          menuItem = {{...groups}}
+          suggestions = {groups}
         />
 }
 export default connect(state => ({
@@ -38,5 +38,6 @@ export default connect(state => ({
   batch : state.changePicker.batch,
   course : state.changePicker.course,
   semester : state.changePicker.semester,
-  subjectInfo : state.initData.subjectInfo
+  subjectInfo : state.initData.subjectInfo,
+  sessionData:state.initData.sessionData,
 }))(GroupPicker)

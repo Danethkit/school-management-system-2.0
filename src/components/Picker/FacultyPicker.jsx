@@ -3,18 +3,19 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { requestFaculty } from '../../redux/ActionCreator/apiRequest' 
 import { onFacultyChange } from '../../redux/ActionCreator/userBehavior' 
-import DefaultPicker from './DefaultPicker'
+import AutoComplete from './AutoComplete'
+
 
 const FacultyPicker = ({dispatch, faculty, facultyData}) => {
   let actions = bindActionCreators({requestFaculty, onFacultyChange}, dispatch)
   useEffect(()=> { actions.requestFaculty()}, [])
   let names = []
   facultyData.map(e => names.push(e.name))
-  return <DefaultPicker 
+  return <AutoComplete 
           value ={faculty}
-          handleOnChange ={actions.onFacultyChange}
+          onChange ={actions.onFacultyChange}
           label = "Faculty"
-          menuItem = {{...names}}
+          suggestions = {names}
         />
 }
 export default connect(state => ({
