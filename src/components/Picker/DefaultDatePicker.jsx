@@ -15,13 +15,13 @@ export default ({value, onChange , label}) =>{
           variant="inline"
           value={value}
           onChange={onChange}
-          style={{margin:30, width:'100%', padding:0}}
+          style={{marginTop:18, width:'100%' }}
           InputProps={{
             startAdornment: (
               <InputAdornment
                 disableTypography={true}
                 position="start"
-                style={{fontSize:14,height:10}}
+                style={{fontSize:14,}}
               >
                 <b>{label}:</b>
               </InputAdornment>

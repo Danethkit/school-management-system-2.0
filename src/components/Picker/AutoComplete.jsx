@@ -36,7 +36,9 @@ function inputComponent({ inputRef, ...props }) {
 
 const ControlComponent = props => {
    return <TextField
-          fullWidth
+       style={{minWidth:190}}
+       fullWidth={true}
+       // multiline={true}
           margin='normal'
           variant='outlined'
           InputProps={{
@@ -44,7 +46,7 @@ const ControlComponent = props => {
             startAdornment: <InputAdornment position="start"><b>{props.selectProps.label}</b></InputAdornment>,
             inputProps: {
                 className: props.selectProps.classes.input,
-                inputRef: props.innerRef,
+                // inputRef: props.innerRef,
                 children: props.children,
                 ...props.innerProps,
               },
@@ -55,7 +57,7 @@ const ControlComponent = props => {
 
 function Menu(props) {
   return (
-    <Paper square className={props.selectProps.classes.paper} {...props.innerProps}>
+    <Paper square className={props.selectProps.classes.paper} {...props.innerProps} style={{minWidth:225}}>
       {props.children}
     </Paper>
   );
