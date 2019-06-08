@@ -101,10 +101,10 @@ class SessionTable extends Component {
     let {subject, date, session, batch, remark} = storeData.changePicker
     // let { subjectData } = storeData.initData
     let data = {
-      subject: subject.value,
+      subject: subject,
       date: date.toDateString(),
-      session: session.value,
-      batch: batch.value,
+      session: session,
+      batch: batch,
       lines: selectedStu,
       remark: remark
     }
@@ -168,7 +168,7 @@ class SessionTable extends Component {
     const { order, orderBy, selected } = this.state
     let data = []
     try{
-      data = batch.value in studentData ? studentData[batch.value] : []
+      data = batch in studentData ? studentData[batch] : []
     }catch(err){data = []}
 
     return (

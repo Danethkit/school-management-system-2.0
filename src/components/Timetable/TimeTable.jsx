@@ -5,7 +5,7 @@ import moment from 'moment'
 import InsertData from './InsertData'
 const CustomTableCell = withStyles(theme => ({
     head: {
-        backgroundColor: theme.palette.secondary.light,
+        backgroundColor:'#4FC3F7',
         color: '#fff',
         fontSize: 14,
     },
@@ -29,12 +29,11 @@ const useStyles = makeStyles(theme => ({
     },
     row: {
         '&:nth-of-type(odd)': {
-            backgroundColor: '#ddd',
+            backgroundColor: '#CFD8DC',
             fontSize: 14,
             paddingRight:5,
             paddingLeft:5,
             margin:0
-
         },
     },
     generateTimetable:{
@@ -52,9 +51,56 @@ const useStyles = makeStyles(theme => ({
         padding: " 10px 0 15px 0",
     },
 }))
+function arraysEqual(a, b) {
+    if (a === b) return true;
+    if (a == null || b == null) return false;
+    if (a.length !== b.length) return false;
+    for (var i = 0; i < a.length; ++i) {
+      if (a[i] !== b[i]) return false;
+    }
+    return true;
+  }
+function isEquivalent(a, b) {
+    var aProps = Object.getOwnPropertyNames(a);
+    var bProps = Object.getOwnPropertyNames(b);
 
-const TimeTable = memo(({header, week, onDataInsert, sessions, facultyData, selectedFaculty}) => {
-    console.log('selectedFaculty',selectedFaculty);
+    // If number of properties is different,
+    // objects are not equivalent
+    if (aProps.length != bProps.length) {
+        return false;
+    }
+
+    for (var i = 0; i < aProps.length; i++) {
+        var propName = aProps[i];
+
+        // If values of same property are not equal,
+        // objects are not equivalent
+        if(a[propName].constructor === Array){
+            return arraysEqual(a[propName],b[propName])
+        }
+        if (a[propName] !== b[propName]) {
+            return false;
+        }
+    }
+
+    // If we made it this far, objects
+    // are considered equivalent
+    return true;
+}
+
+function areEqual(prevProps, nextProps) {
+    if(nextProps.facultyData.length !== prevProps.facultyData.length){
+        return false
+    }
+    if(nextProps.selectedFaculty !== undefined){
+        if(!(isEquivalent(prevProps.selectedFaculty, nextProps.selectedFaculty))){
+            return false
+        }
+    }
+    return isEquivalent(prevProps.header, nextProps.header)
+}
+
+const TimeTable = (({header, week, onDataInsert, sessions, facultyData}) => {
     const sortedSession = useMemo(()=> sessions.sort((a,b)=> {
         let timeA = [a.slice(0,5), ' ', a.slice(5,7)].join('')
         let timeB = [b.slice(0,5), ' ', b.slice(5,7)].join('')
@@ -84,15 +130,14 @@ const TimeTable = memo(({header, week, onDataInsert, sessions, facultyData, sele
                             {sortedSession.map(row => (
                                 <TableRow className={classes.row} key={row} >
                                     {
-                                        columns.map((cell,i)=> {
+                                    columns.map((cell,i)=> {
                                          return   cell === 'Session' ? <CustomTableCell  align='center' component="th" scope="row" key={i}>{row}</CustomTableCell>
                                         : <CustomTableCell text-align= "center" key={i}>
                                             <InsertData
-                                            onChange={onDataInsert}
-                                            row={row} col={cell}
-                                            header={header}
-                                            facultyData={facultyData}
-                                            selectedFaculty={selectedFaculty[cell] !== undefined && row in selectedFaculty[cell] ? selectedFaculty[cell][row] : false  }/>
+                                                onChange={onDataInsert}
+                                                row={row} col={cell}
+                                                header={header}
+                                                facultyData={facultyData}/>
                                         </CustomTableCell>
                                         })
                                     }
@@ -102,7 +147,6 @@ const TimeTable = memo(({header, week, onDataInsert, sessions, facultyData, sele
                     </Table>
                 </Paper>
             </div>
-
             <Divider style={{marginLeft:15,marginRight:15}}/>
             <div className={classes.submitButton} >
                 <Button size="medium" variant="outlined" color="primary" disabled={true} style={{marginLeft:15,marginRight:15}} >Edit</Button>
@@ -113,4 +157,4 @@ const TimeTable = memo(({header, week, onDataInsert, sessions, facultyData, sele
         </>
     )
 })
-export default TimeTable
+export default  memo(TimeTable, areEqual)

@@ -11,15 +11,15 @@ export const primary = red[500];
 export const theme = createMuiTheme({
     palette: {
         primary: {
-          light: '#f6685e',
-          main: '#9c27b0',
-          dark: '#aa2e25',
+          light: '#70c4bc',
+          main: '#4DB6AC',
+          dark: '#357f78',
           contrastText: '#000',
         },
         secondary: {
           light: '#6573c3',
-          main: '#3f51b5',
-          dark: '#2c387e',
+          main: '#4FC3F7',
+          dark: '#4FC3F7',
           contrastText: '#000',
         },
         error: {

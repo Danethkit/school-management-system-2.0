@@ -13,23 +13,25 @@ import {
     SET_SUBJECTS,
     CHANGE_REPORT_END_DATE,
     CHANGE_REPORT_START_DATE,
+    SET_SELECTED_FACULTY
 } from '../../constants/env'
 
 const initialPicker = {
-    batch : {label:'Batch 4', value:'Batch 4'},
-    subject : {label:'Common', value:'Common'},
-    session: {label:'09:10am-10:00am',value: '09:10am-10:00am'},
+    batch : 'Batch 4',
+    subject : 'Common',
+    session: '09:10am-10:00am',
     date : new Date(),
     remark: {},
-    group : {label:'Group 1', value:'Group 1'},
-    faculty: {label:'',value:''},
-    semester : {label:'Semester 1',value:'Semester 1'},
-    course: {label:'Software Engineering', value:'Software Engineering'},
+    group :'Group 1',
+    faculty: '',
+    semester : 'Semester 1',
+    course: 'Software Engineering',
     searchField: '',
     createAttendanceRequested : false,
     subjects : [],
     endDate : new Date(),
     startDate : new Date(),
+    selectedFaculty : {}
 }
 
 export const changePicker = (state=initialPicker, action={}) => {
@@ -62,6 +64,8 @@ export const changePicker = (state=initialPicker, action={}) => {
             return {...state, ...{endDate:action.payload}}
         case CHANGE_REPORT_START_DATE:
             return {...state,...{startDate:action.payload}}
+        case SET_SELECTED_FACULTY:
+            return {...state, ...{selectedFaculty:action.payload}}
         default:
             return state
     }

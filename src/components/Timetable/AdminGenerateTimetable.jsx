@@ -4,6 +4,7 @@ import DateNavigator from './DateNavigator'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import TimeTable from './TimeTable'
+import {setSelectedFaculty} from '../../redux/ActionCreator/userBehavior'
 
 // helper functoin to asign nested key object
 function assign(obj, keyPath, value) {
@@ -19,6 +20,10 @@ function assign(obj, keyPath, value) {
 
 const weekOfYear = moment.utc().week();
 
+const areEqual = (prevProps, nextProps) => (
+    nextProps.course === null && (prevProps.batch !== nextProps.batch 
+        || prevProps.semester !== nextProps.semester || prevProps.group !== nextProps.group) ? true : false
+)
 // filter number of tables based on TimeTableSearchBoxComponent
 // filter parameter : course, batch, semester , group are recieved as props from redux store
 const filterTable=(data, course=false, batch=false,semester =false,group=false)=>{
@@ -27,51 +32,60 @@ const filterTable=(data, course=false, batch=false,semester =false,group=false)=
         return res
     }
     if(group && semester && batch && course){
-            let session = data[course.value][batch.value][semester.value][group.value]
-            res.push({course:course.value,batch:batch.value,semester:semester.value,group:group.value,session})
+            let session = data[course][batch][semester][group]
+            res.push({course:course,batch:batch,semester:semester,group:group,session})
         return res
     }
     if(semester && batch && course){
-        for(const group in data[course.value][batch.value][semester.value] ){
-            let session = data[course.value][batch.value][semester.value][group]
-            res.push({course:course.value,batch:batch.value,semester:semester.value,group,session})
+        for(const group in data[course][batch][semester] ){
+            let session = data[course][batch][semester][group]
+            res.push({course:course,batch:batch,semester:semester,group,session})
         }
         return res
     }
     if(batch && course){
-        for(const semester in data[course.value][batch.value]){
-            for(const group in data[course.value][batch.value][semester]){
-                let session = data[course.value][batch.value][semester][group]
-                let header = {semester, group, session}
-                header['course'] = course.value
-                header['batch'] = batch.value
+        for(const semester in data[course][batch]){
+            for(const group in data[course][batch][semester]){
+                let session = data[course][batch][semester][group]
+                let header = {course,batch,semester, group, session}
                 res.push(header)
             }
         }
         return res
     }
     if(course){
-        for(const batch in data[course.value]){
-            for(const semester in data[course.value][batch]){
-                for(const group in data[course.value][batch][semester] ){
-                    let session = data[course.value][batch][semester][group]
-                    let header = {batch,semester,group,session}
-                    header['course'] = course.value
+        for(const batch in data[course]){
+            for(const semester in data[course][batch]){
+                for(const group in data[course][batch][semester] ){
+                    let session = data[course][batch][semester][group]
+                    let header = {course,batch,semester,group,session}
                     res.push(header)
                 }
             }
         }
         return res
+    }else {
+        for(const course in data){
+            for(const batch in data[course]){
+                for(const semester in data[course][batch]){
+                    for(const group in data[course][batch][semester] ){
+                        let session = data[course][batch][semester][group]
+                        let header = {course,batch,semester,group,session}
+                        res.push(header)
+                    }
+                }
+            }
+        }
     }
     return res
 }
 
 
-const AdminTimeTable = memo(({sessionData, course, batch, semester, group, subjectInfo})=> {
+const AdminTimeTable = (({sessionData, course, batch, semester, group, subjectInfo, dispatch})=> {
     const [week, setWeek] = useState(weekOfYear)
     const [open, setOpen] = useState(false)
     const [data, setData] = useState({})
-    const [weekNumber, setWeekNum] = useState({label:1,value:1})
+    const [weekNumber, setWeekNum] = useState(1)
 
     const setWeekNumber = (value) => {
         setWeekNum(value)
@@ -87,36 +101,39 @@ const AdminTimeTable = memo(({sessionData, course, batch, semester, group, subje
         setWeek(week+1)
     };
     var res = data.res || {}
+
     const onFacultyInsert = (row, col, value, header) => {
         let temp = {}
         let temp2 = {}
-        temp2[row] = value.value
+        value = value !== null ? value : null
+        temp2[row] =  value
         let {course, batch, semester, group} = header
         if(course in res){
             if(batch in res[course]){
                 if(semester in res[course][batch]){
                     if(group in res[course][batch][semester]){
                         if(col in res[course][batch][semester][group]){
-                            res[course][batch][semester][group][col][row] = value.value
+                            res[course][batch][semester][group][col][row] = value
                         }else {
                             res[course][batch][semester][group][col] = temp2
                         }
                     }else {
-                        assign(temp, [col, row], value.value)
+                        assign(temp, [col, row], value)
                         res[course][batch][semester][group] = temp
                     }
                 }else{
-                    assign(temp, [group, col, row], value.value)
+                    assign(temp, [group, col, row], value)
                     res[course][batch][semester] = temp
                 }
             }else{
-                assign(temp, [semester, group, col, row], value.value)
+                assign(temp, [semester, group, col, row], value)
                 res[course][batch] = temp
             }
         }else{
-            assign(res, [course, batch, semester, group, col,row], value.value)
+            assign(res, [course, batch, semester, group, col,row], value)
         }
         setData({res})
+        dispatch(setSelectedFaculty(res))
     };
 
     // useMemo is for performance improvement, if the dependencies still the same function won't execute, instead it directly return the cached reasult
@@ -142,17 +159,12 @@ const AdminTimeTable = memo(({sessionData, course, batch, semester, group, subje
         {
             allTables.map((table,i) => {
                 let faculties = []
-                let selectedFaculty = {}
                 try{
-                    faculties = subjectInfo[table.course][table.batch][table.semester][table.group].map(e => {
-                        if(e.faculty){
-                            return `${e.subject} (${e.faculty})`
+                    for(let e of subjectInfo[table.course][table.batch][table.semester][table.group]){
+                        if(e.faculty) {
+                            faculties.push( `${e.subject} (${e.faculty})`)
                         }
-                        return null
-                    })
-                }catch{}
-                try{
-                    selectedFaculty = data['res'][table.course][table.batch][table.semester][table.group]
+                    }
                 }catch{}
                 return <TimeTable 
                         week={week} 
@@ -160,7 +172,7 @@ const AdminTimeTable = memo(({sessionData, course, batch, semester, group, subje
                         onDataInsert={onFacultyInsert}
                         sessions={table.session} key={i}
                         facultyData={faculties}
-                        selectedFaculty={selectedFaculty}/>
+                        />
             })
         }
         </>
@@ -174,4 +186,4 @@ export default connect(state =>({
     batch: state.changePicker.batch,
     semester: state.changePicker.semester,
     group: state.changePicker.group,
-}))(AdminTimeTable)
+}))(memo(AdminTimeTable,areEqual))

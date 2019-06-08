@@ -66,7 +66,7 @@ const DateNavigator = ({classes, handleLastWeek, handleCurrentWeek, handleNextWe
             <span className={classes.right}>
 
 
-            <Button size="small" color="primary" className="button" variant="contained" onClick={setOpen(true)} >
+            <Button size="small" color="primary" className="button" variant="contained" onClick={()=>setOpen(true)} >
                     Duplicate
             </Button>
                 <Dialog
@@ -83,10 +83,10 @@ const DateNavigator = ({classes, handleLastWeek, handleCurrentWeek, handleNextWe
                     </form>
                     </DialogContent>
                     <DialogActions>
-                    <Button onClick={setOpen(false)} color="secondary">
+                    <Button onClick={()=>setOpen(false)} color="secondary">
                         Cancel
                     </Button>
-                    <Button onClick={setOpen(false)} color="primary">
+                    <Button onClick={()=>setOpen(false)} color="primary">
                         Ok
                     </Button>
                     </DialogActions>

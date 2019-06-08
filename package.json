@@ -11,6 +11,7 @@
     "@material-ui/icons": "^3.0.2",
     "@material-ui/pickers": "^3.0.0",
     "date-fns": "^2.0.0-alpha.27",
+    "downshift": "^3.2.10",
     "history": "^4.9.0",
     "material-table": "^1.39.0",
     "material-ui-pickers": "^2.2.4",
@@ -43,5 +44,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "eslint-plugin-react-hooks": "^1.6.0"
+  }
 }

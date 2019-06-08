@@ -12,7 +12,7 @@ const BatchPicker = ({dispatch, batch, subjectInfo, course}) => {
   })
   let allBatch = []
   try{
-    let batches = subjectInfo[course.value]
+    let batches = subjectInfo[course]
     allBatch = Object.keys(batches).sort((a, b)=> a.split(" ")[1] - b.split(" ")[1])
   }catch(err){}
   let action = bindActionCreators(onBatchChange, dispatch)

@@ -2,8 +2,8 @@ import React from "react";
 import { Route, Switch } from "react-router-dom"
 import AdminGenerateTimeTable from '../components/Timetable/AdminGenerateTimetable'
 import AdminTimeTableView from '../components/Timetable/AdminTimetableView'
-import FacultyTimeTable from '../components/Timetable/FacultyTimeTableView'
-import StudentTimeTableView from '../components/Timetable/StudentTimeTable'
+import FacultyTimeTable from '../components/Timetable/FacultyTimetableView'
+import StudentTimeTableView from '../components/Timetable/StudentTimetableView'
 
 
 const AttendanceScreen = () => {

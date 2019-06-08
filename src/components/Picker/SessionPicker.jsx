@@ -18,7 +18,7 @@ const SessionPicker = ({dispatch, session, sessionData, course, batch, semester,
     useEffect(()=> { actions.getSessionData()}, [])
     let names = []
     try{
-        names = sortSessionTime(sessionData[course.value][batch.value][semester.value][group.value])
+        names = sortSessionTime(sessionData[course][batch][semester][group])
     }catch(err){
       names = []
     }
