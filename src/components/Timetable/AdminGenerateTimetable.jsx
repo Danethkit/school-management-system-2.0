@@ -20,10 +20,16 @@ function assign(obj, keyPath, value) {
 
 const weekOfYear = moment.utc().week();
 
-const areEqual = (prevProps, nextProps) => (
-    nextProps.course === null && (prevProps.batch !== nextProps.batch 
-        || prevProps.semester !== nextProps.semester || prevProps.group !== nextProps.group) ? true : false
-)
+const areEqual = (prevProps, nextProps) => {
+    if(nextProps.course === null && 
+        (prevProps.batch !== nextProps.batch ||prevProps.semester !== nextProps.semester || prevProps.group !== nextProps.group)){
+            return true
+    }
+    if(nextProps.batch === null && (prevProps.semester !== nextProps.semester || prevProps.group !== nextProps.group)){
+        return true
+    }
+    return false
+}
 // filter number of tables based on TimeTableSearchBoxComponent
 // filter parameter : course, batch, semester , group are recieved as props from redux store
 const filterTable=(data, course=false, batch=false,semester =false,group=false)=>{
@@ -133,7 +139,6 @@ const AdminTimeTable = (({sessionData, course, batch, semester, group, subjectIn
             assign(res, [course, batch, semester, group, col,row], value)
         }
         setData({res})
-        dispatch(setSelectedFaculty(res))
     };
 
     // useMemo is for performance improvement, if the dependencies still the same function won't execute, instead it directly return the cached reasult
@@ -172,6 +177,7 @@ const AdminTimeTable = (({sessionData, course, batch, semester, group, subjectIn
                         onDataInsert={onFacultyInsert}
                         sessions={table.session} key={i}
                         facultyData={faculties}
+                        selectedFaculty={data}
                         />
             })
         }

@@ -1,6 +1,6 @@
-import React, {useMemo, memo} from 'react'
+import React, {useMemo} from 'react'
 import DisplayTimetableHeader from '../TimetablePicker/DisplayTimetableHeader'
-import { Paper, Table, TableRow, TableCell, withStyles, Divider, Button, makeStyles, TableHead, TableBody, Box } from '@material-ui/core'
+import { Paper, Table, TableRow, TableCell, withStyles, Divider, Button, makeStyles, TableHead, TableBody, Box, CircularProgress } from '@material-ui/core'
 import moment from 'moment'
 import InsertData from './InsertData'
 const CustomTableCell = withStyles(theme => ({
@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
     generateTimetable:{
         padding:0,
         marginTop:-60,
-        marginBottom: theme.spacing(2)
+        marginBottom: theme.spacing(2),
     },
     container: {
         flexWrap: 'wrap',
@@ -63,16 +63,13 @@ function arraysEqual(a, b) {
 function isEquivalent(a, b) {
     var aProps = Object.getOwnPropertyNames(a);
     var bProps = Object.getOwnPropertyNames(b);
-
     // If number of properties is different,
     // objects are not equivalent
     if (aProps.length != bProps.length) {
         return false;
     }
-
     for (var i = 0; i < aProps.length; i++) {
         var propName = aProps[i];
-
         // If values of same property are not equal,
         // objects are not equivalent
         if(a[propName].constructor === Array){
@@ -82,25 +79,12 @@ function isEquivalent(a, b) {
             return false;
         }
     }
-
     // If we made it this far, objects
     // are considered equivalent
     return true;
 }
 
-function areEqual(prevProps, nextProps) {
-    if(nextProps.facultyData.length !== prevProps.facultyData.length){
-        return false
-    }
-    if(nextProps.selectedFaculty !== undefined){
-        if(!(isEquivalent(prevProps.selectedFaculty, nextProps.selectedFaculty))){
-            return false
-        }
-    }
-    return isEquivalent(prevProps.header, nextProps.header)
-}
-
-const TimeTable = (({header, week, onDataInsert, sessions, facultyData}) => {
+const TimeTable = (({header, week, onDataInsert, sessions, facultyData, selectedFaculty}) => {
     const sortedSession = useMemo(()=> sessions.sort((a,b)=> {
         let timeA = [a.slice(0,5), ' ', a.slice(5,7)].join('')
         let timeB = [b.slice(0,5), ' ', b.slice(5,7)].join('')
@@ -114,8 +98,10 @@ const TimeTable = (({header, week, onDataInsert, sessions, facultyData}) => {
     }
     return (
         <>
-        <DisplayTimetableHeader header={header} week={week}/>
-        <Box className={classes.generateTimetable} boxShadow={3}>
+        {
+        facultyData.length === 0 ? <CircularProgress/> 
+        :<><DisplayTimetableHeader header={header} week={week}/>
+        <Box className={classes.generateTimetable} boxShadow={3} zIndex='modal'>
             <div className={classes.container}>
                 <Paper className={classes.root}>
                     <Table className={classes.table}>
@@ -137,7 +123,8 @@ const TimeTable = (({header, week, onDataInsert, sessions, facultyData}) => {
                                                 onChange={onDataInsert}
                                                 row={row} col={cell}
                                                 header={header}
-                                                facultyData={facultyData}/>
+                                                facultyData={facultyData} 
+                                                selectedFaculty={selectedFaculty}/>
                                         </CustomTableCell>
                                         })
                                     }
@@ -155,6 +142,8 @@ const TimeTable = (({header, week, onDataInsert, sessions, facultyData}) => {
             </div>
         </Box>
         </>
+        }
+        </>
     )
 })
-export default  memo(TimeTable, areEqual)
+export default TimeTable

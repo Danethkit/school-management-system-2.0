@@ -7,8 +7,6 @@ import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputAdornment from '@material-ui/core/InputAdornment'
-import {connect} from 'react-redux'
-
 
 
 function renderInput(inputProps) {
@@ -40,26 +38,35 @@ function renderSuggestion(suggestionProps) {
     selectedItem,
     rest,
     selectedFaculty
-  } = suggestionProps;
+  } = suggestionProps
   let selectedFacultyStr = ""
-  let {row, col} = rest
-  for(let course in selectedFaculty){
-    for(let batch in selectedFaculty[course]){
-      for(let semester in selectedFaculty[course][batch]){
-        for(let group in selectedFaculty[course][batch][semester]){
-          if(col in selectedFaculty[course][batch][semester][group]){
-            if(row in selectedFaculty[course][batch][semester][group][col]){
-              selectedFacultyStr = selectedFaculty[course][batch][semester][group][col][row]
+  let isBusy = false
+  if('col' in rest){
+    let {row, col} = rest
+    for(let course in selectedFaculty['res']){
+      for(let batch in selectedFaculty['res'][course]){
+        for(let semester in selectedFaculty['res'][course][batch]){
+          for(let group in selectedFaculty['res'][course][batch][semester]){
+            if(col in selectedFaculty['res'][course][batch][semester][group]){
+              if(row in selectedFaculty['res'][course][batch][semester][group][col]){
+                selectedFacultyStr = selectedFaculty['res'][course][batch][semester][group][col][row]
+              }
             }
           }
         }
       }
     }
+    if(selectedFacultyStr !== null){
+      if(selectedItem !== null && selectedItem !== undefined){
+        isBusy = selectedItem.includes(selectedFacultyStr.split('(')[1]) ? false: true
+      }else{
+        isBusy = suggestion.label.includes(selectedFacultyStr.split('(')[1]) ? true: false
+      }
+    }
   }
+
   const isHighlighted = highlightedIndex === index;
   const isSelected = (selectedItem || "").indexOf(suggestion.label) > -1;
-  const isBusy = selectedFacultyStr === suggestion.label ? true : false
-  console.log('isBusy', isBusy)
   return (
     <MenuItem
       {...itemProps}
@@ -94,7 +101,7 @@ const useStyles = makeStyles(theme => ({
     },
     paper: {
       position: "absolute",
-      zIndex: 1,
+      zIndex: 999,
       marginTop: theme.spacing(1),
       left: 0,
       right: 0,
@@ -113,76 +120,41 @@ const useStyles = makeStyles(theme => ({
     }
   })
 );
-function stateReducer(state, changes) {
-  // this prevents the menu from being closed when the user
-  // selects an item with a keyboard or mouse
-  switch (changes.type) {
-    case Downshift.stateChangeTypes.keyDownEnter:
-    case Downshift.stateChangeTypes.clickItem:
-      return {
-        ...changes,
-        isOpen: false,
-        highlightedIndex: state.highlightedIndex,
-      }
-    default:
-      return changes
-  }
-}
-const areEqual = (prevProps, nextProps) => {
-  let {course, batch, semester, group} = nextProps.header
-  let {row, col} = nextProps
-}
 
 function AutoComplete({suggestions,value,onChange, label, selectedFaculty, ...rest}) {
   const classes = useStyles();
-
-  return (
-    <div className={classes.root}>
-      <div className={classes.divider} />
-      <Downshift id="downshift-options" onChange={onChange} selectedItem={value}  stateReducer={stateReducer} >
-        {({
-          clearSelection,
-          getInputProps,
-          getItemProps,
-          getLabelProps,
-          getMenuProps,
-          highlightedIndex,
-          inputValue,
-          isOpen,
-          openMenu,
-          selectedItem,
-        }) => {
-          const { onBlur, onChange, onFocus, ...inputProps } = getInputProps({
-            onChange: event => {
-              if (event.target.value === "") {
-                clearSelection();
-              }
-            },
-            onFocus: openMenu,
-          });
-
-          return (
-            <div className={classes.container}>
-              {renderInput({
-                fullWidth: true,
-                classes,
-                InputLabelProps: getLabelProps({ shrink: true }),
-                InputProps: { onBlur, onChange, onFocus },
-                inputProps,
-                label
-              })}
-
-              <div {...getMenuProps()}>
-                {isOpen ? (
-                  <Paper className={classes.paper} square onClick={()=>isOpen=false}>
-                    {getSuggestions(inputValue, { showEmpty: true }, suggestions.map(e=>({label:e}))).map(
+  return  <Downshift onChange={onChange} selectedItem={value}>
+      {downshift => {
+        const {onBlur, onChange, onFocus, ...inputProps} = downshift.getInputProps({
+          onChange: event => {
+            if (event.target.value === "") {
+              downshift.clearSelection()
+            }
+          },
+          onFocus: downshift.openMenu,
+        })
+        return <div className={classes.container}>
+          {
+            renderInput({
+              fullWidth:true,
+              classes,
+              InputLabelProps: downshift.getLabelProps({shrink:true}),
+              InputProps: {onBlur, onChange, onFocus},
+              inputProps,
+              label
+            })
+          }
+          <div {...downshift.getMenuProps()}>
+                {downshift.isOpen ? (
+                  <Paper className={classes.paper} square onClick={()=>downshift.isOpen =false}>
+                    {getSuggestions(downshift.inputValue, { showEmpty: true }, suggestions.map(e=>({label:e}))).map(
                       (suggestion, index) =>
                         renderSuggestion({
                           suggestion,
                           index,
-                          itemProps: getItemProps({ item: suggestion.label }),
-                          highlightedIndex,
-                          selectedItem,
+                          itemProps: downshift.getItemProps({ item: suggestion.label }),
+                          highlightedIndex: downshift.highlightedIndex,
+                          selectedItem: value,
                           selectedFaculty,
                           rest
                         })
@@ -190,15 +162,12 @@ function AutoComplete({suggestions,value,onChange, label, selectedFaculty, ...re
                   </Paper>
                 ) : null}
               </div>
-            </div>
-          );
-        }}
-      </Downshift>
-    </div>
-  );
+        </div>
+      }}
+    </Downshift>
 }
 
-export default connect(state=>({selectedFaculty: state.changePicker.selectedFaculty}))(AutoComplete)
+export default AutoComplete
 renderSuggestion.propTypes = {
   highlightedIndex: PropTypes.number,
   index: PropTypes.number,
