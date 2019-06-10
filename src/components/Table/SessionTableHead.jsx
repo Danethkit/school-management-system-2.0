@@ -24,7 +24,7 @@ const rows = [
     label: "Roll Number"
   },
   { id: "name", numeric: true, disablePadding: false, label: "Student Name" },
-  { id: "present", numeric: true, disablePadding: true, label: "Present ?" },
+  { id: "present", numeric: false, disablePadding: true, label: "Present ?" },
   { id: "remark", numeric: false, disablePadding: false, label: "Remark" }
 ];
 

@@ -15,7 +15,7 @@ export default ({value, onChange , label}) =>{
           variant="inline"
           value={value}
           onChange={onChange}
-          style={{marginTop:18, width:'100%' }}
+          style={{marginTop:16, marginBottom:4}}
           InputProps={{
             startAdornment: (
               <InputAdornment
