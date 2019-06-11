@@ -12,11 +12,11 @@ import {
 
 const styles = theme => ({
   text: {
-    fontWeight: "bold",
     fontSize: 13,
+    color:'white'
   },
   tableHead: {
-    backgroundColor: theme.palette.secondary.light
+    backgroundColor: theme.palette.primary.light
   }
 });
 const rows = [
@@ -69,6 +69,7 @@ class SessionTableHead extends Component {
                 enterDelay={200}
               >
                 <TableSortLabel
+                style={{color:'white'}}
                   className={classes.text}
                   active={orderBy === row.id}
                   direction={order}

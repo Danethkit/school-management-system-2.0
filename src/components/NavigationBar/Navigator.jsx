@@ -39,7 +39,6 @@ const styles = theme => ({
   tab: {
     minWidth: 1,
     textColor: "#fff",
-    fontWeight: "bold"
   }
 });
 

@@ -109,7 +109,6 @@ class SessionTable extends Component {
       remark: remark
     }
     createAttendanceSheet(data)
-    
   }
 
   componentDidMount() {

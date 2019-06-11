@@ -9,13 +9,13 @@ import {
 import TableColumn from './TableColumn'
 const styles = theme => ({
     text: {
-        fontWeight: "bold",
-        fontSize: 13
+        fontSize: 13,
+        color:'white'
     },
     header: {
-        backgroundColor: theme.palette.secondary.light
+        backgroundColor: theme.palette.primary.light
     }
-});
+})
 
 
 class GenerateReportTableHead extends Component {

@@ -21,7 +21,7 @@ const GroupPicker = ({dispatch, group, batch, course, subjectInfo, semester}) =>
   })
   let groups = []
   try{
-    groups = Object.keys(subjectInfo[course][batch][semester])
+    groups = Object.keys(subjectInfo[course][batch][semester]).filter(e=>e.includes('Group'))
   }catch(err){
     groups = []
   }

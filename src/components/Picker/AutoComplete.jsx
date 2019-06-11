@@ -13,6 +13,7 @@ function renderInput(inputProps) {
   const { InputProps, classes, ref,label, ...other } = inputProps;
   return (
     <TextField
+      // disabled={readonly}
       multiline
       variant='outlined'
       InputProps={{
@@ -39,9 +40,9 @@ function renderSuggestion(suggestionProps) {
     rest,
     selectedFaculty
   } = suggestionProps
-  let selectedFacultyStr = ""
+  let selectedFacultyArray = []
   let isBusy = false
-  if('col' in rest){
+   if('col' in rest){
     let {row, col} = rest
     for(let course in selectedFaculty['res']){
       for(let batch in selectedFaculty['res'][course]){
@@ -49,20 +50,25 @@ function renderSuggestion(suggestionProps) {
           for(let group in selectedFaculty['res'][course][batch][semester]){
             if(col in selectedFaculty['res'][course][batch][semester][group]){
               if(row in selectedFaculty['res'][course][batch][semester][group][col]){
-                selectedFacultyStr = selectedFaculty['res'][course][batch][semester][group][col][row]
+                selectedFacultyArray.push(selectedFaculty['res'][course][batch][semester][group][col][row])
               }
             }
           }
         }
       }
     }
-    if(selectedFacultyStr !== null){
-      if(selectedItem !== null && selectedItem !== undefined){
-        isBusy = selectedItem.includes(selectedFacultyStr.split('(')[1]) ? false: true
-      }else{
-        isBusy = suggestion.label.includes(selectedFacultyStr.split('(')[1]) ? true: false
+    if(selectedFacultyArray.length !== 0){
+        selectedFacultyArray.forEach(e=> {
+          if(!e) return
+          if(!isBusy){
+            if(selectedItem){
+              selectedFacultyArray.forEach(e => isBusy = selectedItem.includes(e.split('(')[1]))
+            } else{
+              isBusy = suggestion.label.includes(e.split('(')[1])
+            }
+          }
+        })
       }
-    }
   }
 
   const isHighlighted = highlightedIndex === index;
@@ -121,8 +127,11 @@ const useStyles = makeStyles(theme => ({
   })
 );
 
-function AutoComplete({suggestions,value,onChange, label, selectedFaculty, ...rest}) {
+function AutoComplete({suggestions, value, onChange, label, selectedFaculty, ...rest}) {
   const classes = useStyles();
+  // if(rest.disabled){
+  //   value = 'Holiday'
+  // }
   return  <Downshift onChange={onChange} selectedItem={value}>
       {downshift => {
         const {onBlur, onChange, onFocus, ...inputProps} = downshift.getInputProps({
@@ -141,7 +150,8 @@ function AutoComplete({suggestions,value,onChange, label, selectedFaculty, ...re
               InputLabelProps: downshift.getLabelProps({shrink:true}),
               InputProps: {onBlur, onChange, onFocus},
               inputProps,
-              label
+              label,
+              // readonly: rest.disabled
             })
           }
           <div {...downshift.getMenuProps()}>
