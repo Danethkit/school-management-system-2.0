@@ -92,7 +92,7 @@ class GenerateReportTable extends Component {
 
         const { classes, batch, group, subjects, attendanceLine, endDate, startDate, studentData, dispatch } = this.props;
         let filterLine = attendanceLine.filter(line => {
-            return new Date(line.date) >=  startDate && new Date(line.date) <= endDate && line.present && subjects.includes(line.subject) && line.group === group.value && line.batch === batch.value
+            return new Date(line.date) >=  startDate && new Date(line.date) <= endDate && line.present && subjects.includes(line.subject) && line.group === group && line.batch === batch
         } )
 
         let res = {}
@@ -122,7 +122,7 @@ class GenerateReportTable extends Component {
                                 onRequestSort={this.handleRequestSort}
                             />
                             <TableBody>
-                                {stableSort(studentData[batch.value], getSorting(order, orderBy)).map((row,i) => {
+                                {stableSort(studentData[batch], getSorting(order, orderBy)).map((row,i) => {
                                     return (
                                         <TableRow hover key={row.roll_number}>
                                             <TableCell className={classes.textRow}>

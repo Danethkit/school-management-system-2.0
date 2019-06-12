@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import './index.css'
 // import TimebTableScreen from './components/Timetable/AdminTimetableView'
 import AttendancesScreen from './screen/AttendancesScreen'
+import TimeTable from './screen/TimeTable'
 import { Route, Switch, Router } from "react-router-dom"
 import * as serviceWorker from './serviceWorker'
 import { createBrowserHistory } from 'history'
@@ -29,7 +30,7 @@ const App = ({dispatch}) => {
           <Route path='/' component={NavigationBar} />
           <Switch>
             <Route path = '/attendances' component={AttendancesScreen}/>
-            <Route path='/timetables' component={AdminGenerateTimetable} />
+            <Route path='/timetables' component={TimeTable} />
             {/*<Route path='/timetables/timetable_report' component={TimetableReport}/>*/}
             <Route component={AttendancesScreen}/>
           </Switch>

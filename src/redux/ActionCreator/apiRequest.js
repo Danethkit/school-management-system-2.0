@@ -14,12 +14,12 @@ import {
     REQUEST_SUBJECT_DATA,
     PRINT_ATTENDANCE_REPORT,
     SET_REPORT_B64,
-    GET_SESSION_DATA
+    GET_SESSION_DATA,
 } from '../../constants/env'
 import {odooRequest, odooPrintReport} from '../api'
-// Helper functino 
+// Helper functino
 
-// group data based on batch name 
+// group data based on batch name
 const groupByBatch = (data) =>  {
     let res = {}
     data.forEach(e => {
@@ -139,4 +139,11 @@ export const printAttendanceReport = () => (dispatch) => {
         dispatch({type:SET_REPORT_B64, payload:b64})
     })
     .catch(err => console.log(err))
+}
+
+export const saveTimeTableData = () => (dispatch) => {
+    fetch('http://192.168.7.222:8069/save-timetable')
+    .then(response => response.json())
+    .then(data => dispatch({type: TOGGLE_DIALOG, payload: data}))
+    .catch(err => dispatch({type: TOGGLE_DIALOG, payload: err}))
 }

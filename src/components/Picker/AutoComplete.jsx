@@ -1,131 +1,187 @@
-import React from 'react';
-import Select from 'react-select';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import NoSsr from '@material-ui/core/NoSsr';
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import PropTypes from 'prop-types';
-import {InputAdornment, MenuItem} from '@material-ui/core'
+import React from "react";
+import PropTypes from "prop-types";
+import deburr from "lodash/deburr";
+import Downshift from "downshift";
+import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Paper from "@material-ui/core/Paper";
+import MenuItem from "@material-ui/core/MenuItem";
+import InputAdornment from '@material-ui/core/InputAdornment'
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1,
-    height: 60,
-    padding:0,
-    margin:0
-  },
-  input: {
-    display: 'flex',
-    padding:0,
-    height: '100%',
-  },
-  paper: {
-    position: 'absolute',
-    zIndex: 999,
-    marginTop: theme.spacing(1),
-    left: 0,
-    right: 0,
-    top:50,
-    boxShadow:'-16px 10px 26px -8px rgba(0,0,0,0.61)'
-  },
-}));
 
-function inputComponent({ inputRef, ...props }) {
-    return  <div ref={inputRef} {...props}/>;
-}
-
-const ControlComponent = props => {
-   return <TextField
-       style={{minWidth:190}}
-       fullWidth={true}
-       // multiline={true}
-          margin='normal'
-          variant='outlined'
-          InputProps={{
-            inputComponent,
-            startAdornment: <InputAdornment position="start"><b>{props.selectProps.label}</b></InputAdornment>,
-            inputProps: {
-                className: props.selectProps.classes.input,
-                // inputRef: props.innerRef,
-                children: props.children,
-                ...props.innerProps,
-              },
-          }}
-          {...props.selectProps.TextFieldProps}
-        />
-    }
-
-function Menu(props) {
+function renderInput(inputProps) {
+  const { InputProps, classes, ref,label, ...other } = inputProps;
   return (
-    <Paper square className={props.selectProps.classes.paper} {...props.innerProps} style={{minWidth:225}}>
-      {props.children}
-    </Paper>
+    <TextField
+      // disabled={readonly}
+      multiline
+      variant='outlined'
+      InputProps={{
+        inputRef: ref,
+        startAdornment: <InputAdornment position="start"><b>{label}</b></InputAdornment>,
+        classes: {
+          root: classes.inputRoot,
+          input: classes.inputInput
+        },
+        ...InputProps
+      }}
+      {...other}
+    />
   );
 }
-function Option(props) {
+
+function renderSuggestion(suggestionProps) {
+  const {
+    suggestion,
+    index,
+    itemProps,
+    highlightedIndex,
+    selectedItem,
+    rest,
+    selectedFaculty
+  } = suggestionProps
+  let selectedFacultyArray = []
+  let isBusy = false
+   if('col' in rest){
+    let {row, col} = rest
+    for(let course in selectedFaculty['res']){
+      for(let batch in selectedFaculty['res'][course]){
+        for(let semester in selectedFaculty['res'][course][batch]){
+          for(let group in selectedFaculty['res'][course][batch][semester]){
+            if(col in selectedFaculty['res'][course][batch][semester][group]){
+              if(row in selectedFaculty['res'][course][batch][semester][group][col]){
+                selectedFacultyArray.push(selectedFaculty['res'][course][batch][semester][group][col][row])
+              }
+            }
+          }
+        }
+      }
+    }
+    if(selectedFacultyArray.length !== 0){
+        selectedFacultyArray.forEach(e=> {
+          if(!e) return
+          if(!isBusy){
+            if(selectedItem){
+              selectedFacultyArray.forEach(e => isBusy = selectedItem.includes(e.split('(')[1]))
+            } else{
+              isBusy = suggestion.label.includes(e.split('(')[1])
+            }
+          }
+        })
+      }
+  }
+
+  const isHighlighted = highlightedIndex === index;
+  const isSelected = (selectedItem || "").indexOf(suggestion.label) > -1;
   return (
     <MenuItem
-      ref={props.innerRef}
-      selected={props.isFocused}
+      {...itemProps}
+      key={suggestion.label}
+      selected={isHighlighted}
+      disabled={isBusy}
       component="div"
       style={{
-        fontWeight: props.isSelected ? 500 : 400,
+        fontWeight: isSelected ? 500 : 400
       }}
-      {...props.innerProps}
     >
-      {props.children}
+      {suggestion.label}
     </MenuItem>
   );
 }
 
-function AutoComplete(props) {
-  const classes = useStyles();
-  const theme = useTheme();
-  const {suggestions, value, onChange} = props
-
-  const selectStyles = {
-    input: base => ({
-      ...base,
-      color: theme.palette.secondary,
-      '& input': {
-        font: 'inherit',
-      },
-    }),
-  };
-  let suggestionsObj = suggestions.map(e => ({label:e,value:e}))
-
-  return (
-    <div className={classes.root}>
-      <NoSsr>
-        <Select
-          classes={classes}
-          isClearable={true}
-          styles={selectStyles}
-          options={suggestionsObj}
-          value={value}
-          onChange={onChange}
-          components={{ Control: ControlComponent, Menu:Menu, Option:Option}}
-          placeholder=''
-          {...props}
-        />
-      </NoSsr>
-    </div>
-  );
+function getSuggestions(value, { showEmpty = false } = {}, suggestions) {
+  const inputValue = deburr(value.trim()).toLowerCase();
+  const inputLength = inputValue.length;
+  return inputLength === 0 && !showEmpty
+    ? []
+    : suggestions.filter(suggestion => suggestion.label.toLowerCase().includes(inputValue));
 }
-// =========================== PropTypes
+
+const useStyles = makeStyles(theme => ({
+    root: {
+      flexGrow: 1,
+    },
+    container: {
+      flexGrow: 1,
+      position: "relative"
+    },
+    paper: {
+      position: "absolute",
+      zIndex: 999,
+      marginTop: theme.spacing(1),
+      left: 0,
+      right: 0,
+      width:400,
+      boxShadow: theme.shadows[5]
+    },
+    inputRoot: {
+      flexWrap: "wrap"
+    },
+    inputInput: {
+      width: "auto",
+      flexGrow: 1,
+    },
+    divider: {
+      height: theme.spacing(2)
+    }
+  })
+);
+
+function AutoComplete({suggestions, value, onChange, label, selectedFaculty, ...rest}) {
+  const classes = useStyles();
+  // if(rest.disabled){
+  //   value = 'Holiday'
+  // }
+  return  <Downshift onChange={onChange} selectedItem={value}>
+      {downshift => {
+        const {onBlur, onChange, onFocus, ...inputProps} = downshift.getInputProps({
+          onChange: event => {
+            if (event.target.value === "") {
+              downshift.clearSelection()
+            }
+          },
+          onFocus: downshift.openMenu,
+        })
+        return <div className={classes.container}>
+          {
+            renderInput({
+              fullWidth:true,
+              classes,
+              InputLabelProps: downshift.getLabelProps({shrink:true}),
+              InputProps: {onBlur, onChange, onFocus},
+              inputProps,
+              label,
+              // readonly: rest.disabled
+            })
+          }
+          <div {...downshift.getMenuProps()}>
+                {downshift.isOpen ? (
+                  <Paper className={classes.paper} square onClick={()=>downshift.isOpen =false}>
+                    {getSuggestions(downshift.inputValue, { showEmpty: true }, suggestions.map(e=>({label:e}))).map(
+                      (suggestion, index) =>
+                        renderSuggestion({
+                          suggestion,
+                          index,
+                          itemProps: downshift.getItemProps({ item: suggestion.label }),
+                          highlightedIndex: downshift.highlightedIndex,
+                          selectedItem: value,
+                          selectedFaculty,
+                          rest
+                        })
+                    )}
+                  </Paper>
+                ) : null}
+              </div>
+        </div>
+      }}
+    </Downshift>
+}
+
 export default AutoComplete
-
-
-Option.propTypes = {
-    children: PropTypes.node,
-    innerProps: PropTypes.object,
-    innerRef: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
-    isFocused: PropTypes.bool,
-    isSelected: PropTypes.bool,
-};
-
-Menu.propTypes = {
-    children: PropTypes.node,
-    innerProps: PropTypes.object,
-    selectProps: PropTypes.object,
+renderSuggestion.propTypes = {
+  highlightedIndex: PropTypes.number,
+  index: PropTypes.number,
+  itemProps: PropTypes.object,
+  selectedItem: PropTypes.string,
+  suggestion: PropTypes.shape({ label: PropTypes.string }).isRequired
 };

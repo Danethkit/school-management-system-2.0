@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
-import { bindActionCreators } from 'redux'
-import { getSessionData} from '../../redux/ActionCreator/apiRequest' 
-import { onSessionChange } from '../../redux/ActionCreator/userBehavior' 
+import React from "react";
+import { onSessionChange } from '../../redux/ActionCreator/userBehavior'
 import { connect } from 'react-redux'
+import {bindActionCreators} from 'redux'
 import AutoComplete from './AutoComplete'
 
 export const sortSessionTime = (session) => {
@@ -12,25 +11,17 @@ export const sortSessionTime = (session) => {
       return new Date(`07/16/1999 ${timeA}`) - new Date(`07/16/1999 ${timeB}`)
     })
 }
-  
-const SessionPicker = ({dispatch, session, sessionData, course, batch, semester, group}) => {
-    let actions = bindActionCreators({getSessionData, onSessionChange}, dispatch)
-    useEffect(()=> { actions.getSessionData()}, [])
-    let names = []
-    // let sessionName=[]
-    // try{
-    //     names = sortSessionTime(sessionData[course.value][batch.value][semester.value][group.value])
-    //     names.map((sess,index)=>{
-    //         return(sessionName.push({sessionItem:},))
-    //     })
-    // }catch(err){
-    //   names = []
-    // }
-    return <AutoComplete 
+const SessionPicker = ({dispatch, session, subjectInfo, course, batch, semester, group}) => {
+    const action = bindActionCreators(onSessionChange, dispatch)
+    let suggestions = []
+    try{
+        suggestions = subjectInfo[course][batch][semester]['session']
+    }catch(err){}
+    return <AutoComplete
               value ={session}
-              onChange = {actions.onSessionChange}
+              onChange = {action}
               label = "Session"
-              suggestions ={names}
+              suggestions ={suggestions}
             />
   }
 
@@ -40,4 +31,4 @@ export default connect(state => ({
     batch: state.changePicker.batch,
     semester: state.changePicker.semester,
     group: state.changePicker.group,
-    sessionData: state.initData.sessionData}))(SessionPicker)
+    subjectInfo: state.initData.subjectInfo}))(SessionPicker)

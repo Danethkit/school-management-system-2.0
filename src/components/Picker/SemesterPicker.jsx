@@ -10,7 +10,7 @@ const SemesterPicker = ({dispatch, semester, subjectInfo, batch, course}) => {
   let actions = bindActionCreators({requestSemester, onSemesterChange}, dispatch)
   let semesters = []
   try{
-    semesters = Object.keys(subjectInfo[course.value][batch.value])
+    semesters = Object.keys(subjectInfo[course][batch])
   }catch(err){}
 
   useEffect(()=> {

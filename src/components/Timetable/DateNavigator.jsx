@@ -40,8 +40,8 @@ const styles = theme => ({
 })
 var moment = require("moment");
 const weekOfYear = moment.utc().week();
-
-const DateNavigator = ({classes, handleLastWeek, handleCurrentWeek, handleNextWeek, week, open,setOpen}) => {
+const DateNavigator = ({classes, handleLastWeek, handleCurrentWeek, handleNextWeek, week, weekStr, open, setOpen, endSemDate}) => {
+    let dateStr = moment.utc().week(week).format('YYYY-MM-DD')
     return (
         <Toolbar>
             <span className={classes.left}>
@@ -54,19 +54,19 @@ const DateNavigator = ({classes, handleLastWeek, handleCurrentWeek, handleNextWe
                 Current
             </Button>
 
-            <Button size="small"  color="primary" className="button" variant="outlined" onClick={handleNextWeek} >
+            <Button size="small"  color="primary" className="button" variant="outlined" onClick={handleNextWeek} disabled={new Date(dateStr) >= new Date(endSemDate)}>
                 Next
                 <KeyboardArrowRight fontSize={'inherit'}/>
             </Button>
 
             </span>
             <span className={classes.middle}>
-                <b>Week{moment.utc().week(week).format('w') -17}( {moment.utc().week(week).weekday(0).format("MMM/DD")} - {moment.utc().week(week).weekday(6).format("MMM/DD")})</b>
+                <b>{weekStr}( {moment.utc().week(week).weekday(0).format("MMM/DD")} - {moment.utc().week(week).weekday(6).format("MMM/DD")})</b>
             </span>
             <span className={classes.right}>
 
 
-            <Button size="small" color="primary" className="button" variant="contained" onClick={setOpen(true)} >
+            <Button size="small" color="primary" className="button" variant="contained" onClick={()=>setOpen(true)} >
                     Duplicate
             </Button>
                 <Dialog
@@ -83,10 +83,10 @@ const DateNavigator = ({classes, handleLastWeek, handleCurrentWeek, handleNextWe
                     </form>
                     </DialogContent>
                     <DialogActions>
-                    <Button onClick={setOpen(false)} color="secondary">
+                    <Button onClick={()=>setOpen(false)} color="secondary">
                         Cancel
                     </Button>
-                    <Button onClick={setOpen(false)} color="primary">
+                    <Button onClick={()=>setOpen(false)} color="primary">
                         Ok
                     </Button>
                     </DialogActions>

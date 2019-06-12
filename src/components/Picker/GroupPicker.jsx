@@ -14,14 +14,14 @@ const GroupPicker = ({dispatch, group, batch, course, subjectInfo, semester}) =>
   useEffect(()=> {
     let subjects =[]
     try{
-        subjects = subjectInfo[course.value][batch.value][semester.value][group.value].map(e=>e.subject)
+        subjects = subjectInfo[course][batch][semester][group].map(e=>e.subject)
     }catch(err){ subjects = []}
     dispatch(setSubjects(subjects))
 
   })
   let groups = []
   try{
-    groups = Object.keys(subjectInfo[course.value][batch.value][semester.value])
+    groups = Object.keys(subjectInfo[course][batch][semester]).filter(e=>e.includes('Group'))
   }catch(err){
     groups = []
   }
