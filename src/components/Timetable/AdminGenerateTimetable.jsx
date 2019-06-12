@@ -17,7 +17,6 @@ function assign(obj, keyPath, value) {
   obj[keyPath[lastKeyIndex]] = value;
 }
 
-const weekOfYear = moment.utc().week();
 
 const areEqual = (prevProps, nextProps) => {
   if (
@@ -121,24 +120,47 @@ const filterTable = (
 };
 
 const AdminTimeTable = ({ course, batch, semester, group, subjectInfo }) => {
-  const [week, setWeek] = useState(weekOfYear);
   const [open, setOpen] = useState(false);
   const [data, setData] = useState({});
-  const [weekNumber, setWeekNum] = useState('');
-  useEffect(()=> {setWeekNum(week-17 < 10 ? `W 0${week-17}` : `W ${week-17}`)}, [week])
+  const [week, setWeek] = useState(moment.utc().week());
+  const [weekStr, setWeekStr] = useState('');
+  let currentWeek = ''
+  let endSemDate = useMemo(()=>{
+    if(Object.keys(subjectInfo).length !== 0){
+      for(let semester in subjectInfo[course][batch]){
+        for(let week of subjectInfo[course][batch][semester]['week']){
+          let today = new Date()
+          if(today >= new Date(week.startDate) && today <= new Date(week.endDate)){
+            currentWeek = week.name
+            break
+          }
+        }
+      }
+      if(course && batch && semester){
+        endSemDate = subjectInfo[course][batch][semester]['week'][subjectInfo[course][batch][semester]['week'].length -1].endDate
+      }
+    }
+    return endSemDate
+  }, [subjectInfo])
 
+  useEffect(()=>{
+    if(currentWeek) setWeekStr(currentWeek)
+  }, [subjectInfo])
 
-  const setWeekNumber = value => {
-    setWeekNum(value);
+  const handleChangeWeekStr = value => {
+    setWeekStr(value);
   };
 
   const handleLastWeek = () => {
     setWeek(week - 1);
+    setWeekStr(`W ${parseInt(weekStr.split(' ')[1]) -1} `)
   };
   const handleCurrentWeek = () => {
-    setWeek(weekOfYear);
+    setWeek(moment.utc().week());
+    setWeekStr(currentWeek)
   };
   const handleNextWeek = () => {
+    setWeekStr(`W ${parseInt(weekStr.split(' ')[1]) +1}`)
     setWeek(week + 1);
   };
   var res = data.res || {};
@@ -172,8 +194,11 @@ const AdminTimeTable = ({ course, batch, semester, group, subjectInfo }) => {
     } else {
       assign(res, [course, batch, semester, group, col, row], value);
     }
-    setData({ res });
+    temp[weekStr] = res
+    console.log('week str----------', weekStr);
+    setData({res:temp});
   };
+  console.log('check data=============', data);
 
   // useMemo is for performance improvement, if the dependencies still the same function won't execute, instead it directly return the cached reasult
   let allTables = [];
@@ -194,9 +219,11 @@ const AdminTimeTable = ({ course, batch, semester, group, subjectInfo }) => {
   // let period = ''
   return (
     <>
-      <TimeTableSearchBox setWeekNumber={setWeekNumber} value={weekNumber} />
+      <TimeTableSearchBox setWeekNumber={handleChangeWeekStr} value={weekStr} />
       <DateNavigator
         week={week}
+        weekStr={weekStr}
+        endSemDate = {endSemDate}
         handleLastWeek={handleLastWeek}
         handleNextWeek={handleNextWeek}
         handleCurrentWeek={handleCurrentWeek}
@@ -216,7 +243,7 @@ const AdminTimeTable = ({ course, batch, semester, group, subjectInfo }) => {
         } catch {}
         return (
           <TimeTable
-            week={week}
+            week={weekStr}
             header={table}
             onDataInsert={onFacultyInsert}
             sessions={table.session}

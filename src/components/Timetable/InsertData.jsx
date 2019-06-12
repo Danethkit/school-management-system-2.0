@@ -40,6 +40,7 @@ const areEqual = (prevProps, nextProps) =>{
                 if(row in nextProps.selectedFaculty.res[course][batch][semester][group][col]){
                   if(prevProps.selectedFaculty.res !== undefined){
                     if(nextProps.selectedFaculty.res[course][batch][semester][group][col][row] === prevProps.selectedFaculty.res[course][batch][semester][group][col][row]){
+                      console.log('true222222222222');
                       return true
                     }
                   }
@@ -52,6 +53,7 @@ const areEqual = (prevProps, nextProps) =>{
       }
     }
   }
+  console.log('true1============');
   return true
 }
 export default memo(InsertData, areEqual)

@@ -10,7 +10,7 @@ function DisplayTimetableHeader({header, week})
         <Typography color="textPrimary" variant="h5">{header.batch}</Typography>
         <Typography color="textPrimary" variant="h5">{header.semester}</Typography>
         <Typography color="textPrimary" variant="h5">{header.group}</Typography>
-        <Typography color="textPrimary" variant="h5">week:{week}</Typography>
+        <Typography color="textPrimary" variant="h5">{week}</Typography>
       </Breadcrumbs>
     </div>
   )
