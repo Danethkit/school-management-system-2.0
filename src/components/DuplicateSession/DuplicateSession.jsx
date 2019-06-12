@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux"
 import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles} from "@material-ui/core";
 import {
   Button,
   Dialog,
@@ -22,11 +22,12 @@ const styles = theme => ({
   }
 });
 
+
 class DuplicateSession extends React.Component {
   state = {
     open: false,
-    startSession: '',
-    endSession: ''
+    sessionFrom: '',
+    sessionTo: '',
   };
   handleClickOpen = () => {
     this.setState({ open: true });
@@ -35,13 +36,20 @@ class DuplicateSession extends React.Component {
   handleClose = () => {
     this.setState({ open: false });
   };
-  onChangeSession = (value) =>{
+
+  handleChangeFrom = e => {
+    this.setState( {sessionFrom : e.target.value})
+  }
+  handleChangeTo = e => {
+    this.setState( {sessionTo : e.target.value})
+  }
+  onChangeSession = (e) =>{
     console.log('value')
   }
 
 
   render() {
-    const { classes, sessionData } = this.props;
+    const { classes, sessionNames } = this.props;
 
     return (
       <div>
@@ -57,8 +65,16 @@ class DuplicateSession extends React.Component {
           <DialogTitle>Fill the session to duplicate:</DialogTitle>
           <DialogContent>
             <form className={classes.container}>
-              <DropBox placeholder="From" items={sessionData} handleChange={this.onChangeSession} />
-              <DropBox placeholder="To" items={sessionData} handleChange={this.onChangeSession} />
+              <DropBox placeholder={"Duplicate From"}
+                       handleChange={this.handleChangeFrom}
+                       session={this.state.sessionFrom}
+                       items={sessionNames}
+                  />
+
+              <DropBox placeholder={"Duplicate To"}
+                       handleChange={this.handleChangeTo}
+                       items={sessionNames}
+                       session={this.state.sessionTo}/>
             </form>
           </DialogContent>
           <DialogActions>
@@ -72,6 +88,7 @@ class DuplicateSession extends React.Component {
         </Dialog>
       </div>
     );
+
   }
 }
 

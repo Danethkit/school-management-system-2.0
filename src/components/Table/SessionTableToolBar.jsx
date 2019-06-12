@@ -4,7 +4,17 @@ import PropTypes from "prop-types"
 import DuplicateSession from "../DuplicateSession/DuplicateSession"
 import { Toolbar, Typography, withStyles } from "@material-ui/core"
 import { lighten } from "@material-ui/core/styles/colorManipulator"
-
+const Sessions=[
+  {sessionName:'1'},
+  {sessionName:'2'},
+  {sessionName:'3'},
+  {sessionName:'4'},
+  {sessionName:'5'},
+  {sessionName:'6'},
+  {sessionName:'7'},
+  {sessionName:'8'},
+  {sessionName:'9'},
+]
 const toolbarStyles = theme => ({
   root: {
     paddingRight: theme.spacing(3)
@@ -53,7 +63,7 @@ let SessionTableToolBar = props => {
       </div>
       <div className={classes.spacer} />
       <div className={classes.actions}>
-        <DuplicateSession />
+        <DuplicateSession sessionNames={Sessions} />
       </div>
     </Toolbar>
   );

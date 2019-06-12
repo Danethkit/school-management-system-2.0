@@ -12,25 +12,48 @@ import {Grid, Box } from "@material-ui/core";
 
 export default function HeadPicker() {
   return (
-    <Box boxShadow={2} display='flex' >
-          <Grid container spacing={10} style={{padding:30}} justify='space-around'>
-            <Grid item sm>
-              <DatePicker />
-              <SessionPicker />
-            </Grid>
-            <Grid item sm  >
-              <FacultyPicker />
-              <SubjectPicker />
-            </Grid>
-            <Grid item sm >
-              <CoursePicker />
-              <SemesterPicker />
-            </Grid>
-            <Grid item sm  >
-              <BatchPicker />
-              <GroupPicker />
-            </Grid>
+    <Box boxShadow={2} display={'flex'} >
+      <Grid container>
+        <Grid container item xs={12} >
+
+          <Grid item xs={3} style={{paddingRight:25, paddingLeft:2}}>
+            <DatePicker />
           </Grid>
+          <Grid item xs={3} style={{paddingRight:25, paddingLeft:25}}>
+            <FacultyPicker />
+          </Grid>
+          <Grid item xs={3} style={{paddingRight:25, paddingLeft:25}}>
+            <CoursePicker />
+          </Grid>
+          <Grid item xs={3} style={{paddingLeft:25, paddingRight:2}}>
+            <BatchPicker />
+          </Grid>
+
+        </Grid>
+
+        <Grid container item xs={12}>
+
+          <Grid item xs={3} style={{paddingRight:25, paddingLeft:2}}>
+            <SessionPicker />
+          </Grid>
+          <Grid item xs={3} style={{paddingRight:25, paddingLeft:25}}>
+            <SubjectPicker />
+          </Grid>
+          <Grid item xs={3} style={{paddingRight:25, paddingLeft:25}}>
+            <SemesterPicker />
+          </Grid>
+          <Grid item xs={3} style={{paddingLeft:25,paddingRight:2}}>
+            <GroupPicker />
+          </Grid>
+
+        </Grid>
+
+      </Grid>
     </Box>
+
+
+
+
+
   );
 }

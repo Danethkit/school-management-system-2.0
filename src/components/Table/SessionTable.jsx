@@ -20,6 +20,8 @@ import { connect } from 'react-redux'
 import { store } from '../../redux/store'
 import AttendanceSheetDialog from '../Alert/AttendanceSheetDialog'
 
+
+
 const styles = theme => ({
   root: {
     witdth: "100%",
@@ -207,7 +209,7 @@ class SessionTable extends Component {
                       <TableCell  align="left" onClick={event => this.handleClick(event, n.roll_number)}>
                         {n.last_name + ' ' +n.name}
                       </TableCell>
-                      <TableCell  align="left" onClick={event => this.handleClick(event, n.roll_number)}>
+                      <TableCell  align="center" onClick={event => this.handleClick(event, n.roll_number)}>
                         {isSelected ? (
                           <div>Yes</div>
                         ) : (
@@ -215,7 +217,7 @@ class SessionTable extends Component {
                         )}
                       </TableCell>
                       <TableCell className={classes.textRow}>
-                        <InputBase multiline onChange={event => this.onChangeRemark(event, n.roll_number)}/>
+                        <InputBase align="center" multiline fullWidth={true} onChange={event => this.onChangeRemark(event, n.roll_number)}/>
                       </TableCell>
                     </TableRow>
                   );
