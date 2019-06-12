@@ -17,15 +17,15 @@ const SessionPicker = ({dispatch, session, sessionData, course, batch, semester,
     let actions = bindActionCreators({getSessionData, onSessionChange}, dispatch)
     useEffect(()=> { actions.getSessionData()}, [])
     let names = []
-    let sessionName=[]
-    try{
-        names = sortSessionTime(sessionData[course.value][batch.value][semester.value][group.value])
-        names.map((sess,index)=>{
-            return(sessionName.push({sessionItem:},))
-        })
-    }catch(err){
-      names = []
-    }
+    // let sessionName=[]
+    // try{
+    //     names = sortSessionTime(sessionData[course.value][batch.value][semester.value][group.value])
+    //     names.map((sess,index)=>{
+    //         return(sessionName.push({sessionItem:},))
+    //     })
+    // }catch(err){
+    //   names = []
+    // }
     return <AutoComplete 
               value ={session}
               onChange = {actions.onSessionChange}
