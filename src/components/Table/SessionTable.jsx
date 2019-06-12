@@ -20,6 +20,8 @@ import { connect } from 'react-redux'
 import { store } from '../../redux/store'
 import AttendanceSheetDialog from '../Alert/AttendanceSheetDialog'
 
+
+
 const styles = theme => ({
   root: {
     witdth: "100%",
@@ -190,23 +192,23 @@ class SessionTable extends Component {
                   return (
                     <TableRow
                       hover
-                      onClick={event => this.handleClick(event, n.roll_number)}
+                      // onClick={event => this.handleClick(event, n.roll_number)}
                       role="checkbox"
                       aria-checked={isSelected}
                       tabIndex={-1}
                       key={n.roll_number}
                       selected={isSelected}
                     >
-                      <TableCell padding="checkbox">
+                      <TableCell padding="checkbox" onClick={event => this.handleClick(event, n.roll_number)}>
                         <Checkbox checked={isSelected} />
                       </TableCell>
-                      <TableCell scope="row">
+                      <TableCell scope="row" onClick={event => this.handleClick(event, n.roll_number)}>
                         {n.roll_number}
                       </TableCell>
-                      <TableCell  align="left">
+                      <TableCell  align="left" onClick={event => this.handleClick(event, n.roll_number)}>
                         {n.last_name + ' ' +n.name}
                       </TableCell>
-                      <TableCell  align="center">
+                      <TableCell  align="center" onClick={event => this.handleClick(event, n.roll_number)}>
                         {isSelected ? (
                           <div>Yes</div>
                         ) : (
@@ -214,7 +216,7 @@ class SessionTable extends Component {
                         )}
                       </TableCell>
                       <TableCell className={classes.textRow}>
-                        <InputBase multiline onChange={event => this.onChangeRemark(event, n.roll_number)}/>
+                        <InputBase align="center" multiline fullWidth={true} onChange={event => this.onChangeRemark(event, n.roll_number)}/>
                       </TableCell>
                     </TableRow>
                   );

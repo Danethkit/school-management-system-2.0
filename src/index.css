@@ -12,3 +12,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.MuiOutlinedInput-input {
+  padding: 4px 14px !important;
+  height: 32px !important;
+  /*max-width: 260px !important;*/
+}
+/*.MuiGrid-container {*/
+  /*flex-wrap: nowrap !important;*/
+/*}*/
+/*.MuiGrid-grid-sm-true {*/
+  /*flex-wrap: wrap !important;*/
+/*}*/
+
