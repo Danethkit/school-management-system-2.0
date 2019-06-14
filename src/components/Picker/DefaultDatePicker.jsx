@@ -8,6 +8,7 @@ export default ({value, onChange , label}) =>{
     return (
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <KeyboardDatePicker
+          style={{minWidth:298.81}}
           autoOk
           maxDate ={new Date()}
           inputVariant='outlined'
@@ -16,7 +17,7 @@ export default ({value, onChange , label}) =>{
           variant="inline"
           value={value}
           onChange={onChange}
-          style={{marginTop:16, marginBottom:4}}
+          // style={{marginBottom:4}}
           InputProps={{
             startAdornment: (
               <InputAdornment

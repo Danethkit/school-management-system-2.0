@@ -19,6 +19,7 @@ const CoursePicker = ({course, courseData, dispatch}) => {
   courseData.map(e=> label.push(e.name))
 
   return <AutoComplete
+          width={298.81}
           defaultSelectedItem={{ name: "dara" }}
           value={course}
           onChange={actions.onCourseChange}

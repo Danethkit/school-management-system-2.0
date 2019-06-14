@@ -10,6 +10,7 @@ const SubjectPicker = ({dispatch, subject, subjects}) => {
   useEffect(()=>{ actions.requestSubject()}, [])
 
   return <AutoComplete
+          width={298.81}
           value ={subject}
           onChange={actions.onSubjectChange}
           label="Subject"

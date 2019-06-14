@@ -1,9 +1,7 @@
 import React from 'react'
-import { Divider, InputBase,Grid, Paper, Table,Tooltip, TableBody, TableCell, TableHead, TableRow, withStyles, Button, Toolbar
+import { Grid, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles, Button, Toolbar
 } from "@material-ui/core";
 import PropTypes from "prop-types";
-import TimeTableSearchBox from "../TimetablePicker/TimeTableSearchBox";
-import DisplayTimetableHeader from "../TimetablePicker/DisplayTimetableHeader";
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 
@@ -128,11 +126,6 @@ const styles = theme => ({
 var moment = require("moment");
 const weekOfYear = moment.utc().week();
 let id = 0;
-
-function returnDate(i)
-{
-    return moment.utc().week(weekOfYear).weekday(i).format("ddd MM/DD")
-}
 
 // function to input value to table header
 function inputData(dat,ses,time,sub,bat,gro,sem,cou,wee) {

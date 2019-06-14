@@ -7,14 +7,17 @@ import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputAdornment from '@material-ui/core/InputAdornment'
+import Popper from '@material-ui/core/Popper';
+import Fade from '@material-ui/core/Fade';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 
 function renderInput(inputProps) {
-  const { InputProps, classes, ref,label, ...other } = inputProps;
+  const { InputProps, classes, ref,label,onClick,width, ...other } = inputProps;
   return (
     <TextField
       // disabled={readonly}
-      multiline
+      style={{minWidth:width}}
       variant='outlined'
       InputProps={{
         inputRef: ref,
@@ -26,6 +29,7 @@ function renderInput(inputProps) {
         ...InputProps
       }}
       {...other}
+        onClick={onClick}
     />
   );
 }
@@ -127,8 +131,19 @@ const useStyles = makeStyles(theme => ({
   })
 );
 
-function AutoComplete({suggestions, value, onChange, label, selectedFaculty, ...rest}) {
+function AutoComplete({suggestions, value, onChange, label, selectedFaculty,width, ...rest}) {
   const classes = useStyles();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  function handleClose(event) {
+      setAnchorEl(anchorEl ? null : null);
+  }
+  function handleClick(event) {
+      setAnchorEl(anchorEl ? null : event.currentTarget);
+  }
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popper' : null;
+
   // if(rest.disabled){
   //   value = 'Holiday'
   // }
@@ -146,32 +161,56 @@ function AutoComplete({suggestions, value, onChange, label, selectedFaculty, ...
           {
             renderInput({
               fullWidth:true,
+              width:width,
               classes,
               InputLabelProps: downshift.getLabelProps({shrink:true}),
-              InputProps: {onBlur, onChange, onFocus},
+              InputProps: {onBlur, onChange, onFocus,onClick:handleClick},
               inputProps,
               label,
               // readonly: rest.disabled
             })
           }
-          <div {...downshift.getMenuProps()}>
-                {downshift.isOpen ? (
-                  <Paper className={classes.paper} square onClick={()=>downshift.isOpen =false}>
-                    {getSuggestions(downshift.inputValue, { showEmpty: true }, suggestions.map(e=>({label:e}))).map(
-                      (suggestion, index) =>
-                        renderSuggestion({
-                          suggestion,
-                          index,
-                          itemProps: downshift.getItemProps({ item: suggestion.label }),
-                          highlightedIndex: downshift.highlightedIndex,
-                          selectedItem: value,
-                          selectedFaculty,
-                          rest
-                        })
-                    )}
-                  </Paper>
-                ) : null}
-              </div>
+            <ClickAwayListener onClickAway={handleClose} >
+            <Popper id={id} open={open} anchorEl={anchorEl} transition >
+                {({ TransitionProps }) => (
+                    <Fade {...TransitionProps}>
+                        <Paper style={{minWidth:225}}>
+                            {getSuggestions(downshift.inputValue, { showEmpty: true }, suggestions.map(e=>({label:e}))).map(
+                            (suggestion, index) =>
+                            renderSuggestion({
+                            suggestion,
+                            index,
+                            itemProps: downshift.getItemProps({ item: suggestion.label }),
+                            highlightedIndex: downshift.highlightedIndex,
+                            selectedItem: value,
+                            selectedFaculty,
+                            rest
+                            })
+                            )}
+                        </Paper>
+
+                    </Fade>
+                )}
+            </Popper>
+            </ClickAwayListener>
+          {/*<div {...downshift.getMenuProps()}>*/}
+                {/*{downshift.isOpen ? (*/}
+                  {/*<Paper className={classes.paper} square onClick={()=>downshift.isOpen =false}>*/}
+                    {/*{getSuggestions(downshift.inputValue, { showEmpty: true }, suggestions.map(e=>({label:e}))).map(*/}
+                      {/*(suggestion, index) =>*/}
+                        {/*renderSuggestion({*/}
+                          {/*suggestion,*/}
+                          {/*index,*/}
+                          {/*itemProps: downshift.getItemProps({ item: suggestion.label }),*/}
+                          {/*highlightedIndex: downshift.highlightedIndex,*/}
+                          {/*selectedItem: value,*/}
+                          {/*selectedFaculty,*/}
+                          {/*rest*/}
+                        {/*})*/}
+                    {/*)}*/}
+                  {/*</Paper>*/}
+                {/*) : null}*/}
+              {/*</div>*/}
         </div>
       }}
     </Downshift>

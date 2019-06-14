@@ -9,8 +9,8 @@ import { Grid, Box } from "@material-ui/core";
 const TimeTableSearchBox = ({value, setWeekNumber}) => {
   const memoValue = useMemo(()=>{
     return (
-      <Box boxShadow={3} display='flex'>
-        <Grid container spacing={10} style={{padding:20}} justify='center' >
+      <Box boxShadow={3} display='flex'style={{padding:24}} >
+        <Grid container spacing={10} style={{padding:20}} justify='center'>
           <Grid  item sm><CoursePicker /></Grid>
           <Grid  item sm><BatchPicker/></Grid>
           <Grid  sm item><SemesterPicker/></Grid>

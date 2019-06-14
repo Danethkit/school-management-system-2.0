@@ -11,7 +11,8 @@ const FacultyPicker = ({dispatch, faculty, facultyData}) => {
   useEffect(()=> { actions.requestFaculty()}, [])
   let names = []
   facultyData.map(e => names.push(e.name))
-  return <AutoComplete 
+  return <AutoComplete
+          width={298.81}
           value ={faculty}
           onChange ={actions.onFacultyChange}
           label = "Faculty"

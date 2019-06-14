@@ -14,37 +14,23 @@ export default function HeadPicker() {
   return (
     <Box boxShadow={2} display={'flex'} >
       <Grid container>
-        <Grid container item xs={12} >
+        <Grid container  spacing={10}  style={{marginBottom:2, marginTop:8}} justify='center' >
 
-          <Grid item xs={3} style={{paddingRight:25, paddingLeft:2}}>
-            <DatePicker />
-          </Grid>
-          <Grid item xs={3} style={{paddingRight:25, paddingLeft:25}}>
-            <FacultyPicker />
-          </Grid>
-          <Grid item xs={3} style={{paddingRight:25, paddingLeft:25}}>
-            <CoursePicker />
-          </Grid>
-          <Grid item xs={3} style={{paddingLeft:25, paddingRight:2}}>
-            <BatchPicker />
-          </Grid>
+          <Grid item sm ><DatePicker /></Grid>
 
-        </Grid>
+          <Grid item sm ><FacultyPicker /></Grid>
 
-        <Grid container item xs={12}>
+          <Grid item sm ><CoursePicker /></Grid>
 
-          <Grid item xs={3} style={{paddingRight:25, paddingLeft:2}}>
-            <SessionPicker />
-          </Grid>
-          <Grid item xs={3} style={{paddingRight:25, paddingLeft:25}}>
-            <SubjectPicker />
-          </Grid>
-          <Grid item xs={3} style={{paddingRight:25, paddingLeft:25}}>
-            <SemesterPicker />
-          </Grid>
-          <Grid item xs={3} style={{paddingLeft:25,paddingRight:2}}>
-            <GroupPicker />
-          </Grid>
+          <Grid item sm><BatchPicker /></Grid>
+
+          <Grid item sm ><SessionPicker /></Grid>
+
+          <Grid item sm ><SubjectPicker /></Grid>
+
+          <Grid item sm ><SemesterPicker /></Grid>
+
+          <Grid item sm ><GroupPicker /></Grid>
 
         </Grid>
 

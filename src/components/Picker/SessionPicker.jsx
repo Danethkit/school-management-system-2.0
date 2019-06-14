@@ -18,6 +18,7 @@ const SessionPicker = ({dispatch, session, subjectInfo, course, batch, semester,
         suggestions = subjectInfo[course][batch][semester]['session']
     }catch(err){}
     return <AutoComplete
+              width={298.81}
               value ={session}
               onChange = {action}
               label = "Session"

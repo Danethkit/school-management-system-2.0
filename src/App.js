@@ -1,17 +1,12 @@
 import React, { useEffect } from 'react'
 import {connect} from 'react-redux'
 import './index.css'
-// import TimebTableScreen from './components/Timetable/AdminTimetableView'
 import AttendancesScreen from './screen/AttendancesScreen'
 import TimeTable from './screen/TimeTable'
 import { Route, Switch, Router } from "react-router-dom"
 import * as serviceWorker from './serviceWorker'
 import { createBrowserHistory } from 'history'
 import NavigationBar from "./components/NavigationBar/Navigator"
-import AdminGenerateTimetable from "./components/Timetable/AdminGenerateTimetable";
-// import TimetableReport from "./components/Timetable/TimetableReport";
-// import StudentTimetableView from "./components/Timetable/StudentTimetableView";
-// import FacultyTimetableView from "./components/Timetable/FacultyTimetableView";
 import { ThemeProvider } from '@material-ui/styles';
 import {theme} from '../src/constants/color'
 import {getSubjectData, getSessionData, requestFaculty} from './redux/ActionCreator/apiRequest'
