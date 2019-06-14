@@ -42,21 +42,22 @@ function renderSuggestion(suggestionProps) {
   } = suggestionProps
   let selectedFacultyArray = []
   let isBusy = false
-   if('col' in rest){
-    let {row, col} = rest
-    for(let course in selectedFaculty['res']){
-      for(let batch in selectedFaculty['res'][course]){
-        for(let semester in selectedFaculty['res'][course][batch]){
-          for(let group in selectedFaculty['res'][course][batch][semester]){
-            if(col in selectedFaculty['res'][course][batch][semester][group]){
-              if(row in selectedFaculty['res'][course][batch][semester][group][col]){
-                selectedFacultyArray.push(selectedFaculty['res'][course][batch][semester][group][col][row])
+   if('col' in rest && Object.keys(selectedFaculty).length !== 0){
+    let {row, col, weekStr} = rest
+    for(let course in selectedFaculty['res'][weekStr]){
+      for(let batch in selectedFaculty['res'][weekStr][course]){
+        for(let semester in selectedFaculty['res'][weekStr][course][batch]){
+          for(let group in selectedFaculty['res'][weekStr][course][batch][semester]){
+            if(col in selectedFaculty['res'][weekStr][course][batch][semester][group]){
+              if(row in selectedFaculty['res'][weekStr][course][batch][semester][group][col]){
+                selectedFacultyArray.push(selectedFaculty['res'][weekStr][course][batch][semester][group][col][row])
               }
             }
           }
         }
       }
     }
+
     if(selectedFacultyArray.length !== 0){
         selectedFacultyArray.forEach(e=> {
           if(!e) return
@@ -128,6 +129,9 @@ const useStyles = makeStyles(theme => ({
 );
 
 function AutoComplete({suggestions, value, onChange, label, selectedFaculty, ...rest}) {
+  console.log('render');
+  // console.log('value',value, label);
+
   const classes = useStyles();
   // if(rest.disabled){
   //   value = 'Holiday'
