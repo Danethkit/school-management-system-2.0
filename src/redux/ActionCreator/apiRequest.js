@@ -140,9 +140,15 @@ export const printAttendanceReport = () => (dispatch) => {
     })
     .catch(err => console.log(err))
 }
-
-export const saveTimeTableData = () => (dispatch) => {
-    fetch('http://192.168.7.222:8069/save-timetable')
+export const saveTimeTable = (data) => (dispatch) => {
+    console.log('data================',data)
+    fetch('http://192.168.7.222:8069/create-timetable',{
+        method: 'post',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+            params : data
+        })
+       })
     .then(response => response.json())
     .then(data => dispatch({type: TOGGLE_DIALOG, payload: data}))
     .catch(err => dispatch({type: TOGGLE_DIALOG, payload: err}))

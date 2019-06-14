@@ -45,15 +45,8 @@ export default function HeadPicker() {
           <Grid item xs={3} style={{paddingLeft:25,paddingRight:2}}>
             <GroupPicker />
           </Grid>
-
         </Grid>
-
       </Grid>
     </Box>
-
-
-
-
-
   );
 }
