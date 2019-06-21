@@ -1,9 +1,8 @@
-import React, {memo, useState, useEffect} from "react";
+import React, {memo} from "react";
 import AutoComplete from '../Picker/AutoComplete'
 
 const InsertData = ({onChange, row, col, facultyData, header, selectedFaculty, weekStr}) => {
 
-  // const [value, setValue] = useState(null)
 
   let temp = null
   if(selectedFaculty && Object.keys(selectedFaculty).length !== 0){
@@ -19,10 +18,8 @@ const InsertData = ({onChange, row, col, facultyData, header, selectedFaculty, w
   // }, [selectedFaculty, weekStr])
 
   const handleChange = value => {
-    // setValue(value)
     onChange(row, col, value, header)
   }
-
   return <AutoComplete
           onChange ={handleChange}
           suggestions = {facultyData}
@@ -49,13 +46,6 @@ const areEqual = (prevProps, nextProps) =>{
           for(let group in nextProps.selectedFaculty.res[weekStr][course][batch][semester]){
             if(col in nextProps.selectedFaculty.res[weekStr][course][batch][semester][group]){
               if(row in nextProps.selectedFaculty.res[weekStr][course][batch][semester][group][col]){
-                // if(Object.keys(prevProps.selectedFaculty).length !== 0){
-                //   console.log('prevProps', prevProps.selectedFaculty.res);
-                //   if(nextProps.selectedFaculty.res[weekStr][course][batch][semester][group][col][row] === prevProps.selectedFaculty.res[weekStr][course][batch][semester][group][col][row]){
-                //     return true
-                //   }
-                // }
-                // console.log('---------------------------->>check 2');
                 return false
               }
             }

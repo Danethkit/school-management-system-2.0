@@ -8,6 +8,7 @@ export default ({value, onChange , label}) =>{
     return (
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <KeyboardDatePicker
+          format="MM/dd/yyyy"
           autoOk
           maxDate ={new Date()}
           inputVariant='outlined'

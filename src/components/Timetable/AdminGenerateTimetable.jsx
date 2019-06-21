@@ -4,7 +4,7 @@ import DateNavigator from "./DateNavigator";
 import { connect } from "react-redux";
 import moment from "moment";
 import TimeTable from "./TimeTable";
-
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 // helper functoin to asign nested key object
 function assign(obj, keyPath, value) {
@@ -123,7 +123,6 @@ const AdminTimeTable = ({ course, batch, semester, group, subjectInfo }) => {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState({});
   const [week, setWeek] = useState(moment.utc().week());
-  const [weekStr, setWeekStr] = useState('');
   let currentWeek = ''
   let endSemDate = useMemo(()=>{
     if(Object.keys(subjectInfo).length !== 0){
@@ -139,13 +138,13 @@ const AdminTimeTable = ({ course, batch, semester, group, subjectInfo }) => {
       if(course && batch && semester){
         let lastSemIndex = Object.keys(subjectInfo[course][batch])[Object.keys(subjectInfo[course][batch]).length -1]
         let lastWeekIndex = subjectInfo[course][batch][lastSemIndex]['week'].length -1
-        console.log('last sem index', lastSemIndex)
-        console.log('subject info', subjectInfo);
         endSemDate = subjectInfo[course][batch][semester]['week'][lastWeekIndex].endDate
       }
     }
     return endSemDate
   }, [subjectInfo, semester])
+  const [weekStr, setWeekStr] = useState('');
+
 
   useEffect(()=>{
     if(currentWeek) setWeekStr(currentWeek)
@@ -227,6 +226,8 @@ const AdminTimeTable = ({ course, batch, semester, group, subjectInfo }) => {
   // let period = ''
   return (
     <>
+    {
+      weekStr ? <>
       <TimeTableSearchBox setWeekNumber={handleChangeWeekStr} value={weekStr} />
       <DateNavigator
         week={week}
@@ -263,6 +264,8 @@ const AdminTimeTable = ({ course, batch, semester, group, subjectInfo }) => {
           />
         );
       })}
+      </> : <LinearProgress />
+    }
     </>
   );
 };

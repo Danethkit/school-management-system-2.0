@@ -128,14 +128,9 @@ const useStyles = makeStyles(theme => ({
   })
 );
 
-function AutoComplete({suggestions, value, onChange, label, selectedFaculty, ...rest}) {
-  console.log('render');
-  // console.log('value',value, label);
+function AutoComplete({suggestions, value=null, onChange, label, selectedFaculty, ...rest}) {
 
   const classes = useStyles();
-  // if(rest.disabled){
-  //   value = 'Holiday'
-  // }
   return  <Downshift onChange={onChange} selectedItem={value}>
       {downshift => {
         const {onBlur, onChange, onFocus, ...inputProps} = downshift.getInputProps({
