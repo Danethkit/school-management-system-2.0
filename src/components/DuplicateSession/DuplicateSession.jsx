@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { connect } from "react-redux"
 import PropTypes from "prop-types";
 import { withStyles} from "@material-ui/core";
@@ -22,75 +22,68 @@ const styles = theme => ({
   }
 });
 
+const DuplicateSession = ({sessionNames, classes, handleDuplicateSession}) => {
 
-class DuplicateSession extends React.Component {
-  state = {
-    open: false,
-    sessionFrom: '',
-    sessionTo: '',
-  };
-  handleClickOpen = () => {
-    this.setState({ open: true });
-  };
+  const [sessionStart, setSessoinStart] = useState('')
+  const [sessionEnd, setSessoinEnd] = useState('')
+  const [open, setOpen] = useState(false)
 
-  handleClose = () => {
-    this.setState({ open: false });
+  const handleClickOpen = () => {
+    setOpen(true);
   };
 
-  handleChangeFrom = e => {
-    this.setState( {sessionFrom : e.target.value})
+  const handleClose = () => {
+    setOpen(false);
+    handleDuplicateSession(sessionEnd, sessionStart)
+  };
+
+  const handleChangeFrom = e => {
+    setSessoinStart(e.target.value)
   }
-  handleChangeTo = e => {
-    this.setState( {sessionTo : e.target.value})
-  }
-  onChangeSession = (e) =>{
-    console.log('value')
+  const handleChangeTo = e => {
+    setSessoinEnd(e.target.value)
   }
 
-
-  render() {
-    const { classes, sessionNames } = this.props;
-
-    return (
-      <div>
-        <Button onClick={this.handleClickOpen} color='primary' variant='outlined'>
+  return (
+    <div>
+        <Button onClick={handleClickOpen} color='primary' variant='outlined'>
           Select to duplicate session
         </Button>
         <Dialog
           disableBackdropClick
           disableEscapeKeyDown
-          open={this.state.open}
-          onClose={this.handleClose}
+          open={open}
+          onClose={handleClose}
         >
           <DialogTitle>Fill the session to duplicate:</DialogTitle>
           <DialogContent>
             <form className={classes.container}>
               <DropBox placeholder={"Duplicate From"}
-                       handleChange={this.handleChangeFrom}
-                       session={this.state.sessionFrom}
+                       handleChange={handleChangeFrom}
+                       session={sessionStart}
                        items={sessionNames}
                   />
 
               <DropBox placeholder={"Duplicate To"}
-                       handleChange={this.handleChangeTo}
-                       items={sessionNames}
-                       session={this.state.sessionTo}/>
+                       handleChange={handleChangeTo}
+                       items={sessionNames.filter(e => e > sessionStart)}
+                       session={sessionEnd}/>
             </form>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="secondary">
+            <Button onClick={handleClose} color="secondary">
               Cancel
             </Button>
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={handleClose} color="primary">
               Ok
             </Button>
           </DialogActions>
         </Dialog>
       </div>
-    );
-
-  }
+  )
 }
+
+
 
 DuplicateSession.propTypes = {
   classes: PropTypes.object.isRequired
