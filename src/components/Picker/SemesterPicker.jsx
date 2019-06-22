@@ -21,7 +21,7 @@ const SemesterPicker = ({dispatch, semester, subjectInfo, batch, course}) => {
 
   useEffect(()=> { actions.requestSemester()}, [])
   return <AutoComplete
-          width={298.81}
+          width={280}
           value ={semester}
           onChange ={actions.onSemesterChange}
           label = "Semester"

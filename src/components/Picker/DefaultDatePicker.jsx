@@ -6,9 +6,9 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/picker
 
 export default ({value, onChange , label}) =>{
     return (
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <MuiPickersUtilsProvider
+          style={{width:280}} utils={DateFnsUtils}>
         <KeyboardDatePicker
-          style={{minWidth:298.81}}
           autoOk
           maxDate ={new Date()}
           inputVariant='outlined'

@@ -219,7 +219,7 @@ const AdminTimeTable = ({ course, batch, semester, group, subjectInfo }) => {
   // let period = ''
   return (
     <>
-      <TimeTableSearchBox setWeekNumber={handleChangeWeekStr} value={weekStr} />
+      <TimeTableSearchBox tsetWeekNumber={handleChangeWeekStr} value={weekStr} />
       <DateNavigator
         week={week}
         weekStr={weekStr}

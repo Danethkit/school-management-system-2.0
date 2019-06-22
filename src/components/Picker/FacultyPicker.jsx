@@ -12,7 +12,7 @@ const FacultyPicker = ({dispatch, faculty, facultyData}) => {
   let names = []
   facultyData.map(e => names.push(e.name))
   return <AutoComplete
-          width={298.81}
+          width={280}
           value ={faculty}
           onChange ={actions.onFacultyChange}
           label = "Faculty"

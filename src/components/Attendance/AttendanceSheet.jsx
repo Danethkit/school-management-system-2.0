@@ -16,7 +16,12 @@ const mapStateToProps = (state) => {
   return {
       studentData: state.studentData,
       isPending: state.isPending,
-      error: state.error
+      error: state.error,
+      session: state.changePicker.session,
+      course: state.changePicker.course,
+      batch: state.changePicker.batch,
+      semester: state.changePicker.semester,
+      subjectInfo: state.initData.subjectInfo
   }
 }
 
@@ -32,6 +37,7 @@ class AttendancesSheet extends Component {
   };
   handleChangeSessionNumber = (event, sessionNumber) => {
     this.setState({ sessionNumber });
+
   };
 
   createSessionTab(classTab) {
@@ -43,9 +49,29 @@ class AttendancesSheet extends Component {
     }
     return tabs;
   }
+  componentWillReceiveProps(nextProps, nextContext) {
+      let {course, batch, semester, session} = nextProps
+      let sessionSuggestion=[]
+      try{
+          let suggestions = nextProps.subjectInfo[course][batch][semester]['session']
+          for(let i=1;i<10;i++)
+          {
+              sessionSuggestion =suggestions.map((element,index)=>{
+                  return {key:index+1, value:element}
+              })
+          }
+      }catch  {}
+      sessionSuggestion.map((element) =>{
+          switch (session) {
+              case element.value :return this.setState({sessionNumber:element.key})
+              default: return null
+          }
+      })
 
-  render() {
-    const { classes } = this.props;
+  }
+
+    render() {
+        const { classes} = this.props;
     return (
       <div className={classes.root}>
         <h1>Attendance Sheet</h1>
@@ -62,8 +88,10 @@ class AttendancesSheet extends Component {
             {this.createSessionTab(classes.tab)}
           </Tabs>
         </AppBar>
-        <HeadPicker />
+        <HeadPicker sessionNumber={this.state.sessionNumber}/>
         <SessionTable />
+
+
       </div>
     );
   }
