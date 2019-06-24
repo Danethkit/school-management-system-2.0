@@ -8,6 +8,7 @@ const WeekPicker = ({value, onChange,course,batch, semester, subjectInfo}) => {
     suggestions = subjectInfo[course][batch][semester]['week'].map(e => e.name)
   }
   return <AutoComplete
+          width={280}
           value ={value}
           onChange={onChange}
           label="Week"

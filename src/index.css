@@ -1,11 +1,11 @@
 body {
-  margin: 0;
-  padding: 0px 12px;
+  padding: 0px 0px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin: 0px;
 }
 
 code {
@@ -14,14 +14,18 @@ code {
 }
 
 .MuiOutlinedInput-input {
-  padding: 4px 14px !important;
+  padding: 4px 0px !important;
   height: 32px !important;
   /*max-width: 260px !important;*/
 }
-/*.MuiGrid-container {*/
-  /*flex-wrap: nowrap !important;*/
-/*}*/
-/*.MuiGrid-grid-sm-true {*/
-  /*flex-wrap: wrap !important;*/
+.MuiGrid-spacing-xs-10  .MuiGrid-item {
+  padding: 0px 30px 5px 30px !important;
+
+}
+/*.MuiOutlinedInput-adornedEnd{*/
+  /*width: 280px !important;*/
 /*}*/
 
+.MuiInputBase-root > .MuiOutlinedInput-root > .MuiInputBase-fullWidth > .MuiInputBase-formControl > .MuiInputBase-adornedStart > .MuiOutlinedInput-adornedStart > .MuiInputBase-adornedEnd > .MuiOutlinedInput-adornedEnd{
+  width: 280px!important;
+}

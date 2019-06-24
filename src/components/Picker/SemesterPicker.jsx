@@ -18,6 +18,7 @@ const SemesterPicker = ({dispatch, semester, subjectInfo, batch, course}) => {
     }
   })
   return <AutoComplete
+          width={280}
           value ={semester}
           onChange ={actions.onSemesterChange}
           label = "Semester"

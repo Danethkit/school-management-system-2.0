@@ -9,13 +9,15 @@ import { Grid, Box } from "@material-ui/core";
 const TimeTableSearchBox = ({value, setWeekNumber}) => {
   const memoValue = useMemo(()=>{
     return (
-      <Box boxShadow={3} display='flex'>
-        <Grid container spacing={10} style={{padding:20}} justify='center' >
-          <Grid  item sm><CoursePicker /></Grid>
-          <Grid  item sm><BatchPicker/></Grid>
-          <Grid  sm item><SemesterPicker/></Grid>
-          <Grid  sm item><GroupPicker/></Grid>
-          <Grid  sm item><WeekPicker name="week" value={value} onChange={setWeekNumber}/></Grid>
+        <Box boxShadow={2} display={'flex'}  >
+          <Grid container justify='center' style={{marginLeft:20, marginRight:20}}>
+            <Grid item container spacing={10}  style={{marginBottom:2,  marginTop:8}} justify='flex-start' alignItems='center'>
+            <Grid  item xs={12} sm={6} md={4} lg={3} xl={2}><CoursePicker /></Grid>
+            <Grid  item xs={12} sm={6} md={4} lg={3} xl={2}><BatchPicker/></Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}><SemesterPicker/></Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}><GroupPicker/></Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}><WeekPicker name="week" value={value} onChange={setWeekNumber}/></Grid>
+          </Grid>
         </Grid>
       </Box>)
   }, [value, setWeekNumber])

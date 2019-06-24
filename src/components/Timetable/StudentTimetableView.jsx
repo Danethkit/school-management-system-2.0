@@ -1,8 +1,15 @@
 import React from 'react'
-import { Divider, InputBase, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles, Button, Toolbar
+import {Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    withStyles,
+    Button,
+    Toolbar
 } from "@material-ui/core";
 import PropTypes from "prop-types";
-import TimeTableSearchBox from "../TimetablePicker/TimeTableSearchBox";
 import DisplayTimetableHeader from "../TimetablePicker/DisplayTimetableHeader";
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
