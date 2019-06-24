@@ -13,25 +13,23 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 
 function renderInput(inputProps) {
-    const { InputProps, classes, ref,label,onClick,width, ...other } = inputProps;
-    return (
-        <TextField
-            // disabled={readonly}
-            style={{minWidth:width}}
-            variant='outlined'
-            InputProps={{
-                inputRef: ref,
-                startAdornment: <InputAdornment position="start"><b>{label}</b></InputAdornment>,
-                classes: {
-                    root: classes.inputRoot,
-                    input: classes.inputInput
-                },
-                ...InputProps
-            }}
-            {...other}
-            onClick={onClick}
-        />
-    );
+  const { InputProps, classes, ref,label, ...other } = inputProps;
+  return (
+    <TextField
+      multiline
+      variant='outlined'
+      InputProps={{
+        inputRef: ref,
+        startAdornment: <InputAdornment position="start"><b>{label}</b></InputAdornment>,
+        classes: {
+          root: classes.inputRoot,
+          input: classes.inputInput
+        },
+        ...InputProps
+      }}
+      {...other}
+    />
+  );
 }
 
 function renderSuggestion(suggestionProps) {

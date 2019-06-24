@@ -9,6 +9,7 @@ import {
     PRINT_ATTENDANCE_REPORT,
     SET_REPORT_B64,
     GET_SESSION_DATA,
+    SET_USER_IDENTITY
 } from '../../constants/env'
 import {odooRequest, odooPrintReport} from '../api'
 // Helper functino
@@ -145,4 +146,18 @@ export const saveTimeTable = (data) => (dispatch) => {
     .then(response => response.json())
     .then(data => dispatch({type: TOGGLE_DIALOG, payload: data}))
     .catch(err => dispatch({type: TOGGLE_DIALOG, payload: err}))
+}
+
+export const requestUserIdentity = (data) => (dispatch) => {
+    console.log('data============>>',data)
+    fetch('http://192.168.7.240:8008/get-user-identity',{
+        method: 'post',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+            params : data
+        })
+       })
+    .then(response => response.json())
+    .then(data => dispatch({type: SET_USER_IDENTITY, payload: data}))
+    .catch(err => console.log(err));
 }

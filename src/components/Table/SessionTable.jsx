@@ -70,8 +70,11 @@ const mapStateToProps = (state) => {
   return {
     studentData : state.initData.studentData ,
     isPending: state.initData.isPending,
+    subjectInfo: state.initData.subjectInfo,
     error: state.initData.error,
     batch: state.changePicker.batch,
+    course: state.changePicker.course,
+    semester: state.changePicker.semester,
     session: state.changePicker.session,
   }
 }
@@ -175,8 +178,16 @@ class SessionTable extends Component {
     this.setState({ selected });
   }
 
-  handleDuplicateSession = (startSession, endSessoin) => {
-    console.log('check', endSessoin)
+  handleDuplicateSession = (startSession, endSession) => {
+    let {course, batch, semester, subjectInfo, session} = this.props
+    let {selected} = this.state
+    if(!(session in selected)) return
+    let sessions = subjectInfo[course][batch][semester]['session']
+    let newSession = sessions.filter((e,i) =>  parseInt(startSession) > i&& parseInt(endSession) <= i)
+    newSession.forEach(element => {
+      selected[element] = selected[session]
+    });
+    this.setState(selected)
   }
 
   isSelected = roll_number =>{
@@ -191,7 +202,6 @@ class SessionTable extends Component {
   render() {
     const { classes, studentData, batch, session } = this.props
     const { order, orderBy, selected } = this.state
-    console.log('selected', selected)
     let numSelected = 0
     if(session in selected){
       numSelected =  selected[session].length
