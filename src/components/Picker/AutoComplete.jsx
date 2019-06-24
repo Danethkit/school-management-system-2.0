@@ -13,76 +13,67 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 
 function renderInput(inputProps) {
-  const { InputProps, classes, ref,label, ...other } = inputProps;
-  return (
-    <TextField
-      multiline
-      variant='outlined'
-      InputProps={{
-        inputRef: ref,
-        startAdornment: <InputAdornment position="start"><b>{label}</b></InputAdornment>,
-        classes: {
-          root: classes.inputRoot,
-          input: classes.inputInput
-        },
-        ...InputProps
-      }}
-      {...other}
-    />
-  );
+    const { InputProps, classes, ref,label,onClick,width, ...other } = inputProps;
+    return (
+        <TextField
+            // disabled={readonly}
+            style={{minWidth:width}}
+            variant='outlined'
+            InputProps={{
+                inputRef: ref,
+                startAdornment: <InputAdornment position="start"><b>{label}</b></InputAdornment>,
+                classes: {
+                    root: classes.inputRoot,
+                    input: classes.inputInput
+                },
+                ...InputProps
+            }}
+            {...other}
+            onClick={onClick}
+        />
+    );
 }
 
 function renderSuggestion(suggestionProps) {
-  const {
-    suggestion,
-    index,
-    itemProps,
-    highlightedIndex,
-    selectedItem,
-    rest,
-    selectedFaculty
-  } = suggestionProps
-  let selectedFacultyArray = []
-  let isBusy = false
-   if('col' in rest && Object.keys(selectedFaculty).length !== 0){
-    let {row, col, weekStr} = rest
-    for(let course in selectedFaculty['res'][weekStr]){
-      for(let batch in selectedFaculty['res'][weekStr][course]){
-        for(let semester in selectedFaculty['res'][weekStr][course][batch]){
-          for(let group in selectedFaculty['res'][weekStr][course][batch][semester]){
-            if(col in selectedFaculty['res'][weekStr][course][batch][semester][group]){
-              if(row in selectedFaculty['res'][weekStr][course][batch][semester][group][col]){
-                selectedFacultyArray.push(selectedFaculty['res'][weekStr][course][batch][semester][group][col][row])
+    const {
+        suggestion,
+        index,
+        itemProps,
+        highlightedIndex,
+        selectedItem,
+        rest,
+        selectedFaculty
+    } = suggestionProps
+    let selectedFacultyArray = []
+    let isBusy = false
+    if('col' in rest && Object.keys(selectedFaculty).length !== 0){
+      let {row, col, weekStr} = rest
+      for(let course in selectedFaculty['res'][weekStr]){
+        for(let batch in selectedFaculty['res'][weekStr][course]){
+          for(let semester in selectedFaculty['res'][weekStr][course][batch]){
+            for(let group in selectedFaculty['res'][weekStr][course][batch][semester]){
+              if(col in selectedFaculty['res'][weekStr][course][batch][semester][group]){
+                if(row in selectedFaculty['res'][weekStr][course][batch][semester][group][col]){
+                  selectedFacultyArray.push(selectedFaculty['res'][weekStr][course][batch][semester][group][col][row])
+                }
               }
             }
-        }
-        if(selectedFacultyArray.length !== 0){
-            selectedFacultyArray.forEach(e=> {
-                if(!e) return
-                if(!isBusy){
-                    if(selectedItem){
-                        selectedFacultyArray.forEach(e => isBusy = selectedItem.includes(e.split('(')[1]))
-                    } else{
-                        isBusy = suggestion.label.includes(e.split('(')[1])
-                    }
-                }
-            })
-        }
-    }
-
-    if(selectedFacultyArray.length !== 0){
-        selectedFacultyArray.forEach(e=> {
-          if(!e) return
-          if(!isBusy){
-            if(selectedItem){
-              selectedFacultyArray.forEach(e => isBusy = selectedItem.includes(e.split('(')[1]))
-            } else{
-              isBusy = suggestion.label.includes(e.split('(')[1])
-            }
           }
-        })
+        }
       }
-  }
+      if(selectedFacultyArray.length !== 0){
+          selectedFacultyArray.forEach(e=> {
+              if(!e) return
+              if(!isBusy){
+                  if(selectedItem){
+                      selectedFacultyArray.forEach(e => isBusy = selectedItem.includes(e.split('(')[1]))
+                  } else{
+                      isBusy = suggestion.label.includes(e.split('(')[1])
+                  }
+              }
+          })
+      }
+    }
 
     const isHighlighted = highlightedIndex === index;
     const isSelected = (selectedItem || "").indexOf(suggestion.label) > -1;
@@ -140,29 +131,32 @@ const useStyles = makeStyles(theme => ({
     })
 );
 
-function AutoComplete({suggestions, value=null, onChange, label, selectedFaculty, ...rest}) {
+function AutoComplete({suggestions, value=null, onChange, label, selectedFaculty,width, ...rest}) {
+  console.log('render');
+    const classes = useStyles();
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    function handleClose(event) {
+        setAnchorEl(null);
+    }
+    function handleClick(event) {
+        setAnchorEl(anchorEl ? null : event.currentTarget);
+    }
 
-  const classes = useStyles();
-  return  <Downshift onChange={onChange} selectedItem={value}>
-      {downshift => {
-        const {onBlur, onChange, onFocus, ...inputProps} = downshift.getInputProps({
-          onChange: event => {
-            if (event.target.value === "") {
-              downshift.clearSelection()
-            }
-          },
-          onFocus: downshift.openMenu,
-        })
-        return <div className={classes.container}>
-          {
-            renderInput({
-              fullWidth:true,
-              classes,
-              InputLabelProps: downshift.getLabelProps({shrink:true}),
-              InputProps: {onBlur, onChange, onFocus},
-              inputProps,
-              label,
-              // readonly: rest.disabled
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popper' : null;
+
+    // if(rest.disabled){
+    //   value = 'Holiday'
+    // }
+    return  <Downshift onChange={onChange} selectedItem={value}>
+        {downshift => {
+            const {onBlur, onChange, onFocus, ...inputProps} = downshift.getInputProps({
+                onChange: event => {
+                    if (event.target.value === "") {
+                        downshift.clearSelection()
+                    }
+                },
+                onFocus: downshift.openMenu,
             })
             return <div className={classes.container}>
                 {
@@ -195,7 +189,6 @@ function AutoComplete({suggestions, value=null, onChange, label, selectedFaculty
                                             })
                                     )}
                                 </Paper>
-
                             </Fade>
                         )}
                     </Popper>

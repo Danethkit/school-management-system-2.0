@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { onSessionChange } from '../../redux/ActionCreator/userBehavior'
 import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux'
@@ -14,40 +14,19 @@ export const sortSessionTime = (session) => {
 const SessionPicker = ({dispatch, session, subjectInfo, course, batch, semester,sessionNumber, group}) => {
     const action = bindActionCreators(onSessionChange, dispatch)
     let suggestions = []
-    let sessionSuggestion = []
     try {
         suggestions = subjectInfo[course][batch][semester]['session']
-        for(let i=1;i<10;i++)
-        {
-            sessionSuggestion=suggestions.map((element,index)=>{
-                return {key:index+1, value:element}
-            })
-
-        }
-
-
     } catch(err){}
 
-        return(
-    <>
-        {sessionSuggestion.map((element) =>{
-            switch (sessionNumber) {
-                case element.key :return <AutoComplete
-                                            width={280}
-                                            key ={element.key}
-                                            value ={element.value}
-                                            onChange = {action}
-                                            label = "Session"
-                                            suggestions ={suggestions}
-                                        />
-                default: return null
-            }
-        })}
-
-
-
-
-    </>)
+    useEffect(()=>{
+        action(suggestions[sessionNumber-1])
+    },[sessionNumber])
+    return <AutoComplete
+            width={280}
+            value ={session}
+            onChange = {action}
+            label = "Session"
+            suggestions ={suggestions} />
   }
 
 export default connect(state => ({
