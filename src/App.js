@@ -16,8 +16,6 @@ const App = ({dispatch}) => {
   useEffect(() => {
     dispatch(getSubjectData())
     dispatch(getSessionData())
-    dispatch(requestFaculty())
-
   }, [])
    return <>
     <ThemeProvider theme={theme}>

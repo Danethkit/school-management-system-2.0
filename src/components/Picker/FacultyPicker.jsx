@@ -1,25 +1,31 @@
-import React,{ useEffect} from "react";
+import React from "react";
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { requestFaculty } from '../../redux/ActionCreator/apiRequest' 
-import { onFacultyChange } from '../../redux/ActionCreator/userBehavior' 
+import { onFacultyChange } from '../../redux/ActionCreator/userBehavior'
 import AutoComplete from './AutoComplete'
 
 
-const FacultyPicker = ({dispatch, faculty, facultyData}) => {
-  let actions = bindActionCreators({requestFaculty, onFacultyChange}, dispatch)
-  useEffect(()=> { actions.requestFaculty()}, [])
-  let names = []
-  facultyData.map(e => names.push(e.name))
-  return <AutoComplete
-          width={280}
+const FacultyPicker = ({dispatch, faculty, subjectInfo, course, batch, semester, group}) => {
+  let actions = bindActionCreators({onFacultyChange}, dispatch)
+  let faculties = []
+  try{
+    for (let e of subjectInfo[course][batch][semester][group]) {
+      if (e.faculty) {
+        faculties.push(e.faculty);
+      }
+    }
+  }catch{}
+  return <AutoComplete 
           value ={faculty}
           onChange ={actions.onFacultyChange}
           label = "Faculty"
-          suggestions = {names}
+          suggestions = {faculties}
         />
 }
 export default connect(state => ({
   faculty:state.changePicker.faculty,
-  facultyData: state.initData.facultyData
+  course:state.changePicker.course,
+  batch:state.changePicker.batch,
+  semester:state.changePicker.semester,
+  subjectInfo: state.initData.subjectInfo,
 }))(FacultyPicker)

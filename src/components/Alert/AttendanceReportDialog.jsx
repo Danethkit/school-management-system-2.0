@@ -32,12 +32,13 @@ const styles = theme => ({
     marginRight: 100
   },
   button: {
-    marginRight: 40
+    marginRight: 40,
   }
 });
 
-const AttendanceReportDialog = ({classes,report,dispatch, b64}) =>{
-var link = React.createElement('a', {download:'file.pdf', href:'data:application/octet-stream;base64,' + b64}, 'Download');
+const AttendanceReportDialog = ({classes,report,dispatch, b64, startDate, endDate}) =>{
+const onClick = () => dispatch({type:PRINT_ATTENDANCE_REPORT, payload:false})
+var link = React.createElement('a', {download:`Attendance Report ${startDate.toDateString()}~${endDate.toDateString()}.pdf`, href:'data:application/octet-stream;base64,' + b64}, 'Download');
 let obj = React.createElement('embed', {style:{width:'100%', height:'100%'},type:'application/pdf', src:'data:application/pdf;base64,' + report})
 return (
     <Dialog
@@ -51,13 +52,27 @@ return (
         <DialogActions>
             <Button
                 className={classes.button}
-                onClick={()=> dispatch({type:PRINT_ATTENDANCE_REPORT, payload:false})}
-                size="large"
+                onClick={onClick}
+                size='medium'
                 variant="outlined"
                 color="primary">
                     {link}
             </Button>
+            <Button
+            className={classes.button}
+            size='medium'
+            variant="outlined"
+            color='secondary'
+            onClick={onClick}
+            >
+              Close
+            </Button>
         </DialogActions>
     </Dialog>)
 }  
-export default connect(state=>({report:state.initData.report, b64: state.initData.b64Report}))(withStyles(styles)(AttendanceReportDialog))
+export default connect(state=>({
+  report:state.initData.report,
+  b64: state.initData.b64Report,
+  endDate: state.changePicker.endDate,
+  startDate: state.changePicker.startDate,
+}))(withStyles(styles)(AttendanceReportDialog))

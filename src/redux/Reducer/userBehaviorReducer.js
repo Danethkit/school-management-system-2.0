@@ -19,7 +19,7 @@ import {
 const initialPicker = {
     batch : 'Batch 4',
     subject : 'Common',
-    session: '08:00am-08:50am',
+    session: '07:30am-08:20am',
     date : new Date(),
     remark: {},
     group :'Group 1',

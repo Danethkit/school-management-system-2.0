@@ -22,8 +22,8 @@ function DropBox ({classes, items, placeholder,handleChange, session}) {
                 onChange={handleChange}
                 input={<Input id="age-simple"/>}
             >
-                {items.map((sessionChoice,index)=>
-                    <MenuItem key={index} value={sessionChoice.sessionName}>{sessionChoice.sessionName}</MenuItem>)
+                {items.map((item,index)=>
+                    <MenuItem key={index} value={item}>{item}</MenuItem>)
                 }
             </Select>
         </FormControl>)

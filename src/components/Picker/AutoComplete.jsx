@@ -35,30 +35,27 @@ function renderInput(inputProps) {
 }
 
 function renderSuggestion(suggestionProps) {
-    const {
-        suggestion,
-        index,
-        itemProps,
-        highlightedIndex,
-        selectedItem,
-        rest,
-        selectedFaculty
-    } = suggestionProps
-    let selectedFacultyArray = []
-    let isBusy = false
-    if('col' in rest){
-        let {row, col} = rest
-        for(let course in selectedFaculty['res']){
-            for(let batch in selectedFaculty['res'][course]){
-                for(let semester in selectedFaculty['res'][course][batch]){
-                    for(let group in selectedFaculty['res'][course][batch][semester]){
-                        if(col in selectedFaculty['res'][course][batch][semester][group]){
-                            if(row in selectedFaculty['res'][course][batch][semester][group][col]){
-                                selectedFacultyArray.push(selectedFaculty['res'][course][batch][semester][group][col][row])
-                            }
-                        }
-                    }
-                }
+  const {
+    suggestion,
+    index,
+    itemProps,
+    highlightedIndex,
+    selectedItem,
+    rest,
+    selectedFaculty
+  } = suggestionProps
+  let selectedFacultyArray = []
+  let isBusy = false
+   if('col' in rest && Object.keys(selectedFaculty).length !== 0){
+    let {row, col, weekStr} = rest
+    for(let course in selectedFaculty['res'][weekStr]){
+      for(let batch in selectedFaculty['res'][weekStr][course]){
+        for(let semester in selectedFaculty['res'][weekStr][course][batch]){
+          for(let group in selectedFaculty['res'][weekStr][course][batch][semester]){
+            if(col in selectedFaculty['res'][weekStr][course][batch][semester][group]){
+              if(row in selectedFaculty['res'][weekStr][course][batch][semester][group][col]){
+                selectedFacultyArray.push(selectedFaculty['res'][weekStr][course][batch][semester][group][col][row])
+              }
             }
         }
         if(selectedFacultyArray.length !== 0){
@@ -74,6 +71,20 @@ function renderSuggestion(suggestionProps) {
             })
         }
     }
+
+    if(selectedFacultyArray.length !== 0){
+        selectedFacultyArray.forEach(e=> {
+          if(!e) return
+          if(!isBusy){
+            if(selectedItem){
+              selectedFacultyArray.forEach(e => isBusy = selectedItem.includes(e.split('(')[1]))
+            } else{
+              isBusy = suggestion.label.includes(e.split('(')[1])
+            }
+          }
+        })
+      }
+  }
 
     const isHighlighted = highlightedIndex === index;
     const isSelected = (selectedItem || "").indexOf(suggestion.label) > -1;
@@ -131,31 +142,29 @@ const useStyles = makeStyles(theme => ({
     })
 );
 
-function AutoComplete({suggestions, value, onChange, label, selectedFaculty,width, ...rest}) {
-    const classes = useStyles();
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    function handleClose(event) {
-        setAnchorEl(anchorEl ? null : null);
-    }
-    function handleClick(event) {
-        setAnchorEl(anchorEl ? null : event.currentTarget);
-    }
+function AutoComplete({suggestions, value=null, onChange, label, selectedFaculty, ...rest}) {
 
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popper' : null;
-
-    // if(rest.disabled){
-    //   value = 'Holiday'
-    // }
-    return  <Downshift onChange={onChange} selectedItem={value}>
-        {downshift => {
-            const {onBlur, onChange, onFocus, ...inputProps} = downshift.getInputProps({
-                onChange: event => {
-                    if (event.target.value === "") {
-                        downshift.clearSelection()
-                    }
-                },
-                onFocus: downshift.openMenu,
+  const classes = useStyles();
+  return  <Downshift onChange={onChange} selectedItem={value}>
+      {downshift => {
+        const {onBlur, onChange, onFocus, ...inputProps} = downshift.getInputProps({
+          onChange: event => {
+            if (event.target.value === "") {
+              downshift.clearSelection()
+            }
+          },
+          onFocus: downshift.openMenu,
+        })
+        return <div className={classes.container}>
+          {
+            renderInput({
+              fullWidth:true,
+              classes,
+              InputLabelProps: downshift.getLabelProps({shrink:true}),
+              InputProps: {onBlur, onChange, onFocus},
+              inputProps,
+              label,
+              // readonly: rest.disabled
             })
             return <div className={classes.container}>
                 {

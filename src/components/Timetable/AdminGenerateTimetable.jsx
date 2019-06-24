@@ -4,7 +4,7 @@ import DateNavigator from "./DateNavigator";
 import { connect } from "react-redux";
 import moment from "moment";
 import TimeTable from "./TimeTable";
-
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 // helper functoin to asign nested key object
 function assign(obj, keyPath, value) {
@@ -16,7 +16,6 @@ function assign(obj, keyPath, value) {
   }
   obj[keyPath[lastKeyIndex]] = value;
 }
-
 
 const areEqual = (prevProps, nextProps) => {
   if (
@@ -120,10 +119,10 @@ const filterTable = (
 };
 
 const AdminTimeTable = ({ course, batch, semester, group, subjectInfo }) => {
+
   const [open, setOpen] = useState(false);
   const [data, setData] = useState({});
   const [week, setWeek] = useState(moment.utc().week());
-  const [weekStr, setWeekStr] = useState('');
   let currentWeek = ''
   let endSemDate = useMemo(()=>{
     if(Object.keys(subjectInfo).length !== 0){
@@ -137,17 +136,22 @@ const AdminTimeTable = ({ course, batch, semester, group, subjectInfo }) => {
         }
       }
       if(course && batch && semester){
-        endSemDate = subjectInfo[course][batch][semester]['week'][subjectInfo[course][batch][semester]['week'].length -1].endDate
+        let lastSemIndex = Object.keys(subjectInfo[course][batch])[Object.keys(subjectInfo[course][batch]).length -1]
+        let lastWeekIndex = subjectInfo[course][batch][lastSemIndex]['week'].length -1
+        endSemDate = subjectInfo[course][batch][semester]['week'][lastWeekIndex].endDate
       }
     }
     return endSemDate
-  }, [subjectInfo])
+  }, [subjectInfo, semester])
+  const [weekStr, setWeekStr] = useState('');
+
 
   useEffect(()=>{
     if(currentWeek) setWeekStr(currentWeek)
   }, [subjectInfo])
 
   const handleChangeWeekStr = value => {
+    setWeek(week +  (parseInt(value.split(' ')[1] - parseInt(weekStr.split(' ')[1]))))
     setWeekStr(value);
   };
 
@@ -155,50 +159,53 @@ const AdminTimeTable = ({ course, batch, semester, group, subjectInfo }) => {
     setWeek(week - 1);
     setWeekStr(`W ${parseInt(weekStr.split(' ')[1]) -1} `)
   };
+
   const handleCurrentWeek = () => {
     setWeek(moment.utc().week());
     setWeekStr(currentWeek)
   };
+
   const handleNextWeek = () => {
     setWeekStr(`W ${parseInt(weekStr.split(' ')[1]) +1}`)
     setWeek(week + 1);
   };
-  var res = data.res || {};
 
+  var res = weekStr && Object.keys(data).length !== 0 ? data.res : {};
   const onFacultyInsert = (row, col, value, header) => {
     let temp = {};
     let temp2 = {};
     temp2[row] = value;
     let { course, batch, semester, group } = header;
-    if (course in res) {
-      if (batch in res[course]) {
-        if (semester in res[course][batch]) {
-          if (group in res[course][batch][semester]) {
-            if (col in res[course][batch][semester][group]) {
-              res[course][batch][semester][group][col][row] = value;
+    if(weekStr in res){
+      if (course in res[weekStr]) {
+        if (batch in res[weekStr][course]) {
+          if (semester in res[weekStr][course][batch]) {
+            if (group in res[weekStr][course][batch][semester]) {
+              if (col in res[weekStr][course][batch][semester][group]) {
+                res[weekStr][course][batch][semester][group][col][row] = value;
+              } else {
+                res[weekStr][course][batch][semester][group][col] = temp2;
+              }
             } else {
-              res[course][batch][semester][group][col] = temp2;
+              assign(temp, [col, row], value);
+              res[weekStr][course][batch][semester][group] = temp;
             }
           } else {
-            assign(temp, [col, row], value);
-            res[course][batch][semester][group] = temp;
+            assign(temp, [group, col, row], value);
+            res[weekStr][course][batch][semester] = temp;
           }
         } else {
-          assign(temp, [group, col, row], value);
-          res[course][batch][semester] = temp;
+          assign(temp, [semester, group, col, row], value);
+          res[weekStr][course][batch] = temp;
         }
       } else {
-        assign(temp, [semester, group, col, row], value);
-        res[course][batch] = temp;
+        assign(res, [course, batch, semester, group, col, row], value);
       }
     } else {
-      assign(res, [course, batch, semester, group, col, row], value);
+      assign(res, [weekStr, course, batch, semester, group, col, row], value);
     }
-    temp[weekStr] = res
-    console.log('week str----------', weekStr);
-    setData({res:temp});
+    setData({res});
   };
-  console.log('check data=============', data);
 
   // useMemo is for performance improvement, if the dependencies still the same function won't execute, instead it directly return the cached reasult
   let allTables = [];
@@ -219,7 +226,9 @@ const AdminTimeTable = ({ course, batch, semester, group, subjectInfo }) => {
   // let period = ''
   return (
     <>
-      <TimeTableSearchBox tsetWeekNumber={handleChangeWeekStr} value={weekStr} />
+    {
+      weekStr ? <>
+      <TimeTableSearchBox setWeekNumber={handleChangeWeekStr} value={weekStr} />
       <DateNavigator
         week={week}
         weekStr={weekStr}
@@ -243,17 +252,20 @@ const AdminTimeTable = ({ course, batch, semester, group, subjectInfo }) => {
         } catch {}
         return (
           <TimeTable
-            week={weekStr}
+            week={week}
             header={table}
             onDataInsert={onFacultyInsert}
             sessions={table.session}
             key={i}
             facultyData={faculties}
             selectedFaculty={data}
+            weekStr = {weekStr}
             // dayOff = {period}
           />
         );
       })}
+      </> : <LinearProgress />
+    }
     </>
   );
 };

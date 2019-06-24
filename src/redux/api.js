@@ -21,15 +21,14 @@ export const  odooRequest = (model, operation='search_read',fields =[], domain =
                 params = [[domain, fields]]
             }
             odoo.execute_kw(model, operation, params, (err, data)=>{
-                if(err) return reject(`${operation} on ${model} error\n ${err}`)           
+                if(err) return reject(`${operation} on ${model} error\n ${err}`)
                 resolve(data)
-            })        
+            })
         })
     })
 }
 
 export const  odooPrintReport = (report_id, value)=>{
-    console.log('check check')
     return new Promise ((resolve, reject)=> {
         odoo.connect((err) => {
             if(err) return reject('request error')
@@ -38,7 +37,7 @@ export const  odooPrintReport = (report_id, value)=>{
             odoo.render_report(report_id, params, function (err, value) {
                 if (err) { return reject('report error') }
                 resolve(value)
-            });   
+            });
         })
     })
 }
