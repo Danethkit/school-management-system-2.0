@@ -8,7 +8,8 @@ import {
     REQUEST_SUBJECT_DATA,
     PRINT_ATTENDANCE_REPORT,
     GET_SESSION_DATA,
-    SET_REPORT_B64
+    SET_REPORT_B64,
+    SET_USER_IDENTITY
 } from '../../constants/env'
 
 const initialData = {
@@ -25,7 +26,8 @@ const initialData = {
     subjectInfo : {},
     report: false,
     b64Report : '',
-    sessionData: {}
+    sessionData: {},
+    userIden: {}
 }
 
 export const initData = (state= initialData, action={}) => {
@@ -50,6 +52,8 @@ export const initData = (state= initialData, action={}) => {
             return {...state,...{b64Report:action.payload}}
         case GET_SESSION_DATA:
             return {...state, ...{sessionData:action.payload}}
+        case SET_USER_IDENTITY:
+            return {...state, ...{userIden:action.payload}}
         default:
             return state
     }

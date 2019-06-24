@@ -13,7 +13,6 @@ function renderInput(inputProps) {
   const { InputProps, classes, ref,label, ...other } = inputProps;
   return (
     <TextField
-      // disabled={readonly}
       multiline
       variant='outlined'
       InputProps={{
