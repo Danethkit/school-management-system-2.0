@@ -11,18 +11,43 @@ export const sortSessionTime = (session) => {
       return new Date(`07/16/1999 ${timeA}`) - new Date(`07/16/1999 ${timeB}`)
     })
 }
-const SessionPicker = ({dispatch, session, subjectInfo, course, batch, semester, group}) => {
+const SessionPicker = ({dispatch, session, subjectInfo, course, batch, semester,sessionNumber, group}) => {
     const action = bindActionCreators(onSessionChange, dispatch)
     let suggestions = []
-    try{
+    let sessionSuggestion = []
+    try {
         suggestions = subjectInfo[course][batch][semester]['session']
-    }catch(err){}
-    return <AutoComplete
-              value ={session}
-              onChange = {action}
-              label = "Session"
-              suggestions ={suggestions}
-            />
+        for(let i=1;i<10;i++)
+        {
+            sessionSuggestion=suggestions.map((element,index)=>{
+                return {key:index+1, value:element}
+            })
+
+        }
+
+
+    } catch(err){}
+
+        return(
+    <>
+        {sessionSuggestion.map((element) =>{
+            switch (sessionNumber) {
+                case element.key :return <AutoComplete
+                                            width={280}
+                                            key ={element.key}
+                                            value ={element.value}
+                                            onChange = {action}
+                                            label = "Session"
+                                            suggestions ={suggestions}
+                                        />
+                default: return null
+            }
+        })}
+
+
+
+
+    </>)
   }
 
 export default connect(state => ({

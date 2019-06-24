@@ -8,6 +8,7 @@ const SubjectPicker = ({dispatch, subject, subjects}) => {
   let actions = bindActionCreators({onSubjectChange},dispatch)
 
   return <AutoComplete
+          width={280}
           value ={subject}
           onChange={actions.onSubjectChange}
           label="Subject"

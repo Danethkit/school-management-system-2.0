@@ -28,6 +28,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const AttendanceDate = ({date, onChangeDate}) => {
-    return <DefaultDatePicker value={date} onChange={onChangeDate} label = "Date" />
+    return <DefaultDatePicker  value={date} onChange={onChangeDate} label = "Date" />
 }
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(AttendanceDate))

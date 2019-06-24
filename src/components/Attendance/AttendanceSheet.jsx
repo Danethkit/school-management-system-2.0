@@ -11,6 +11,18 @@ const styles = theme => ({
   }
 });
 
+const mapStateToProps = (state) => {
+  return {
+      studentData: state.studentData,
+      isPending: state.isPending,
+      error: state.error,
+      session: state.changePicker.session,
+      course: state.changePicker.course,
+      batch: state.changePicker.batch,
+      semester: state.changePicker.semester,
+      subjectInfo: state.initData.subjectInfo
+  }
+}
 
 const AttendancesSheet = ({classes}) => {
 
@@ -28,6 +40,26 @@ const AttendancesSheet = ({classes}) => {
       );
     }
     return tabs;
+  }
+  componentWillReceiveProps(nextProps, nextContext) {
+      let {course, batch, semester, session} = nextProps
+      let sessionSuggestion=[]
+      try{
+          let suggestions = nextProps.subjectInfo[course][batch][semester]['session']
+          for(let i=1;i<10;i++)
+          {
+              sessionSuggestion =suggestions.map((element,index)=>{
+                  return {key:index+1, value:element}
+              })
+          }
+      }catch  {}
+      sessionSuggestion.map((element) =>{
+          switch (session) {
+              case element.value :return this.setState({sessionNumber:element.key})
+              default: return null
+          }
+      })
+
   }
 
   return <div style={{flexGrow: 1, width: "100%"}}>

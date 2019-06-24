@@ -6,7 +6,8 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/picker
 
 export default ({value, onChange , label}) =>{
     return (
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <MuiPickersUtilsProvider
+          style={{width:280}} utils={DateFnsUtils}>
         <KeyboardDatePicker
           format="MM/dd/yyyy"
           autoOk
@@ -17,7 +18,7 @@ export default ({value, onChange , label}) =>{
           variant="inline"
           value={value}
           onChange={onChange}
-          style={{marginTop:16, marginBottom:4}}
+          // style={{marginBottom:4}}
           InputProps={{
             startAdornment: (
               <InputAdornment

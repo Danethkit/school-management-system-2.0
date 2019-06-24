@@ -18,6 +18,7 @@ const styles = theme => ({
 const DefaultPicker = ({ classes, value, handleOnChange, label, menuItem}) => {
   return <TextField
           fullWidth
+          width={280}
           select
           autoFocus
           className={classes.margin}

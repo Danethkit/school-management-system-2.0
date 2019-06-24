@@ -12,6 +12,7 @@ const CoursePicker = ({course, subjectInfo, dispatch}) => {
     }
   })
   return <AutoComplete
+          width={280}
           defaultSelectedItem={{ name: "dara" }}
           value={course}
           onChange={actions.onCourseChange}

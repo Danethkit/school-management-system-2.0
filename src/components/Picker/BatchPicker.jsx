@@ -18,6 +18,7 @@ const BatchPicker = ({dispatch, batch, subjectInfo, course}) => {
   let action = bindActionCreators(onBatchChange, dispatch)
 
   return  <AutoComplete
+          width={280}
           value={batch}
           onChange={action}
           label = "Batch"
