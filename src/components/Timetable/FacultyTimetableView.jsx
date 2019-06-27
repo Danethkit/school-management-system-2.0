@@ -1,9 +1,10 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Grid, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles, Button, Toolbar
 } from "@material-ui/core";
 import PropTypes from "prop-types";
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import FacultyDateNavigator from "./FacultyDateNavigator";
+import moment from 'moment'
+
 
 
 const CustomTableCell = withStyles(theme => ({
@@ -121,10 +122,6 @@ const styles = theme => ({
 
 })
 
-
-
-var moment = require("moment");
-const weekOfYear = moment.utc().week();
 let id = 0;
 
 // function to input value to table header
@@ -172,155 +169,113 @@ const numberTable = [
 
 
 
+const weekOfYear = moment.utc().week();
 
-class StudentView extends React.Component{
+const FacultyTimeTableView = ({classes, userIden}) =>{
 
-    state = {
-        week: weekOfYear
+    const [week, setWeek] = useState((moment.utc().week()))
+
+    const handleLastWeek= () => {
+        setWeek(week -1)
     }
 
-
-    handleLastWeek = () => {
-        this.setState(state =>({
-            week: state.week-1
-        }));
-    };
-    handleCurrentWeek = () => {
-        this.setState({week: weekOfYear});
+    const handleCurrentWeek = () => {
+        setWeek(weekOfYear)
     }
-    handleNextWeek = () => {
-        this.setState(state =>({
-            week: state.week+1
-        }));
-    };
 
-    render(){
-        const {classes} = this.props;
+    const handleNextWeek = () => {
+        setWeek(week +1)
+    }
 
-        return(
-            <React.Fragment>
-                <Grid container className={classes.gridContainer}>
-                    <Grid item  className={classes.left} style={{marginLeft:23}}>
-                        <b>Faculty: Shiraz Kaurana</b>
+    return(
+        <>
+            <Grid container className={classes.gridContainer}>
+                <Grid item  className={classes.left} style={{marginLeft:23}}>
+                    <b>Faculty: {userIden['user']}</b>
 
-                    </Grid>
-                    <Grid item style={{marginRight:23}}>
-                       <b>Faculty Code: 110101212</b>
-
-                    </Grid>
                 </Grid>
-                <Toolbar className={classes.threeButton}>
-                <span className={classes.left}>
-                <Button size="small" color="primary" className="button" variant="outlined" onClick={this.handleLastWeek} disabled={this.state.week === weekOfYear} >
-                    <KeyboardArrowLeft fontSize={'inherit'} />
-                    Last
-                </Button>
+                <Grid item style={{marginRight:23}}>
+                    <b>Faculty Code: 110101212</b>
 
-                <Button size="small" color="primary" className="button" variant="outlined" onClick={this.handleCurrentWeek} disabled={this.state.week === weekOfYear} >
-                    Current
-                </Button>
-
-                <Button size="small"  color="primary" className="button" variant="outlined" onClick={this.handleNextWeek} >
-                    Next
-                    <KeyboardArrowRight fontSize={'inherit'}/>
-                </Button>
-
-                </span>
-                    <span className={classes.middle}>
-                    <b>Week{moment.utc().week(this.state.week).format('w') -17}( {moment.utc().week(this.state.week).weekday(0).format("MMM/DD")} - {moment.utc().week(this.state.week).weekday(6).format("MMM/DD")})</b>
-                </span>
-                    <span className={classes.right}>
+                </Grid>
+            </Grid>
+            <FacultyDateNavigator
+                week={week}
+                handleLastWeek={handleLastWeek}
+                handleNextWeek={handleNextWeek}
+                handleCurrentWeek={handleCurrentWeek}
+                weekOfYear = {weekOfYear}
+                />
 
 
-                <Button size="small" color="primary" className="button" variant="outlined" >
-                        Month
-                </Button>
+            {numberTable.map(table => (
+                <div className={classes.generateTimetable} >
+                    <div className={classes.container}>
+                        <Paper className={classes.root}>
+                            <Table className={classes.table}>
+                                <TableHead>
+                                    {headData.map(row => (
+                                        <TableRow className={classes.row} key={row.id}>
+                                            <CustomTableCell align='center' multiline={"true"} >{row.dat}</CustomTableCell>
+                                            <CustomTableCell align='center' multiline={"true"} >{row.ses}</CustomTableCell>
+                                            <CustomTableCell align='center' multiline={"true"} >{row.time}</CustomTableCell>
+                                            <CustomTableCell align='center' multiline={"true"} >{row.sub}</CustomTableCell>
+                                            <CustomTableCell align='center' multiline={"true"} >{row.bat}</CustomTableCell>
+                                            <CustomTableCell align='center' multiline={"true"} >{row.gro}</CustomTableCell>
+                                            <CustomTableCell align='center' multiline={"true"} >{row.sem}</CustomTableCell>
+                                            <CustomTableCell align='center' multiline={"true"} >{row.cou}</CustomTableCell>
+                                            <CustomTableCell align='center' multiline={"true"} >{row.wee}</CustomTableCell>
 
-                <Button size="small" color="primary" className="button" variant="outlined" >
-                        Week
-                </Button>
-
-                <Button size="small"  color="primary" className="button" variant="outlined">
-                        Day
-                </Button>
-
-                <Button size="small"  color="primary" className="button" variant="outlined">
-                        Event
-                </Button>
-                </span>
-
-                </Toolbar>
-
-
-                {numberTable.map(table => (
-                    <div className={classes.generateTimetable} >
-                        {/*<DisplayTimetableHeader course={table.course} batch={table.batch}  semester={table.semester} week={table.week}/>*/}
-                        <div className={classes.container}>
-                            <Paper className={classes.root}>
-                                <Table className={classes.table}>
-                                    <TableHead>
-                                        {headData.map(row => (
-                                            <TableRow className={classes.row} key={row.id}>
-                                                <CustomTableCell align='center' multiline={"true"} >{row.dat}</CustomTableCell>
-                                                <CustomTableCell align='center' multiline={"true"} >{row.ses}</CustomTableCell>
-                                                <CustomTableCell align='center' multiline={"true"} >{row.time}</CustomTableCell>
-                                                <CustomTableCell align='center' multiline={"true"} >{row.sub}</CustomTableCell>
-                                                <CustomTableCell align='center' multiline={"true"} >{row.bat}</CustomTableCell>
-                                                <CustomTableCell align='center' multiline={"true"} >{row.gro}</CustomTableCell>
-                                                <CustomTableCell align='center' multiline={"true"} >{row.sem}</CustomTableCell>
-                                                <CustomTableCell align='center' multiline={"true"} >{row.cou}</CustomTableCell>
-                                                <CustomTableCell align='center' multiline={"true"} >{row.wee}</CustomTableCell>
-
-                                            </TableRow>
-                                        ))}
-                                    </TableHead>
-                                    <TableBody>
-                                        {bodyData.map(row => (
-                                            <TableRow className={classes.row} key={row.id}>
-                                                <CustomTableCell align="center">
-                                                    {row.dat}
-                                                </CustomTableCell>
-                                                <CustomTableCell align="center">
-                                                    {row.ses}
-                                                </CustomTableCell>
-                                                <CustomTableCell align="center">
-                                                    {row.time}
-                                                </CustomTableCell>
-                                                <CustomTableCell align="center">
-                                                    {row.sub}
-                                                </CustomTableCell>
-                                                <CustomTableCell align="center">
-                                                    {row.bat}
-                                                </CustomTableCell>
-                                                <CustomTableCell align="center">
-                                                    {row.gro}
-                                                </CustomTableCell>
-                                                <CustomTableCell align="center">
-                                                    {row.sem}
-                                                </CustomTableCell>
-                                                <CustomTableCell align="center">
-                                                    {row.cou}
-                                                </CustomTableCell>
-                                                <CustomTableCell align="center">
-                                                    {row.wee}
-                                                </CustomTableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </Paper>
-                        </div>
-
-
+                                        </TableRow>
+                                    ))}
+                                </TableHead>
+                                <TableBody>
+                                    {bodyData.map(row => (
+                                        <TableRow className={classes.row} key={row.id}>
+                                            <CustomTableCell align="center">
+                                                {row.dat}
+                                            </CustomTableCell>
+                                            <CustomTableCell align="center">
+                                                {row.ses}
+                                            </CustomTableCell>
+                                            <CustomTableCell align="center">
+                                                {row.time}
+                                            </CustomTableCell>
+                                            <CustomTableCell align="center">
+                                                {row.sub}
+                                            </CustomTableCell>
+                                            <CustomTableCell align="center">
+                                                {row.bat}
+                                            </CustomTableCell>
+                                            <CustomTableCell align="center">
+                                                {row.gro}
+                                            </CustomTableCell>
+                                            <CustomTableCell align="center">
+                                                {row.sem}
+                                            </CustomTableCell>
+                                            <CustomTableCell align="center">
+                                                {row.cou}
+                                            </CustomTableCell>
+                                            <CustomTableCell align="center">
+                                                {row.wee}
+                                            </CustomTableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </Paper>
                     </div>
 
-                ))}
-            </React.Fragment>
-        )
-    }
+
+                </div>
+
+            ))}
+        </>
+    )
 }
-StudentView.propTypes = {
+
+FacultyTimeTableView.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(StudentView)
+export default withStyles(styles)(FacultyTimeTableView)

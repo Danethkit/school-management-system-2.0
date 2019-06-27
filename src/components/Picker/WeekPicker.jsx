@@ -4,9 +4,12 @@ import {connect} from 'react-redux'
 
 const WeekPicker = ({value, onChange,course,batch, semester, subjectInfo}) => {
   let suggestions = []
-  if(Object.keys(subjectInfo).length !==0 && course !== null && batch !== null && semester !== null){
-    suggestions = subjectInfo[course][batch][semester]['week'].map(e => e.name)
-  }
+  try{
+    if(Object.keys(subjectInfo).length !==0 && course !== null && batch !== null && semester !== null){
+      suggestions = subjectInfo[course][batch][semester]['week'].map(e => e.name)
+    }
+  }catch{}
+
   return <AutoComplete
           width={280}
           value ={value}

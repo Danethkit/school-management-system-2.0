@@ -4,7 +4,14 @@ import { bindActionCreators } from 'redux'
 import { onCourseChange, onBatchChange } from '../../redux/ActionCreator/userBehavior'
 import AutoComplete from './AutoComplete'
 
-const CoursePicker = ({course, subjectInfo, dispatch}) => {
+const CoursePicker = ({course, subjectInfo, userIden, dispatch}) => {
+  const uid = localStorage.getItem('uid')
+  let data = {}
+  if(uid == 1){
+    data = subjectInfo
+  }else {
+    data = userIden
+  }
   let actions = bindActionCreators({onCourseChange}, dispatch)
   useEffect(()=> {
     if(!(course)){
@@ -17,7 +24,7 @@ const CoursePicker = ({course, subjectInfo, dispatch}) => {
           value={course}
           onChange={actions.onCourseChange}
           label = "Course"
-          suggestions={Object.keys(subjectInfo)} />
+          suggestions={data ? Object.keys(data): []} />
 }
 export default connect(state => ({
   course : state.changePicker.course,

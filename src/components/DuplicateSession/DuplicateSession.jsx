@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import { connect } from "react-redux"
 import PropTypes from "prop-types";
 import { withStyles} from "@material-ui/core";
 import {
@@ -25,8 +24,8 @@ const styles = theme => ({
 const DuplicateSession = ({sessionNames, classes, handleDuplicateSession}) => {
 
   const [sessionStart, setSessoinStart] = useState('')
-  const [sessionEnd, setSessoinEnd] = useState('')
   const [open, setOpen] = useState(false)
+  const [selected, setSelected] = useState([])
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -34,14 +33,19 @@ const DuplicateSession = ({sessionNames, classes, handleDuplicateSession}) => {
 
   const handleClose = () => {
     setOpen(false);
-    handleDuplicateSession(sessionEnd, sessionStart)
   };
+
+  const handleCloseDuplicate = () => {
+    setOpen(false);
+    handleDuplicateSession(selected)
+  }
 
   const handleChangeFrom = e => {
     setSessoinStart(e.target.value)
   }
+
   const handleChangeTo = e => {
-    setSessoinEnd(e.target.value)
+    setSelected(e.target.value)
   }
 
   return (
@@ -61,20 +65,22 @@ const DuplicateSession = ({sessionNames, classes, handleDuplicateSession}) => {
               <DropBox placeholder={"Duplicate From"}
                        handleChange={handleChangeFrom}
                        session={sessionStart}
-                       items={sessionNames}
+                       items={sessionNames ? sessionNames : []}
                   />
 
               <DropBox placeholder={"Duplicate To"}
                        handleChange={handleChangeTo}
-                       items={sessionNames.filter(e => e > sessionStart)}
-                       session={sessionEnd}/>
+                       items={sessionNames ? sessionNames.filter(e=> e > sessionStart) : []}
+                       value = {selected}
+                       checkBox
+                       selected={selected}/>
             </form>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} color="secondary">
               Cancel
             </Button>
-            <Button onClick={handleClose} color="primary">
+            <Button onClick={handleCloseDuplicate} color="primary">
               Ok
             </Button>
           </DialogActions>
@@ -89,4 +95,4 @@ DuplicateSession.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default connect(state=>({sessionData: state.initData.sessionData}))(withStyles(styles)(DuplicateSession))
+export default withStyles(styles)(DuplicateSession)

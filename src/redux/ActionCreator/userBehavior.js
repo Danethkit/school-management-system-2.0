@@ -25,7 +25,6 @@ export const onRemarkChange = (data) => ({type:CHANGE_REMARK, payload:data})
 
 export const onSemesterChange = (data) => ({type:CHANGE_SEMESTER, payload:data})
 export const onCourseChange = (data) => {
-    console.log('data',data)
     return  {type:CHANGE_COURSE, payload:data}
 }
 export const onFacultyChange = (data) => ({type:CHANGE_FACULTY, payload:data}) 
