@@ -76,7 +76,8 @@ const TimeTable = ({
   facultyData,
   selectedFaculty,
   weekStr,
-  dispatch
+  dispatch,
+  columns
 }) => {
   const sortedSession = useMemo(
     () =>
@@ -172,16 +173,6 @@ const TimeTable = ({
   }
 
   const classes = useStyles();
-  let columns = ["Session"];
-  for (let i = 0; i < 7; i++) {
-    columns.push(
-      moment
-        .utc()
-        .week(week)
-        .weekday(i)
-        .format("ddd MM/DD")
-    );
-  }
 
   return (
     <>

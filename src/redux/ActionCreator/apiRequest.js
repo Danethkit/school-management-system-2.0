@@ -92,7 +92,7 @@ export const requestStudent= () => (dispatch) => {
 // }
 
 export const createAttendanceSheet= (data) => (dispatch) => {
-    fetch('http://192.168.7.240:8008/create-attendance-sheet',{
+    fetch('http://192.168.7.222:8069/create-attendance-sheet',{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -106,21 +106,21 @@ export const createAttendanceSheet= (data) => (dispatch) => {
 
 export const getAttendanceLine = () => (dispatch) => {
     dispatch({type: REQUEST_ATTENDANCE_LINE_PENDING})
-    fetch('http://192.168.7.240:8008/get-attendance-line')
+    fetch('http://192.168.7.222:8069/get-attendance-line')
     .then(res => res.json())
     .then( data => dispatch({type: REQUEST_ATTENDANCE_LINE_SUCCESS, payload:data.data}))
     .catch(err => dispatch({type:REQUEST_ATTENDANCE_LINE_FAILED, payload:err}))
 }
 
 export const getSubjectData = () => (dispatch) => {
-    fetch('http://192.168.7.240:8008/get-subject-data')
+    fetch('http://192.168.7.222:8069/get-subject-data')
     .then(res => res.json())
     .then(data => dispatch({type:REQUEST_SUBJECT_DATA, payload:data}))
     .catch( err => console.log(err))
 }
 
 export const getSessionData = () => (dispatch) => {
-    fetch('http://192.168.7.240:8008/get-session-data')
+    fetch('http://192.168.7.222:8069/get-session-data')
     .then(res => res.json())
     .then(data => dispatch({type:GET_SESSION_DATA, payload:data}))
     .catch( err => console.log(err))
@@ -136,7 +136,7 @@ export const printAttendanceReport = () => (dispatch) => {
     .catch(err => console.log(err))
 }
 export const saveTimeTable = (data) => (dispatch) => {
-    fetch('http://192.168.7.240:8008/create-timetable',{
+    fetch('http://192.168.7.222:8069/create-timetable',{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -149,8 +149,7 @@ export const saveTimeTable = (data) => (dispatch) => {
 }
 
 export const requestUserIdentity = (data) => (dispatch) => {
-    console.log('data============>>',data)
-    fetch('http://192.168.7.240:8008/get-user-identity',{
+    fetch('http://192.168.7.222:8069/get-user-identity',{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -158,6 +157,19 @@ export const requestUserIdentity = (data) => (dispatch) => {
         })
        })
     .then(response => response.json())
-    .then(data => dispatch({type: SET_USER_IDENTITY, payload: data}))
+    .then(data => dispatch({type: SET_USER_IDENTITY, payload:JSON.parse(data.result)}))
     .catch(err => console.log(err));
 }
+
+// export const requestUserIdentity = (data) => (dispatch) => {
+//     fetch('http://192.168.7.240:8008/get-user-identity',{
+//         method: 'post',
+//         headers: {'Content-Type':'application/json'},
+//         body: JSON.stringify({
+//             params : data
+//         })
+//        })
+//     .then(response => response.json())
+//     .then(data => dispatch({type: SET_USER_IDENTITY, payload:JSON.parse(data.result)}))
+//     .catch(err => console.log(err));
+// }

@@ -47,7 +47,7 @@ const navBar = [
   "Attendances",
   "Assignments",
   "Event",
-  "TimeTables",
+  "TimeTable",
   "Exams",
   "Library",
   "Apps",
@@ -59,7 +59,7 @@ class NavigationBar extends React.Component {
     super(props);
     this.state = {
       menuOpen: false,
-      route: "/attendances"
+      route: "/sms/attendances"
     };
   }
 
@@ -80,8 +80,9 @@ class NavigationBar extends React.Component {
     if(this.props.history.location.pathname.includes("/timetable")){
       items = [
         {path: "timetable/admin-view", label: "Current Timetable"},
-        {path: "timetable/admin-create", label: "Timetable Record"},
-        {path: "timetable/student", label: "Generate Timetable"}
+        {path: "timetable/admin-create", label: "Create TimeTable"},
+        {path: "timetable/student", label: "Student"},
+        {path: "timetable/faculty", label: "Faculty"}
       ];
     }
     else {
@@ -122,7 +123,7 @@ class NavigationBar extends React.Component {
                   label={label}
                   className={classes.tab}
                   key={label}
-                  value={`/${label.toLowerCase()}`}
+                  value={`/sms/${label.toLowerCase()}`}
                 />
               ))}
             </Tabs>

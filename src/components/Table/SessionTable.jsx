@@ -106,7 +106,7 @@ class SessionTable extends Component {
     let selectedStu = this.state.selected[session]
     let storeData = store.getState()
     let {subject, date, batch, remark} = storeData.changePicker
-    // let { subjectData } = storeData.initData
+    // let { subjectData } = storeData.initData'
     let data = {
       subject: subject,
       date: date.toDateString(),
@@ -178,13 +178,13 @@ class SessionTable extends Component {
     this.setState({ selected });
   }
 
-  handleDuplicateSession = (startSession, endSession) => {
+  handleDuplicateSession = (newSelected) => {
     let {course, batch, semester, subjectInfo, session} = this.props
     let {selected} = this.state
     if(!(session in selected)) return
     let sessions = subjectInfo[course][batch][semester]['session']
-    let newSession = sessions.filter((e,i) =>  parseInt(startSession) > i&& parseInt(endSession) <= i)
-    newSession.forEach(element => {
+    sessions.filter((e,i) => newSelected.includes(i+1))
+    .forEach(element => {
       selected[element] = selected[session]
     });
     this.setState(selected)
@@ -200,7 +200,7 @@ class SessionTable extends Component {
   }
 
   render() {
-    const { classes, studentData, batch, session } = this.props
+    const { classes, studentData, batch, session ,subjectInfo, sessions} = this.props
     const { order, orderBy, selected } = this.state
     let numSelected = 0
     if(session in selected){
@@ -217,7 +217,7 @@ class SessionTable extends Component {
         data.length === 0 ? <LinearProgress /> 
         : <>
         <Box className={classes.root} boxShadow={2}>
-          <SessionTableToolBar numSelected={numSelected} handleDuplicateSession={this.handleDuplicateSession}/>
+          <SessionTableToolBar numSelected={numSelected} handleDuplicateSession={this.handleDuplicateSession} sessions={sessions}/>
           <div className={classes.tableWrapper}>
             <Table aria-labelledby="tableTitle"  >
               <SessionTableHead

@@ -11,22 +11,34 @@ export const sortSessionTime = (session) => {
       return new Date(`07/16/1999 ${timeA}`) - new Date(`07/16/1999 ${timeB}`)
     })
 }
-const SessionPicker = ({dispatch, session, subjectInfo, course, batch, semester,sessionNumber, group}) => {
-    const action = bindActionCreators(onSessionChange, dispatch)
+const SessionPicker = ({dispatch, session, subjectInfo, userIden, course, batch, semester,sessionNumber, group}) => {
+    const uid = localStorage.getItem('uid')
     let suggestions = []
-    try {
-        suggestions = subjectInfo[course][batch][semester]['session']
-    } catch(err){}
+    let allSuggestions =  []
+    try{
+        allSuggestions = subjectInfo[course][batch][semester]['session']
+    }catch{}
+    if(uid == 1){
+        try {
+            suggestions = allSuggestions
+        } catch(err){}
+    }else {
+        try {
+            suggestions = Object.keys(userIden[course][batch][semester][group])
+        } catch(err){}
+    }
+    const action = bindActionCreators(onSessionChange, dispatch)
 
     useEffect(()=>{
-        action(suggestions[sessionNumber-1])
-    },[sessionNumber])
+        let index = suggestions.findIndex(e => e === allSuggestions[sessionNumber -1])
+        action(suggestions[index])
+    },[sessionNumber, subjectInfo, userIden])
     return <AutoComplete
             width={280}
             value ={session}
             onChange = {action}
             label = "Session"
-            suggestions ={suggestions} />
+            suggestions ={sortSessionTime(suggestions)} />
   }
 
 export default connect(state => ({

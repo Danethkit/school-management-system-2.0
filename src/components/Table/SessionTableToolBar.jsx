@@ -5,7 +5,6 @@ import DuplicateSession from "../DuplicateSession/DuplicateSession"
 import { Toolbar, Typography, withStyles } from "@material-ui/core"
 import { lighten } from "@material-ui/core/styles/colorManipulator"
 
-const sessions=['1','2','3','4','5','6','7','8','9']
 const toolbarStyles = theme => ({
   root: {
     paddingRight: theme.spacing(3)
@@ -32,8 +31,8 @@ const toolbarStyles = theme => ({
   }
 })
 
-let SessionTableToolBar = props => {
-  const { numSelected, classes, handleDuplicateSession } = props;
+const SessionTableToolBar = props => {
+  const { numSelected, classes, handleDuplicateSession, sessions } = props;
 
   return (
     <Toolbar
@@ -65,6 +64,4 @@ SessionTableToolBar.propTypes = {
   numSelected: PropTypes.number.isRequired
 };
 
-export default (SessionTableToolBar = withStyles(toolbarStyles)(
-  SessionTableToolBar
-));
+export default withStyles(toolbarStyles)(SessionTableToolBar)

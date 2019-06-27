@@ -3,7 +3,7 @@ import Odoo from 'odoo-xmlrpc'
 var odoo = new Odoo({
     url: 'http://192.168.7.222',
     port: '8069',
-    db: 'KruyChandara',
+    db: 'KIT',
     username: 'admin',
     password: 'adminkit'
 });

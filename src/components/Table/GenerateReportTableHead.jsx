@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { connect } from 'react-redux'
 import {
@@ -18,13 +18,7 @@ const styles = theme => ({
 })
 
 
-class GenerateReportTableHead extends Component {
-    createSortHandler = property => event => {
-        this.props.onRequestSort(event, property);
-    };
-
-    render() {
-        const { order, orderBy, classes, subjects } = this.props;
+const GenerateReportTableHead = (order, orderBy, classes, subjects) => {
         return (
             <TableHead className={classes.header}>
                 <TableRow>
@@ -43,7 +37,6 @@ class GenerateReportTableHead extends Component {
                 </TableRow>
             </TableHead>
         );
-    }
 }
 GenerateReportTableHead.propTypes = {
     onRequestSort: PropTypes.func.isRequired,
@@ -51,9 +44,5 @@ GenerateReportTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired
 };
 export default connect(state => ({
-  group:state.changePicker.group,
-  batch : state.changePicker.batch,
-  course : state.changePicker.course,
-  semester : state.changePicker.semester,
   subjects : state.changePicker.subjects,
 })) (withStyles(styles)(GenerateReportTableHead))
