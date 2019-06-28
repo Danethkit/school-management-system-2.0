@@ -8,8 +8,18 @@ import AutoComplete from './AutoComplete'
 
 
 
-const GroupPicker = ({dispatch, group, batch, course, subjectInfo, semester}) => {
-  let actions = bindActionCreators({onGroupChange}, dispatch)
+const GroupPicker = ({dispatch, group, batch, course, subjectInfo, userIden, semester}) => {
+  let actions = bindActionCreators(onGroupChange, dispatch)
+  let data = []
+  const uid = localStorage.getItem('uid')
+  try{
+    if(uid != 1){
+      data = Object.keys(userIden[course][batch][semester].filter(e=>e.includes('Group')))
+    }else{
+      data = Object.keys(subjectInfo[course][batch][semester]).filter(e=>e.includes('Group'))
+    }
+  }catch{}
+
   useEffect(()=> {
     let subjects =[]
     try{
@@ -18,19 +28,13 @@ const GroupPicker = ({dispatch, group, batch, course, subjectInfo, semester}) =>
     dispatch(setSubjects(subjects))
 
   })
-  let groups = []
-  try{
-    groups = Object.keys(subjectInfo[course][batch][semester]).filter(e=>e.includes('Group'))
-  }catch(err){
-    groups = []
-  }
 
   return <AutoComplete
           width={280}
           value ={group}
           onChange ={actions.onGroupChange}
           label = "Group"
-          suggestions = {groups}
+          suggestions = {data}
         />
 }
 export default connect(state => ({
@@ -39,5 +43,4 @@ export default connect(state => ({
   course : state.changePicker.course,
   semester : state.changePicker.semester,
   subjectInfo : state.initData.subjectInfo,
-  sessionData:state.initData.sessionData,
 }))(GroupPicker)

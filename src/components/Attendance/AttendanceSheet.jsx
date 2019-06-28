@@ -12,28 +12,16 @@ const styles = theme => ({
   }
 });
 
-const mapStateToProps = (state) => {
-  return {
-      studentData: state.studentData,
-      isPending: state.isPending,
-      error: state.error,
-      session: state.changePicker.session,
-      course: state.changePicker.course,
-      batch: state.changePicker.batch,
-      semester: state.changePicker.semester,
-      subjectInfo: state.initData.subjectInfo
-  }
-}
-
-const AttendancesSheet = ({classes, dispatch, date, course, batch, semester, session, subjectInfo}) => {
+const AttendancesSheet = ({classes, dispatch, date, course, batch, group, semester, session, subjectInfo, userIden}) => {
   const uid = localStorage.getItem('uid')
   const yyyy = date.getFullYear()
   const mm = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() +1
   const dd = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
 
   useEffect(()=>{
+    if(date == 'Invalid Date') return
     dispatch(requestUserIdentity({date:`${yyyy}-${mm}-${dd}`, uid}))
-  }, [])
+  }, [date])
 
   const [sessionNumber, setSessionNumber] = useState(1)
 
@@ -48,15 +36,19 @@ const AttendancesSheet = ({classes, dispatch, date, course, batch, semester, ses
     setSessionNumber(sessionNumber);
   };
 
-  const createSessionTab = (classTab) => {
-    let tabs = [];
-    for (let i = 1; i < 10; i++) {
-      tabs.push(
-        <Tab label={"session " + i} className={classTab} key={i} value={i} />
-      );
+  let availableTab = []
+  let allSessions = []
+  try{
+    if(Object.keys(subjectInfo).length !== 0) {
+      allSessions = subjectInfo[course][batch][semester]['session']
+      let availableSession = Object.keys(userIden[course][batch][semester][group])
+      allSessions.forEach((e,i) => {
+        if(availableSession.includes(e)){
+          availableTab.push(i+1)
+        }
+      })
     }
-    return tabs;
-  }
+  }catch{}
 
   return <div style={{flexGrow: 1, width: "100%"}}>
           <h1>Attendance Sheet</h1>
@@ -70,11 +62,13 @@ const AttendancesSheet = ({classes, dispatch, date, course, batch, semester, ses
               classes={{ root: classes.tabRoot }}
               scrollButtons="on"
             >
-              {createSessionTab(classes.tab)}
+              {
+                (uid == 1 ?  allSessions.map((e,i)=> i+1) : availableTab).map(i=>  <Tab label={"session " + i} className={classes.Tab} key={i} value={i} />)
+              }
             </Tabs>
           </AppBar>
-          <HeadPicker sessionNumber={sessionNumber} />
-          <SessionTable />
+          <HeadPicker sessionNumber={sessionNumber} userIden={userIden} />
+          <SessionTable sessions = {uid == 1 ? allSessions.map((e,i)=> i+1):availableTab} />
         </div>
 }
 
@@ -84,6 +78,8 @@ export default connect(state => ({
   session: state.changePicker.session,
   course: state.changePicker.course,
   batch: state.changePicker.batch,
+  group: state.changePicker.group,
   semester: state.changePicker.semester,
-  subjectInfo: state.initData.subjectInfo
+  subjectInfo: state.initData.subjectInfo,
+  userIden: state.initData.userIden
 }))(withStyles(styles)(AttendancesSheet))

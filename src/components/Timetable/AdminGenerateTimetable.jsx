@@ -1,10 +1,10 @@
-import React, { useState, useMemo, memo, useEffect } from "react";
+import React, { useState, useMemo, memo } from "react";
 import TimeTableSearchBox from "../TimetablePicker/TimeTableSearchBox";
 import DateNavigator from "./DateNavigator";
-import { connect } from "react-redux";
 import moment from "moment";
 import TimeTable from "./TimeTable";
-import LinearProgress from '@material-ui/core/LinearProgress';
+import DefaultAlert from '../../components/Alert/DefaultDialog'
+import { Announcement } from '@material-ui/icons'
 
 // helper functoin to asign nested key object
 function assign(obj, keyPath, value) {
@@ -118,60 +118,18 @@ const filterTable = (
   return res;
 };
 
-const AdminTimeTable = ({ course, batch, semester, group, subjectInfo }) => {
+const AdminTimeTable = ({weekStr, handleChangeWeekStr, handleCurrentWeek, handleLastWeek, handleNextWeek, ...others  }) => {
 
   const [open, setOpen] = useState(false);
   const [data, setData] = useState({});
-  const [week, setWeek] = useState(moment.utc().week());
-  let currentWeek = ''
-  let endSemDate = useMemo(()=>{
-    if(Object.keys(subjectInfo).length !== 0){
-      for(let semester in subjectInfo[course][batch]){
-        for(let week of subjectInfo[course][batch][semester]['week']){
-          let today = new Date()
-          if(today >= new Date(week.startDate) && today <= new Date(week.endDate)){
-            currentWeek = week.name
-            break
-          }
-        }
-      }
-      if(course && batch && semester){
-        let lastSemIndex = Object.keys(subjectInfo[course][batch])[Object.keys(subjectInfo[course][batch]).length -1]
-        let lastWeekIndex = subjectInfo[course][batch][lastSemIndex]['week'].length -1
-        endSemDate = subjectInfo[course][batch][semester]['week'][lastWeekIndex].endDate
-      }
-    }
-    return endSemDate
-  }, [subjectInfo, semester])
-  const [weekStr, setWeekStr] = useState('');
+  const [warning, setWarning] = useState(false)
 
-
-  useEffect(()=>{
-    if(currentWeek) setWeekStr(currentWeek)
-  }, [subjectInfo])
-
-  const handleChangeWeekStr = value => {
-    setWeek(week +  (parseInt(value.split(' ')[1] - parseInt(weekStr.split(' ')[1]))))
-    setWeekStr(value);
-  };
-
-  const handleLastWeek = () => {
-    setWeek(week - 1);
-    setWeekStr(`W ${parseInt(weekStr.split(' ')[1]) -1} `)
-  };
-
-  const handleCurrentWeek = () => {
-    setWeek(moment.utc().week());
-    setWeekStr(currentWeek)
-  };
-
-  const handleNextWeek = () => {
-    setWeekStr(`W ${parseInt(weekStr.split(' ')[1]) +1}`)
-    setWeek(week + 1);
-  };
+  const {subjectInfo, course, batch, semester, group, week, endSemDate} = others
 
   var res = weekStr && Object.keys(data).length !== 0 ? data.res : {};
+
   const onFacultyInsert = (row, col, value, header) => {
+    if(!weekStr) return setWarning(true)
     let temp = {};
     let temp2 = {};
     temp2[row] = value;
@@ -207,27 +165,45 @@ const AdminTimeTable = ({ course, batch, semester, group, subjectInfo }) => {
     setData({res});
   };
 
+  const handleCloseWarning = () => {
+    setWarning(false)
+  }
+
   // useMemo is for performance improvement, if the dependencies still the same function won't execute, instead it directly return the cached reasult
   let allTables = [];
   allTables = useMemo(() => {
     return filterTable(subjectInfo, course, batch, semester, group);
   }, [subjectInfo, course, batch, semester, group]);
 
-  let columns = ["Session"];
-  for (let i = 0; i < 7; i++) {
-    columns.push(
-      moment
-        .utc()
-        .week(week)
-        .weekday(i)
-        .format("ddd MM/DD")
-    );
+  let columns = []
+  if(Object.keys(subjectInfo).length !== 0 && semester){
+    if(subjectInfo[course][batch][semester]['week'].length !== 0){
+      let weekIndex = subjectInfo[course][batch][semester]['week'].findIndex(e => e.name === weekStr)
+      if(weekIndex === -1) weekIndex = 0
+      columns = ["Session"];
+      for (let i = 1; i < 7; i++) {
+        columns.push(
+          moment(subjectInfo[course][batch][semester]['week'][weekIndex].startDate, 'YYYY-MM-DD')
+            .add(i, 'days')
+            .utc()
+            .format("ddd MM/DD")
+      );
+    }
+    }
   }
-  // let period = ''
+
+  let weekStartDate = ''
+  let weekEndDate = ''
+  if(Object.keys(subjectInfo).length !== 0 && semester){
+    for(let week of subjectInfo[course][batch][semester]['week']){
+      if(week.name === weekStr){
+        weekStartDate = week.startDate
+        weekEndDate = week.endDate
+      }
+    }
+  }
   return (
     <>
-    {
-      weekStr ? <>
       <TimeTableSearchBox setWeekNumber={handleChangeWeekStr} value={weekStr} />
       <DateNavigator
         week={week}
@@ -238,6 +214,8 @@ const AdminTimeTable = ({ course, batch, semester, group, subjectInfo }) => {
         handleCurrentWeek={handleCurrentWeek}
         open={open}
         setOpen={setOpen}
+        weekEndDate = {weekEndDate}
+        weekStartDate = {weekStartDate}
       />
       {allTables.map((table, i) => {
         let faculties = [];
@@ -260,21 +238,17 @@ const AdminTimeTable = ({ course, batch, semester, group, subjectInfo }) => {
             facultyData={faculties}
             selectedFaculty={data}
             weekStr = {weekStr}
-            // dayOff = {period}
+            columns = {columns}
           />
         );
       })}
-      </> : <LinearProgress />
-    }
+      <DefaultAlert
+          icon
+          onClick={handleCloseWarning}
+          title = "You must select week first"
+          open={warning}/>
     </>
   );
 };
 
-export default connect(state => ({
-  sessionData: state.initData.sessionData,
-  subjectInfo: state.initData.subjectInfo,
-  course: state.changePicker.course,
-  batch: state.changePicker.batch,
-  semester: state.changePicker.semester,
-  group: state.changePicker.group
-}))(memo(AdminTimeTable, areEqual));
+export default memo(AdminTimeTable, areEqual)

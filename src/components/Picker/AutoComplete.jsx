@@ -13,10 +13,10 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 
 function renderInput(inputProps) {
-    const { InputProps, classes, ref,label,onClick,width, ...other } = inputProps;
+    const { InputProps, classes, ref,label,onClick,width, disable, ...other } = inputProps;
     return (
         <TextField
-            // disabled={readonly}
+            disabled={disable}
             style={{minWidth:width}}
             variant='outlined'
             InputProps={{
@@ -131,21 +131,14 @@ const useStyles = makeStyles(theme => ({
     })
 );
 
-function AutoComplete({suggestions, value=null, onChange, label, selectedFaculty,width, ...rest}) {
-
+function AutoComplete({suggestions, value=null, onChange, disable = false, label, selectedFaculty,width, ...rest}) {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
-
     function handleClose(event) {
         setAnchorEl(null);
     }
-
     function handleClick(event) {
         setAnchorEl(anchorEl ? null : event.currentTarget);
-    }
-
-    function test(event) {
-        console.log( 'check::', event.keyCode)
     }
 
     const open = Boolean(anchorEl);
@@ -154,7 +147,7 @@ function AutoComplete({suggestions, value=null, onChange, label, selectedFaculty
     // if(rest.disabled){
     //   value = 'Holiday'
     // }
-    return  <Downshift onChange={onChange} selectedItem={value} onKeyUp={test}>
+    return  <Downshift onChange={onChange} selectedItem={value}>
         {downshift => {
             const {onBlur, onChange, onFocus, ...inputProps} = downshift.getInputProps({
                 onChange: event => {
@@ -163,7 +156,6 @@ function AutoComplete({suggestions, value=null, onChange, label, selectedFaculty
                     }
                 },
                 onFocus: downshift.openMenu,
-                onKeyUp: test
             })
             return <div className={classes.container}>
                 {
@@ -175,6 +167,7 @@ function AutoComplete({suggestions, value=null, onChange, label, selectedFaculty
                         InputProps: {onBlur, onChange, onFocus,onClick:handleClick},
                         inputProps,
                         label,
+                        disable
                         // readonly: rest.disabled
                     })
                 }

@@ -8,7 +8,7 @@ import { Route, Switch } from "react-router-dom"
 
 const AttendanceScreen = () => {
 
-  let route = '/attendance'
+  let route = '/sms/attendance'
   return <Switch>
       <Route path = {`${route}/attendance_line`} component={AttendanceLine} />
       <Route path = {`${route}/generate_attendance`} component={GenerateAttendance} />

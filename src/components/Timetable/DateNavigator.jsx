@@ -40,7 +40,9 @@ const styles = theme => ({
 })
 var moment = require("moment");
 const weekOfYear = moment.utc().week();
-const DateNavigator = ({classes, handleLastWeek, handleCurrentWeek, handleNextWeek, week, weekStr, open, setOpen, endSemDate}) => {
+
+const DateNavigator = ({classes, handleLastWeek, duplicate = false, handleCurrentWeek, weekEndDate,weekStartDate, handleNextWeek, week, weekStr, open, setOpen, endSemDate}) => {
+
     let dateStr = moment.utc().week(week).format('YYYY-MM-DD')
     return (
         <Toolbar>
@@ -61,7 +63,10 @@ const DateNavigator = ({classes, handleLastWeek, handleCurrentWeek, handleNextWe
 
             </span>
             <span className={classes.middle}>
-                <b>{weekStr}( {moment.utc().week(week).weekday(0).format("MMM/DD")} - {moment.utc().week(week).weekday(6).format("MMM/DD")})</b>
+                {
+                    weekEndDate && weekStartDate ?
+                    <b>{moment(weekStartDate, 'YYYY-MM-DD').format("ddd MM/DD")+ '~' + moment(weekEndDate, 'YYYY-MM-DD').format("ddd MM/DD")}</b> : null
+                }
             </span>
             <span className={classes.right}>
 
@@ -69,6 +74,8 @@ const DateNavigator = ({classes, handleLastWeek, handleCurrentWeek, handleNextWe
             <Button size="small" color="primary" className="button" variant="contained" onClick={()=>setOpen(true)} >
                     Duplicate
             </Button>
+            {
+                duplicate ?
                 <Dialog
                     disableBackdropClick
                     disableEscapeKeyDown
@@ -90,7 +97,8 @@ const DateNavigator = ({classes, handleLastWeek, handleCurrentWeek, handleNextWe
                         Ok
                     </Button>
                     </DialogActions>
-                </Dialog>
+                </Dialog>: null
+            }
             </span>
         </Toolbar>
     );

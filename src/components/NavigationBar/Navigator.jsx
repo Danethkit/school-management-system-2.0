@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {
   AppBar,
   Badge,
@@ -15,7 +15,6 @@ import SideBarDrawer from '../NavigationBar/SideBarDrawer'
 const styles = theme => ({
   root: {
     flexGrow: 0,
-    // backgroundColor: "#000",
     padding: -10,
     paddingLeft: -10
   },
@@ -28,7 +27,6 @@ const styles = theme => ({
   menuButton: {
     marginRight: 0,
     marginLeft: -20,
-    // marginRight: theme.spacing(2),
   },
   hide : {
     display: 'none'
@@ -47,41 +45,41 @@ const navBar = [
   "Attendances",
   "Assignments",
   "Event",
-  "TimeTables",
+  "TimeTable",
   "Exams",
   "Library",
   "Apps",
   "App Setting"
 ];
 
-class NavigationBar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      menuOpen: false,
-      route: "/attendances"
-    };
-  }
+const NavigationBar = ({classes, history}) => {
 
-  changeNavigateRoute = (event, route) => {
-    this.setState({ route });
-    this.props.history.push(route);
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [route, setRoute] = useState("/sms/attendances")
+
+  useEffect(()=>{
+    if(history.location.pathname !== route) setRoute(history.location.pathname)
+  })
+
+  const changeNavigateRoute = (event, route) => {
+    setRoute(route)
+    history.push(route);
   };
 
-  toggleDrawer = (open) => event => {
+  const toggleDrawer = (open) => event => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
-    this.setState({ ...this.state, menuOpen: open });
+    setMenuOpen(open)
   };
 
-  render() {
-    var items = [];
-    if(this.props.history.location.pathname.includes("/timetable")){
+  var items = [];
+    if(history.location.pathname.includes("/timetable")){
       items = [
         {path: "timetable/admin-view", label: "Current Timetable"},
-        {path: "timetable/admin-create", label: "Timetable Record"},
-        {path: "timetable/student", label: "Generate Timetable"}
+        {path: "timetable/admin-create", label: "Create TimeTable"},
+        {path: "timetable/student", label: "Student"},
+        {path: "timetable/faculty", label: "Faculty"}
       ];
     }
     else {
@@ -94,9 +92,6 @@ class NavigationBar extends React.Component {
       ];
     }
 
-    const { classes } = this.props;
-    const { menuOpen } = this.state
-
     return (
       <>
         <AppBar position="static">
@@ -104,25 +99,25 @@ class NavigationBar extends React.Component {
             <IconButton
             color="inherit"
             aria-label="Open drawer"
-            onClick={this.toggleDrawer(true)}
+            onClick={toggleDrawer(true)}
             edge="start"
             className={menuOpen ? classes.hide : classes.menuButton}>
                 <MenuIcon />
             </IconButton>
-            <SideBarDrawer open={menuOpen} toggleDrawer={this.toggleDrawer} items={items}/>
+            <SideBarDrawer open={menuOpen} toggleDrawer={toggleDrawer} items={items}/>
             <Tabs
               variant="scrollable"
               scrollButtons="off"
               className={classes.tabs}
-              value={this.state.route}
-              onChange={this.changeNavigateRoute}
+              value={route}
+              onChange={changeNavigateRoute}
             >
               {navBar.map(label => (
                 <Tab
                   label={label}
                   className={classes.tab}
                   key={label}
-                  value={`/${label.toLowerCase()}`}
+                  value={`/sms/${label.toLowerCase()}`}
                 />
               ))}
             </Tabs>
@@ -146,6 +141,5 @@ class NavigationBar extends React.Component {
         </AppBar>
       </>
     );
-  }
 }
 export default withStyles(styles)(NavigationBar);

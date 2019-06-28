@@ -7,6 +7,8 @@ import {
   DialogContent,
   DialogTitle
 } from "@material-ui/core";
+import { Announcement } from '@material-ui/icons'
+
 
 const styles = theme => ({
   root: {
@@ -21,18 +23,20 @@ const styles = theme => ({
     marginRight: 100
   },
   button: {
-    marginRight: 60
+    marginRight: 10
   }
 });
 
-const DefaultAlert = ({img, title, open, classes, onClick, detail, error}) =>{
+const DefaultAlert = ({img, title, open, classes, onClick, detail, error, icon}) =>{
   return (
     <Dialog
-        disableEscapeKeyDown
         open={open}
         className={classes.root}>
         <DialogTitle>{title}</DialogTitle>
-        <img src={img} className={classes.icon} alt = "Sign" />
+        {
+          icon ?<DialogContent><Announcement color='secondary' style={{fontSize:100}}/></DialogContent> 
+          :  <img src={img} className={classes.icon} alt = "Sign" />
+        }
         <DialogContent><h3>{detail}</h3></DialogContent>
         <DialogContent>{error}</DialogContent>
         <DialogActions>

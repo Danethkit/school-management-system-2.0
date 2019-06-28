@@ -14,7 +14,6 @@ import {
   TableBody,
   Box,
 } from "@material-ui/core";
-import moment from "moment";
 import InsertData from "./InsertData";
 import {saveTimeTable} from '../../redux/ActionCreator/apiRequest'
 import { connect } from 'react-redux'
@@ -76,7 +75,8 @@ const TimeTable = ({
   facultyData,
   selectedFaculty,
   weekStr,
-  dispatch
+  dispatch,
+  columns
 }) => {
   const sortedSession = useMemo(
     () =>
@@ -91,8 +91,6 @@ const TimeTable = ({
   );
 
   const handleSaveTimeTable = () => {
-    let startDate = moment.utc().week(week).weekday(0).format('YYYY-MM-DD')
-    let endDate = moment.utc().week(week).weekday(6).format('YYYY-MM-DD')
     let { course, batch, semester, group} = header
     let line1 = []
     let line2 = []
@@ -159,8 +157,6 @@ const TimeTable = ({
       }
     }
     let res = {
-      startDate,
-      endDate,
       course,
       batch,
       semester,
@@ -172,16 +168,6 @@ const TimeTable = ({
   }
 
   const classes = useStyles();
-  let columns = ["Session"];
-  for (let i = 0; i < 7; i++) {
-    columns.push(
-      moment
-        .utc()
-        .week(week)
-        .weekday(i)
-        .format("ddd MM/DD")
-    );
-  }
 
   return (
     <>
