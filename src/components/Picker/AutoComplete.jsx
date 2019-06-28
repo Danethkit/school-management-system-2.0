@@ -132,14 +132,20 @@ const useStyles = makeStyles(theme => ({
 );
 
 function AutoComplete({suggestions, value=null, onChange, label, selectedFaculty,width, ...rest}) {
-  console.log('render');
+
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
+
     function handleClose(event) {
         setAnchorEl(null);
     }
+
     function handleClick(event) {
         setAnchorEl(anchorEl ? null : event.currentTarget);
+    }
+
+    function test(event) {
+        console.log( 'check::', event.keyCode)
     }
 
     const open = Boolean(anchorEl);
@@ -148,7 +154,7 @@ function AutoComplete({suggestions, value=null, onChange, label, selectedFaculty
     // if(rest.disabled){
     //   value = 'Holiday'
     // }
-    return  <Downshift onChange={onChange} selectedItem={value}>
+    return  <Downshift onChange={onChange} selectedItem={value} onKeyUp={test}>
         {downshift => {
             const {onBlur, onChange, onFocus, ...inputProps} = downshift.getInputProps({
                 onChange: event => {
@@ -157,6 +163,7 @@ function AutoComplete({suggestions, value=null, onChange, label, selectedFaculty
                     }
                 },
                 onFocus: downshift.openMenu,
+                onKeyUp: test
             })
             return <div className={classes.container}>
                 {
