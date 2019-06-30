@@ -1,26 +1,27 @@
-import React, {useState} from 'react'
-import { Grid, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles, Button, Toolbar
+import React, {useState, useEffect} from 'react'
+import { Grid, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles, LinearProgress
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import FacultyDateNavigator from "./FacultyDateNavigator";
 import moment from 'moment'
+import { requestFacultyTimeTable } from '../../redux/ActionCreator/apiRequest'
+import {connect} from 'react-redux'
 
 
 
 const CustomTableCell = withStyles(theme => ({
     head: {
-        backgroundColor: '#000',
-        color: '#fff',
-        fontSize: 14,
-        paddingRight:5,
-        paddingLeft:5
+        backgroundColor: theme.palette.primary.light,
+        color: "#fff",
+        fontSize: 14
     },
-    body: {
+      body: {
         fontSize: 14,
-        paddingRight:5,
-        paddingLeft:5
-
-    },
+        paddingRight: 5,
+        paddingLeft: 5,
+        textAlign: "center",
+        margin: 0
+    }
 }))(TableCell);
 
 const styles = theme => ({
@@ -34,23 +35,12 @@ const styles = theme => ({
     },
     row: {
         '&:nth-of-type(odd)': {
-            backgroundColor: '#ddd',
+            backgroundColor: '#CFD8DC',
             fontSize: 14,
             paddingRight:5,
             paddingLeft:5
 
         },
-    },
-    generateTimetable:{
-        backgroundColor:"#efefef",
-        paddingBottom:1,
-        borderColor:"#ccc",
-        borderStyle:"solid",
-        borderRadius:3,
-        borderWidth: 1,
-        marginRight:3,
-        marginLeft:3,
-        marginBottom:15
     },
     container: {
         display: 'flex',
@@ -60,21 +50,6 @@ const styles = theme => ({
         marginLeft: 15,
         marginRight:15,
     },
-    formControl: {
-        margin: theme.spacing(3),
-        flexGrow:1,
-        fullWidth:1,
-        textColor:'secondary',
-        height:40,
-        backgroundColor:"#fff"
-
-    },
-    inputLabel:{
-        fontSize: 14,
-        lineHeight:0,
-        margin:0
-
-    },
     outLinedInput:{
         color: 'primary'
     },
@@ -83,7 +58,6 @@ const styles = theme => ({
         marginLeft:20,
 
     },
-
     margin: {
         width:'100%',
         margin:0,
@@ -95,14 +69,6 @@ const styles = theme => ({
         whiteSpace: 'pre-wrap',
         overflowWrap: 'break-word',
 
-    },
-    submitButton: {
-        display:"flex",
-        justifyContent:"flex-end",
-        padding: " 10px 0 15px 0",
-    },
-    threeButton: {
-        display : '1'
     },
     gridContainer:{
         display:1,
@@ -121,58 +87,12 @@ const styles = theme => ({
     }
 
 })
-
-let id = 0;
-
-// function to input value to table header
-function inputData(dat,ses,time,sub,bat,gro,sem,cou,wee) {
-    id += 1;
-    return {id, dat,ses,time,sub,bat,gro,sem,cou,wee};
-}
-
-const headData = [
-    inputData("Date", 'Session' ,'Time', 'Subject', 'Batch', 'Group', 'Semester', 'Course', 'Week')
-];
-
-// function to input value to table body
-function createData(dat,ses,time,sub,bat,gro,sem,cou,wee) {
-    id += 1;
-    return {id, dat,ses,time,sub,bat,gro,sem,cou,wee};
-}
-const bodyData = [
-    createData('Sun 05/19/19','1','8:00am - 8:50am','Software Engineering',4,1,3,'Software Engineering',20),
-    createData('Sun 05/19/19','2','8:50am - 9:40am','Software Engineering',4,1,3,'Software Engineering',20),
-    createData('Sun 05/19/19','3','9:40am - 10:30am','AI',3,1,5,'Software Engineering',20),
-    createData('Mon 05/20/19','2','8:50am - 9:40am','Software Engineering',4,1,3,'Software Engineering',20),
-    createData('Mon 05/20/19','4','10:45am - 11:35am','AI',3,1,5,'Software Engineering',20),
-    createData('Mon 05/20/19','5','11:35am - 12:25pm','AI',3,1,5,'Software Engineering',20),
-    createData('Tue 05/21/19','1','8:00am - 8:50am','Software Engineering',4,1,5,'Software Engineering',20),
-    createData('Wed 05/22/19','1','8:00am - 8:50am','Software Engineering',4,1,3,'Software Engineering',20),
-    createData('Wed 05/22/19','3','9:40am - 10:30am','AI',3,1,5,'Software Engineering',20),
-    createData('Thu 05/23/19','2','8:50am - 9:40am','Software Engineering',4,1,3,'Software Engineering',20),
-    createData('Thu 05/23/19','4','10:45am - 11:35am','AI',3,1,5,'Software Engineering',20),
-    createData('Thu 05/23/19','5','11:35am - 12:25pm','AI',3,1,5,'Software Engineering',20),
-    createData('Fri 05/24/19','1','8:00am - 8:50am','Software Engineering',4,1,5,'Software Engineering',20),
-
-]
-
-function createTable(course, batch, group,semester, week) {
-    id += 1;
-    return {
-        id, course, batch, group, semester, week
-    }
-}
-const numberTable = [
-    createTable("Software EE", 2,1,7,),
-
-];
-
-
+const headData = ["Date", 'Session' ,'Time', 'Subject', 'Batch', 'Group', 'Semester', 'Course', 'Week'];
 
 const weekOfYear = moment.utc().week();
 
-const FacultyTimeTableView = ({classes, userIden}) =>{
-
+const FacultyTimeTableView = ({classes, userIden, facultyTT, dispatch, subjectInfo}) =>{
+    console.log('subjectinfo',subjectInfo);
     const [week, setWeek] = useState((moment.utc().week()))
 
     const handleLastWeek= () => {
@@ -186,6 +106,11 @@ const FacultyTimeTableView = ({classes, userIden}) =>{
     const handleNextWeek = () => {
         setWeek(week +1)
     }
+
+    useEffect(()=>{
+        dispatch(requestFacultyTimeTable({date:moment('2017-11-05', 'YYYY-MM-DD').format('YYYY-MM-DD')}))
+    }, [week])
+
 
     return(
         <>
@@ -206,70 +131,63 @@ const FacultyTimeTableView = ({classes, userIden}) =>{
                 handleCurrentWeek={handleCurrentWeek}
                 weekOfYear = {weekOfYear}
                 />
-
-
-            {numberTable.map(table => (
-                <div className={classes.generateTimetable} >
-                    <div className={classes.container}>
-                        <Paper className={classes.root}>
-                            <Table className={classes.table}>
-                                <TableHead>
-                                    {headData.map(row => (
-                                        <TableRow className={classes.row} key={row.id}>
-                                            <CustomTableCell align='center' multiline={"true"} >{row.dat}</CustomTableCell>
-                                            <CustomTableCell align='center' multiline={"true"} >{row.ses}</CustomTableCell>
-                                            <CustomTableCell align='center' multiline={"true"} >{row.time}</CustomTableCell>
-                                            <CustomTableCell align='center' multiline={"true"} >{row.sub}</CustomTableCell>
-                                            <CustomTableCell align='center' multiline={"true"} >{row.bat}</CustomTableCell>
-                                            <CustomTableCell align='center' multiline={"true"} >{row.gro}</CustomTableCell>
-                                            <CustomTableCell align='center' multiline={"true"} >{row.sem}</CustomTableCell>
-                                            <CustomTableCell align='center' multiline={"true"} >{row.cou}</CustomTableCell>
-                                            <CustomTableCell align='center' multiline={"true"} >{row.wee}</CustomTableCell>
-
+                <div className={classes.container}>
+                    <Paper className={classes.root}>
+                        <Table className={classes.table}>
+                            <TableHead>
+                                    <TableRow className={classes.row} >
+                                    {
+                                        headData.map(item =><CustomTableCell align='center' multiline={"true"} key={item}>{item}</CustomTableCell> )
+                                    }
+                                    </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {
+                                    Object.keys(facultyTT).map(key=> {
+                                        let flag = true
+                                        return facultyTT[key].map((item,i) => {
+                                        const row =  <TableRow className={classes.row} key={i}>
+                                                {
+                                                    flag ?
+                                                    <CustomTableCell align='center' rowSpan={facultyTT[key].length} style={{border:'0.5px solid gray', backgroundColor:'#CFD8DC'}} >
+                                                        {moment.utc().week(week).weekday(key).format('ddd YYYY/MM/DD')}
+                                                    </CustomTableCell>: null
+                                                }
+                                                <CustomTableCell align='center'>
+                                                    {Object.keys(subjectInfo).length !== 0 ? subjectInfo[item.course][item.batch][item.semester]['session'].findIndex(e=> e === item.session)+1:null}
+                                                </CustomTableCell>
+                                                <CustomTableCell align='center'>
+                                                    {item.session}
+                                                </CustomTableCell>
+                                                <CustomTableCell align='center'>
+                                                    {item.subject}
+                                                </CustomTableCell>
+                                                <CustomTableCell align='center'>
+                                                    {item.batch}
+                                                </CustomTableCell>
+                                                <CustomTableCell align='center'>
+                                                    {item.group}
+                                                </CustomTableCell>
+                                                <CustomTableCell align='center'>
+                                                    {item.semester}
+                                                </CustomTableCell>
+                                                <CustomTableCell align='center'>
+                                                    {item.course}
+                                                </CustomTableCell>
+                                                <CustomTableCell align='center'>
+                                                    {item.week}
+                                                </CustomTableCell>
                                         </TableRow>
-                                    ))}
-                                </TableHead>
-                                <TableBody>
-                                    {bodyData.map(row => (
-                                        <TableRow className={classes.row} key={row.id}>
-                                            <CustomTableCell align="center">
-                                                {row.dat}
-                                            </CustomTableCell>
-                                            <CustomTableCell align="center">
-                                                {row.ses}
-                                            </CustomTableCell>
-                                            <CustomTableCell align="center">
-                                                {row.time}
-                                            </CustomTableCell>
-                                            <CustomTableCell align="center">
-                                                {row.sub}
-                                            </CustomTableCell>
-                                            <CustomTableCell align="center">
-                                                {row.bat}
-                                            </CustomTableCell>
-                                            <CustomTableCell align="center">
-                                                {row.gro}
-                                            </CustomTableCell>
-                                            <CustomTableCell align="center">
-                                                {row.sem}
-                                            </CustomTableCell>
-                                            <CustomTableCell align="center">
-                                                {row.cou}
-                                            </CustomTableCell>
-                                            <CustomTableCell align="center">
-                                                {row.wee}
-                                            </CustomTableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </Paper>
-                    </div>
+                                        flag = false
+                                        return row
+                                        })
+                                    })
+                                }
 
-
+                            </TableBody>
+                        </Table>
+                    </Paper>
                 </div>
-
-            ))}
         </>
     )
 }
@@ -278,4 +196,6 @@ FacultyTimeTableView.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(FacultyTimeTableView)
+export default connect(state=>({
+    facultyTT: state.initData.facultyTT,
+})) (withStyles(styles)(FacultyTimeTableView))

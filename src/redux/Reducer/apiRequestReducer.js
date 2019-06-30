@@ -9,7 +9,8 @@ import {
     PRINT_ATTENDANCE_REPORT,
     GET_SESSION_DATA,
     SET_REPORT_B64,
-    SET_USER_IDENTITY
+    SET_USER_IDENTITY,
+    SET_FACULTY_TIMETABLE
 } from '../../constants/env'
 
 const initialData = {
@@ -27,7 +28,8 @@ const initialData = {
     report: false,
     b64Report : '',
     sessionData: {},
-    userIden: {}
+    userIden: {},
+    facultyTT : {}
 }
 
 export const initData = (state= initialData, action={}) => {
@@ -54,6 +56,8 @@ export const initData = (state= initialData, action={}) => {
             return {...state, ...{sessionData:action.payload}}
         case SET_USER_IDENTITY:
             return {...state, ...{userIden:action.payload}}
+        case SET_FACULTY_TIMETABLE:
+            return {...state, ...{facultyTT:action.payload}}
         default:
             return state
     }

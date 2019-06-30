@@ -42,7 +42,7 @@ const styles = theme => ({
 
 const navBar = [
   "Facultices",
-  "Attendances",
+  "Attendance",
   "Assignments",
   "Event",
   "TimeTable",
@@ -55,10 +55,13 @@ const navBar = [
 const NavigationBar = ({classes, history}) => {
 
   const [menuOpen, setMenuOpen] = useState(false)
-  const [route, setRoute] = useState("/sms/attendances")
+  const [route, setRoute] = useState("/sms/attendance")
 
   useEffect(()=>{
-    if(history.location.pathname !== route) setRoute(history.location.pathname)
+    const pathnameSplit = history.location.pathname.split('/')
+    // console.log('history', );
+
+    if(history.location.pathname !== route) setRoute([pathnameSplit[0], pathnameSplit[1], pathnameSplit[2]].join('/'))
   })
 
   const changeNavigateRoute = (event, route) => {
