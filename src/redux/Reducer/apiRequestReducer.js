@@ -10,7 +10,8 @@ import {
     GET_SESSION_DATA,
     SET_REPORT_B64,
     SET_USER_IDENTITY,
-    SET_FACULTY_TIMETABLE
+    SET_FACULTY_TIMETABLE,
+    SET_STUDENT_TIMETABLE
 } from '../../constants/env'
 
 const initialData = {
@@ -29,7 +30,8 @@ const initialData = {
     b64Report : '',
     sessionData: {},
     userIden: {},
-    facultyTT : {}
+    facultyTT : {},
+    studentTT: {}
 }
 
 export const initData = (state= initialData, action={}) => {
@@ -58,6 +60,8 @@ export const initData = (state= initialData, action={}) => {
             return {...state, ...{userIden:action.payload}}
         case SET_FACULTY_TIMETABLE:
             return {...state, ...{facultyTT:action.payload}}
+        case SET_STUDENT_TIMETABLE:
+            return {...state, ...{studentTT:action.payload}}
         default:
             return state
     }

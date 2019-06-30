@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { Grid, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles, LinearProgress
+import { Grid, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles,
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import FacultyDateNavigator from "./FacultyDateNavigator";
@@ -92,8 +92,8 @@ const headData = ["Date", 'Session' ,'Time', 'Subject', 'Batch', 'Group', 'Semes
 const weekOfYear = moment.utc().week();
 
 const FacultyTimeTableView = ({classes, userIden, facultyTT, dispatch, subjectInfo}) =>{
-    console.log('subjectinfo',subjectInfo);
-    const [week, setWeek] = useState((moment.utc().week()))
+
+    const [week, setWeek] = useState(weekOfYear)
 
     const handleLastWeek= () => {
         setWeek(week -1)
@@ -135,11 +135,11 @@ const FacultyTimeTableView = ({classes, userIden, facultyTT, dispatch, subjectIn
                     <Paper className={classes.root}>
                         <Table className={classes.table}>
                             <TableHead>
-                                    <TableRow className={classes.row} >
-                                    {
-                                        headData.map(item =><CustomTableCell align='center' multiline={"true"} key={item}>{item}</CustomTableCell> )
-                                    }
-                                    </TableRow>
+                                <TableRow className={classes.row} >
+                                {
+                                    headData.map(item =><CustomTableCell align='center' multiline={"true"} key={item}>{item}</CustomTableCell> )
+                                }
+                                </TableRow>
                             </TableHead>
                             <TableBody>
                                 {
@@ -183,7 +183,6 @@ const FacultyTimeTableView = ({classes, userIden, facultyTT, dispatch, subjectIn
                                         })
                                     })
                                 }
-
                             </TableBody>
                         </Table>
                     </Paper>

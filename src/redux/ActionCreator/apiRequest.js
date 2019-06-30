@@ -10,7 +10,8 @@ import {
     SET_REPORT_B64,
     GET_SESSION_DATA,
     SET_USER_IDENTITY,
-    SET_FACULTY_TIMETABLE
+    SET_FACULTY_TIMETABLE,
+    SET_STUDENT_TIMETABLE
 } from '../../constants/env'
 import {odooRequest, odooPrintReport} from '../api'
 // Helper functino
@@ -173,5 +174,19 @@ export const requestFacultyTimeTable = (data) => (dispatch) => {
        })
     .then(response => response.json())
     .then(data => dispatch({type: SET_FACULTY_TIMETABLE, payload:JSON.parse(data.result)}))
+    .catch(err => console.log(err));
+}
+
+export const requestStudentTimeTable = (data) => (dispatch) => {
+    console.log('data',data);
+    fetch('http://192.168.7.240:8008/get-student-timetable',{
+        method: 'post',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+            params : data
+        })
+       })
+    .then(response => response.json())
+    .then(data => dispatch({type: SET_STUDENT_TIMETABLE, payload:JSON.parse(data.result)}))
     .catch(err => console.log(err));
 }
