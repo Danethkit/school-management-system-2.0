@@ -99,6 +99,7 @@ const TimeTable = ({
     let line5 = []
     let line6 = []
     let line7 = []
+    if(selectedFaculty.res === undefined) return
     let data = selectedFaculty.res[weekStr][course][batch][semester][group]
     for(let day in data){
       for(let entrie of Object.entries(data[day])){

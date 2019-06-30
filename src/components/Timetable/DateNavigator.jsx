@@ -4,6 +4,8 @@ from '@material-ui/core'
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import WeekPicker from '../Picker/WeekPicker'
+import DuplicateSession from '../DuplicateSession/DuplicateSession'
+
 const styles = theme => ({
 
     container1: {
@@ -41,7 +43,11 @@ const styles = theme => ({
 var moment = require("moment");
 const weekOfYear = moment.utc().week();
 
-const DateNavigator = ({classes, handleLastWeek, duplicate = false, handleCurrentWeek, weekEndDate,weekStartDate, handleNextWeek, week, weekStr, open, setOpen, endSemDate}) => {
+const DateNavigator = ({classes, handleLastWeek, handleDuplicateTimetable,
+    handleCurrentWeek, weekEndDate,weekStartDate, handleNextWeek,
+    week, weekStr, open, setOpen, endSemDate, ...rest}) => {
+
+    const {subjectInfo, course, batch, semester} = rest
 
     let dateStr = moment.utc().week(week).format('YYYY-MM-DD')
     return (
@@ -69,36 +75,9 @@ const DateNavigator = ({classes, handleLastWeek, duplicate = false, handleCurren
                 }
             </span>
             <span className={classes.right}>
-
-
-            <Button size="small" color="primary" className="button" variant="contained" onClick={()=>setOpen(true)} >
-                    Duplicate
-            </Button>
-            {
-                duplicate ?
-                <Dialog
-                    disableBackdropClick
-                    disableEscapeKeyDown
-                    open={open}
-                    aria-labelledby='Dialog-content'
-                            >
-                    <DialogTitle>Duplicate Timetable</DialogTitle>
-                    <DialogContent id ='Dialog-content'>
-                    <form className={classes.container1}>
-                        <WeekPicker name ='Duplicate_from' className={classes.piker}/>
-                        <WeekPicker name ='Duplicate_to' className={classes.piker}/>
-                    </form>
-                    </DialogContent>
-                    <DialogActions>
-                    <Button onClick={()=>setOpen(false)} color="secondary">
-                        Cancel
-                    </Button>
-                    <Button onClick={()=>setOpen(false)} color="primary">
-                        Ok
-                    </Button>
-                    </DialogActions>
-                </Dialog>: null
-            }
+            <DuplicateSession 
+                sessionNames={Object.keys(subjectInfo).length !== 0 ? subjectInfo[course][batch][semester]['week'].map(e=>e.name) : []}
+                handleDuplicateSession={handleDuplicateTimetable}/>
             </span>
         </Toolbar>
     );

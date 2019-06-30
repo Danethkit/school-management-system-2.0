@@ -22,7 +22,7 @@ const AttendanceSheetDialog = ({createAttendanceRequested, dispatch}) =>{
       detail = `${createAttendanceRequested.error.message}`
       img = failedImg
       error = createAttendanceRequested.error.data.arguments[0]
-    } 
+    }
   }
   return <DefaultAlert
           img={img} 

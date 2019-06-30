@@ -5,7 +5,7 @@ import moment from "moment";
 import TimeTable from "./TimeTable";
 import DefaultAlert from '../../components/Alert/DefaultDialog'
 import { Announcement } from '@material-ui/icons'
-
+import { Prompt } from 'react-router-dom'
 // helper functoin to asign nested key object
 function assign(obj, keyPath, value) {
   const lastKeyIndex = keyPath.length - 1;
@@ -17,6 +17,7 @@ function assign(obj, keyPath, value) {
   obj[keyPath[lastKeyIndex]] = value;
 }
 
+const weekday = {'Sun':0, 'Mon':1, 'Tue':2, 'Wed':3, 'Thu':4, 'Fri':5, 'Sat':6}
 const areEqual = (prevProps, nextProps) => {
   if (
     nextProps.course === null &&
@@ -169,6 +170,34 @@ const AdminTimeTable = ({weekStr, handleChangeWeekStr, handleCurrentWeek, handle
     setWarning(false)
   }
 
+  const openDuplicateDialog = (boo) => {
+    setOpen(boo)
+  }
+
+  const handleDuplicateTimetable = (selected) => {
+    var res = weekStr && Object.keys(data).length !== 0 ? data.res : {};
+    let temp2 = {}
+    if(!weekStr) return
+    selected.forEach(w=>{
+      let temp = res[weekStr][course][batch][semester][group]
+      for(let day in temp){
+        let weekIndex = subjectInfo[course][batch][semester]['week'].findIndex(e => e.name === w)
+        let keyDay = moment(subjectInfo[course][batch][semester]['week'][weekIndex].startDate, 'YYYY-MM-DD').weekday(weekday[day.split(' ')[0]]).format("ddd MM/DD")
+        Object.keys(temp[day]).forEach(k=>{
+          if(keyDay in temp2){
+            temp2[keyDay][k]= temp[day][k]
+          }else {
+            temp2[keyDay] = {}
+            temp2[keyDay][k] = temp[day][k]
+          }
+          console.log('temp2',temp2);
+        })
+        assign(res, [w, course, batch, semester, group], temp2 )
+      }
+    })
+    setData({res})
+  }
+
   // useMemo is for performance improvement, if the dependencies still the same function won't execute, instead it directly return the cached reasult
   let allTables = [];
   allTables = useMemo(() => {
@@ -202,8 +231,15 @@ const AdminTimeTable = ({weekStr, handleChangeWeekStr, handleCurrentWeek, handle
       }
     }
   }
+
+  const shouldPrompt = Object.keys(data).length === 0 ? false : true
+
   return (
     <>
+    <Prompt
+      when={shouldPrompt}
+      message='You have unsaved changes, are you sure you want to leave?'
+    />
       <TimeTableSearchBox setWeekNumber={handleChangeWeekStr} value={weekStr} />
       <DateNavigator
         week={week}
@@ -213,9 +249,11 @@ const AdminTimeTable = ({weekStr, handleChangeWeekStr, handleCurrentWeek, handle
         handleNextWeek={handleNextWeek}
         handleCurrentWeek={handleCurrentWeek}
         open={open}
-        setOpen={setOpen}
+        setOpen={openDuplicateDialog}
         weekEndDate = {weekEndDate}
         weekStartDate = {weekStartDate}
+        handleDuplicateTimetable = {handleDuplicateTimetable}
+        {...others}
       />
       {allTables.map((table, i) => {
         let faculties = [];

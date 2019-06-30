@@ -70,7 +70,8 @@ const DuplicateSession = ({sessionNames, classes, handleDuplicateSession}) => {
 
               <DropBox placeholder={"Duplicate To"}
                        handleChange={handleChangeTo}
-                       items={sessionNames ? sessionNames.filter(e=> e > sessionStart) : []}
+                       items={sessionNames ? sessionNames : []}
+                      //  items={sessionNames ? sessionNames.filter(e=> e > sessionStart) : []}
                        value = {selected}
                        checkBox
                        selected={selected}/>
