@@ -16,12 +16,6 @@ const App = ({dispatch}) => {
   const uid = localStorage.getItem('uid')
   useEffect(() => {
     dispatch(getSubjectData())
-    // dispatch(getSessionData())
-    const date = new Date()
-    const yyyy = date.getFullYear()
-    const mm = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() +1
-    const dd = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
-    dispatch(requestUserIdentity({date:`${yyyy}-${mm}-${dd}`, uid}))
   }, [])
    return <>
     <ThemeProvider theme={theme}>

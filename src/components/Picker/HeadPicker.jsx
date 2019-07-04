@@ -20,7 +20,7 @@ export default function HeadPicker({sessionNumber, userIden}) {
 
             <Grid item xs={12} sm={6} md={4} lg={3} xl={3}><DatePicker /></Grid>
 
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={3}><FacultyPicker user={userIden['user']}/></Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={3}><FacultyPicker userIden={userIden}/></Grid>
 
             <Grid item xs={12} sm={6} md={4} lg={3} xl={3}><CoursePicker userIden={userIden} /></Grid>
 

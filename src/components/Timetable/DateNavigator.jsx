@@ -1,10 +1,10 @@
 import React from 'react'
-import { Dialog,DialogActions,DialogContent,DialogTitle, Button, Toolbar, withStyles}
+import { Button, Toolbar, withStyles}
 from '@material-ui/core'
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import WeekPicker from '../Picker/WeekPicker'
 import DuplicateSession from '../DuplicateSession/DuplicateSession'
+import moment from 'moment'
 
 const styles = theme => ({
 
@@ -40,20 +40,29 @@ const styles = theme => ({
     }
 
 })
-var moment = require("moment");
 const weekOfYear = moment.utc().week();
 
 const DateNavigator = ({classes, handleLastWeek, handleDuplicateTimetable,
     handleCurrentWeek, weekEndDate,weekStartDate, handleNextWeek,
     week, weekStr, open, setOpen, endSemDate, ...rest}) => {
 
-    const {subjectInfo, course, batch, semester} = rest
+    const {subjectInfo, course, batch, semester, group} = rest
 
     let dateStr = moment.utc().week(week).format('YYYY-MM-DD')
+    let items = []
+    let weekStartIndex = 0
+    let weekEndIndex = 0
+    try{
+        let weeks = subjectInfo[course][batch][semester][group]['week']
+        weekStartIndex = weeks.findIndex(e => e.name === weekStr)
+        weekEndIndex = weeks.length -1
+        items = weeks.map(e=>e.name)
+    }catch{}
+
     return (
         <Toolbar>
             <span className={classes.left}>
-            <Button size="small" color="primary" className="button" variant="outlined" onClick={handleLastWeek} disabled={week === weekOfYear} >
+            <Button size="small" color="primary" className="button" variant="outlined" onClick={handleLastWeek} disabled={weekStartIndex <= 0} >
                 <KeyboardArrowLeft fontSize={'inherit'} />
                 Last
             </Button>
@@ -62,7 +71,7 @@ const DateNavigator = ({classes, handleLastWeek, handleDuplicateTimetable,
                 Current
             </Button>
 
-            <Button size="small"  color="primary" className="button" variant="outlined" onClick={handleNextWeek} disabled={new Date(dateStr) >= new Date(endSemDate)}>
+            <Button size="small"  color="primary" className="button" variant="outlined" onClick={handleNextWeek} disabled={weekStartIndex === weekEndIndex}>
                 Next
                 <KeyboardArrowRight fontSize={'inherit'}/>
             </Button>
@@ -75,8 +84,10 @@ const DateNavigator = ({classes, handleLastWeek, handleDuplicateTimetable,
                 }
             </span>
             <span className={classes.right}>
-            <DuplicateSession 
-                sessionNames={Object.keys(subjectInfo).length !== 0 ? subjectInfo[course][batch][semester]['week'].map(e=>e.name) : []}
+            <DuplicateSession
+                label="Duplicate Week"
+                valFrom = {weekStr}
+                items={items}
                 handleDuplicateSession={handleDuplicateTimetable}/>
             </span>
         </Toolbar>

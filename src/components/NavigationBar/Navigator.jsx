@@ -59,7 +59,6 @@ const NavigationBar = ({classes, history}) => {
 
   useEffect(()=>{
     const pathnameSplit = history.location.pathname.split('/')
-    // console.log('history', );
 
     if(history.location.pathname !== route) setRoute([pathnameSplit[0], pathnameSplit[1], pathnameSplit[2]].join('/'))
   })

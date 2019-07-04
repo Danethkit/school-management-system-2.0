@@ -3,22 +3,18 @@ import AutoComplete from '../Picker/AutoComplete'
 
 const InsertData = ({onChange, row, col, facultyData, header, selectedFaculty, weekStr}) => {
 
-
+  let {course, batch, semester, group} = header
   let temp = null
-  if(selectedFaculty && Object.keys(selectedFaculty).length !== 0){
+  if(selectedFaculty){
     try{
       weekStr = weekStr.slice(0,4)
-      let {course, batch, semester, group} = header
-      temp = selectedFaculty['res'][weekStr][course][batch][semester][group][col][row]
-      // console.log('temp',temp);
+      temp = selectedFaculty[weekStr][course][batch][semester][group][col][row]
     }catch(err){}
   }
-  // useEffect(()=> {
-  //   if(temp !== undefined)  setValue(temp)
-  // }, [selectedFaculty, weekStr])
+
 
   const handleChange = value => {
-    onChange(row, col, value, header)
+    onChange(row+col+course+batch+group)(row,col,value,header)
   }
   return <AutoComplete
           onChange ={handleChange}
@@ -38,14 +34,23 @@ const areEqual = (prevProps, nextProps) =>{
     return false
   }
 
+  let prevHeader = prevProps.header
+  let nextHeader = nextProps.header
+
+  if(prevHeader.batch !== nextHeader.batch) return false
+  if(prevHeader.course !== nextHeader.course) return false
+  if(prevHeader.semester !== nextHeader.semester) return false
+  if(prevHeader.group !== nextHeader.group) return false
+
   let {row, col, weekStr} = nextProps
-  if(Object.keys(nextProps.selectedFaculty).length !== 0){
-    for(let course in nextProps.selectedFaculty.res[weekStr]){
-      for(let batch in nextProps.selectedFaculty.res[weekStr][course]){
-        for(let semester in nextProps.selectedFaculty.res[weekStr][course][batch]){
-          for(let group in nextProps.selectedFaculty.res[weekStr][course][batch][semester]){
-            if(col in nextProps.selectedFaculty.res[weekStr][course][batch][semester][group]){
-              if(row in nextProps.selectedFaculty.res[weekStr][course][batch][semester][group][col]){
+  let selectedFaculty = nextProps.selectedFaculty
+  if(selectedFaculty){
+    for(let course in selectedFaculty[weekStr]){
+      for(let batch in selectedFaculty[weekStr][course]){
+        for(let semester in selectedFaculty[weekStr][course][batch]){
+          for(let group in selectedFaculty[weekStr][course][batch][semester]){
+            if(col in selectedFaculty[weekStr][course][batch][semester][group]){
+              if(row in selectedFaculty[weekStr][course][batch][semester][group][col]){
                 return false
               }
             }

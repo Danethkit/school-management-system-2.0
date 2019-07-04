@@ -32,7 +32,7 @@ const toolbarStyles = theme => ({
 })
 
 const SessionTableToolBar = props => {
-  const { numSelected, classes, handleDuplicateSession, sessions } = props;
+  const { numSelected, classes, handleDuplicateSession, sessions, sessionNumber } = props;
 
   return (
     <Toolbar
@@ -53,7 +53,7 @@ const SessionTableToolBar = props => {
       </div>
       <div className={classes.spacer} />
       <div className={classes.actions}>
-        <DuplicateSession sessionNames={sessions} handleDuplicateSession={handleDuplicateSession}/>
+        <DuplicateSession items={sessions} label="Duplicate Session" handleDuplicateSession={handleDuplicateSession} valFrom={sessionNumber}/>
       </div>
     </Toolbar>
   );

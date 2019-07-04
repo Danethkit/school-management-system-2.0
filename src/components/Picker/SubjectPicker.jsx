@@ -4,36 +4,26 @@ import { onSubjectChange } from '../../redux/ActionCreator/userBehavior'
 import { bindActionCreators } from "redux";
 import AutoComplete from './AutoComplete'
 
-const SubjectPicker = ({dispatch, subject, subjects, userIden,course, batch, semester, group, session}) => {
+const SubjectPicker = ({dispatch, subject, userIden, course, batch, semester, group, session}) => {
   let actions = bindActionCreators(onSubjectChange,dispatch)
-  let suggestions = []
   let sub = ''
   try{
-    sub = userIden[course][batch][semester][group][session]
+    sub = userIden[course][batch][semester][group][session]['subject']
   }catch{}
-
-  console.log('useIden', userIden);
 
   useEffect(()=>{
     actions(sub)
   },[session])
-  const uid = localStorage.getItem('uid')
-  if(uid == 1){
-    suggestions = subjects
-  }else {
-    suggestions = []
-  }
 
   return <AutoComplete
           width={280}
           value ={subject}
           onChange={actions}
           label="Subject"
-          suggestions={suggestions}
+          suggestions={[]}
           disable={true}/>
 }
 export default connect(state => ({
-  subjects: state.changePicker.subjects,
   batch: state.changePicker.batch,
   session: state.changePicker.session,
   subject: state.changePicker.subject,

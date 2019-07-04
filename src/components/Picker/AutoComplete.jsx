@@ -9,7 +9,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputAdornment from '@material-ui/core/InputAdornment'
 import Popper from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 
 function renderInput(inputProps) {
@@ -29,7 +28,6 @@ function renderInput(inputProps) {
                 ...InputProps
             }}
             {...other}
-            onClick={onClick}
         />
     );
 }
@@ -48,13 +46,13 @@ function renderSuggestion(suggestionProps) {
     let isBusy = false
     if('col' in rest && Object.keys(selectedFaculty).length !== 0){
       let {row, col, weekStr} = rest
-      for(let course in selectedFaculty['res'][weekStr]){
-        for(let batch in selectedFaculty['res'][weekStr][course]){
-          for(let semester in selectedFaculty['res'][weekStr][course][batch]){
-            for(let group in selectedFaculty['res'][weekStr][course][batch][semester]){
-              if(col in selectedFaculty['res'][weekStr][course][batch][semester][group]){
-                if(row in selectedFaculty['res'][weekStr][course][batch][semester][group][col]){
-                  selectedFacultyArray.push(selectedFaculty['res'][weekStr][course][batch][semester][group][col][row])
+      for(let course in selectedFaculty[weekStr]){
+        for(let batch in selectedFaculty[weekStr][course]){
+          for(let semester in selectedFaculty[weekStr][course][batch]){
+            for(let group in selectedFaculty[weekStr][course][batch][semester]){
+              if(col in selectedFaculty[weekStr][course][batch][semester][group]){
+                if(row in selectedFaculty[weekStr][course][batch][semester][group][col]){
+                  selectedFacultyArray.push(selectedFaculty[weekStr][course][batch][semester][group][col][row])
                 }
               }
             }
@@ -134,6 +132,7 @@ const useStyles = makeStyles(theme => ({
 function AutoComplete({suggestions, value=null, onChange, disable = false, label, selectedFaculty,width, ...rest}) {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
+
     function handleClose(event) {
         setAnchorEl(null);
     }
@@ -141,21 +140,34 @@ function AutoComplete({suggestions, value=null, onChange, disable = false, label
         setAnchorEl(anchorEl ? null : event.currentTarget);
     }
 
+    function onKeyDown(event){
+        if(anchorEl && event.key === 'Escape') setAnchorEl(null)
+    }
+
+    function handleOnChange(value){
+        onChange(value)
+    }
+
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popper' : null;
 
-    // if(rest.disabled){
-    //   value = 'Holiday'
-    // }
     return  <Downshift onChange={onChange} selectedItem={value}>
-        {downshift => {
-            const {onBlur, onChange, onFocus, ...inputProps} = downshift.getInputProps({
+        {({getInputProps, clearSelection, getLabelProps, inputValue, getItemProps, highlightedIndex}) => {
+            const {onBlur, onChange, onFocus, ...inputProps} = getInputProps({
                 onChange: event => {
                     if (event.target.value === "") {
-                        downshift.clearSelection()
+                        clearSelection()
+                    }else{
+                        for(let i of suggestions){
+                            if(i === event.target.value){
+                                handleOnChange(event.target.value)
+                            }
+                        }
                     }
                 },
-                onFocus: downshift.openMenu,
+                onFocus: handleClick,
+                onBlur: handleClose,
+                onKeyDown: onKeyDown
             })
             return <div className={classes.container}>
                 {
@@ -163,36 +175,33 @@ function AutoComplete({suggestions, value=null, onChange, disable = false, label
                         fullWidth:true,
                         width:width,
                         classes,
-                        InputLabelProps: downshift.getLabelProps({shrink:true}),
-                        InputProps: {onBlur, onChange, onFocus,onClick:handleClick},
+                        InputLabelProps: getLabelProps({shrink:true}),
+                        InputProps: {onBlur, onChange, onFocus},
                         inputProps,
                         label,
                         disable
-                        // readonly: rest.disabled
                     })
                 }
-                <ClickAwayListener onClickAway={handleClose} >
-                    <Popper id={id} open={open} anchorEl={anchorEl} transition >
-                        {({ TransitionProps }) => (
-                            <Fade {...TransitionProps}>
-                                <Paper style={{minWidth:225}}>
-                                    {getSuggestions(downshift.inputValue, { showEmpty: true }, suggestions.map(e=>({label:e}))).map(
-                                        (suggestion, index) =>
-                                            renderSuggestion({
-                                                suggestion,
-                                                index,
-                                                itemProps: downshift.getItemProps({ item: suggestion.label }),
-                                                highlightedIndex: downshift.highlightedIndex,
-                                                selectedItem: value,
-                                                selectedFaculty,
-                                                rest
-                                            })
-                                    )}
-                                </Paper>
-                            </Fade>
-                        )}
-                    </Popper>
-                </ClickAwayListener>
+                <Popper id={id} open={open} anchorEl={anchorEl} transition >
+                    {({ TransitionProps }) => (
+                        <Fade {...TransitionProps}>
+                            <Paper style={{minWidth:225}}>
+                                {getSuggestions(inputValue, { showEmpty: true }, suggestions.map(e=>({label:e}))).map(
+                                    (suggestion, index) =>
+                                        renderSuggestion({
+                                            suggestion,
+                                            index,
+                                            itemProps: getItemProps({ item: suggestion.label }),
+                                            highlightedIndex: highlightedIndex,
+                                            selectedItem: value,
+                                            selectedFaculty,
+                                            rest
+                                        })
+                                )}
+                            </Paper>
+                        </Fade>
+                    )}
+                </Popper>
             </div>
         }}
     </Downshift>

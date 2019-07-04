@@ -8,11 +8,6 @@ import AutoComplete from './AutoComplete'
 const SemesterPicker = ({dispatch, semester, subjectInfo, batch, userIden, course}) => {
 
   let actions = bindActionCreators(onSemesterChange, dispatch)
-  const uid = localStorage.getItem('uid')
-  // let lastSemIndex = ''
-  // if(course && batch && semester && Object.keys(subjectInfo).length !== 0){
-  //   lastSemIndex = Object.keys(subjectInfo[course][batch])[Object.keys(subjectInfo[course][batch]).length -1]
-  // }
 
   let semesters = []
   try{
@@ -23,8 +18,8 @@ const SemesterPicker = ({dispatch, semester, subjectInfo, batch, userIden, cours
     if(!semester) {
       dispatch(onGroupChange(null))
     }
-    // if(lastSemIndex) dispatch(actions(lastSemIndex))
-  },[batch, semester])
+    if(Object.keys(userIden).length) dispatch(actions(userIden['semester']))
+  },[userIden])
 
   return <AutoComplete
           width={280}
@@ -32,13 +27,13 @@ const SemesterPicker = ({dispatch, semester, subjectInfo, batch, userIden, cours
           onChange ={actions}
           label = "Semester"
           suggestions = {semesters}
-          disable={uid == 1? false : true}
+          disable
         />
 }
 export default connect(state => ({
   semester:state.changePicker.semester,
   subjectInfo: state.initData.subjectInfo,
   batch : state.changePicker.batch,
-  course : state.changePicker.course
-
+  course : state.changePicker.course,
+  userIden: state.initData.userIden
 }))(SemesterPicker)

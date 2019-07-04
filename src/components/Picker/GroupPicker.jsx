@@ -2,11 +2,7 @@ import React, {useEffect} from "react";
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { onGroupChange } from '../../redux/ActionCreator/userBehavior'
-import { setSubjects } from '../../redux/ActionCreator/userBehavior'
 import AutoComplete from './AutoComplete'
-
-
-
 
 const GroupPicker = ({dispatch, group, batch, course, subjectInfo, userIden, semester}) => {
   let actions = bindActionCreators(onGroupChange, dispatch)
@@ -20,19 +16,14 @@ const GroupPicker = ({dispatch, group, batch, course, subjectInfo, userIden, sem
     }
   }catch{}
 
-  useEffect(()=> {
-    let subjects =[]
-    try{
-        subjects = subjectInfo[course][batch][semester][group].map(e=>e.subject)
-    }catch(err){ subjects = []}
-    dispatch(setSubjects(subjects))
-
-  })
+  useEffect(()=>{
+    if(!group) actions('Group 1')
+  }, [semester])
 
   return <AutoComplete
           width={280}
           value ={group}
-          onChange ={actions.onGroupChange}
+          onChange ={actions}
           label = "Group"
           suggestions = {data}
         />

@@ -1,7 +1,8 @@
 import React, {useMemo} from'react'
 import {Breadcrumbs,Typography} from '@material-ui/core';
-function DisplayTimetableHeader({header, week})
-{
+
+
+function DisplayTimetableHeader({header, week}){
   const memoValue = useMemo(()=>{
     return(
       <>

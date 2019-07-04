@@ -12,11 +12,11 @@ export const sortSessionTime = (session) => {
     })
 }
 const SessionPicker = ({dispatch, session, subjectInfo, userIden, course, batch, semester,sessionNumber, group}) => {
+
     let suggestions = []
     let allSuggestions =  []
-
     try {
-        allSuggestions = subjectInfo[course][batch][semester]['session']
+        allSuggestions = subjectInfo[course][batch][semester][group]['session']
         suggestions = Object.keys(userIden[course][batch][semester][group])
     } catch(err){}
 
@@ -26,6 +26,7 @@ const SessionPicker = ({dispatch, session, subjectInfo, userIden, course, batch,
         let index = suggestions.findIndex(e => e === allSuggestions[sessionNumber -1])
         action(suggestions[index])
     },[sessionNumber, subjectInfo, userIden])
+
     return <AutoComplete
             width={280}
             value ={session}

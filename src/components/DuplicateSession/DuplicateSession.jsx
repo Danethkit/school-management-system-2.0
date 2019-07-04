@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import PropTypes from "prop-types";
 import { withStyles} from "@material-ui/core";
 import {
@@ -21,9 +21,8 @@ const styles = theme => ({
   }
 });
 
-const DuplicateSession = ({sessionNames, classes, handleDuplicateSession}) => {
+const DuplicateSession = ({items, classes, handleDuplicateSession, valFrom, label}) => {
 
-  const [sessionStart, setSessoinStart] = useState('')
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState([])
 
@@ -37,21 +36,23 @@ const DuplicateSession = ({sessionNames, classes, handleDuplicateSession}) => {
 
   const handleCloseDuplicate = () => {
     setOpen(false);
-    handleDuplicateSession(selected)
-  }
-
-  const handleChangeFrom = e => {
-    setSessoinStart(e.target.value)
+    let temp = selected
+    handleDuplicateSession(temp)
+    clearSelected([])
   }
 
   const handleChangeTo = e => {
     setSelected(e.target.value)
   }
 
+  const clearSelected = () => {
+    setSelected([])
+  }
+
   return (
     <div>
         <Button onClick={handleClickOpen} color='primary' variant='outlined'>
-          Select to duplicate session
+          {label}
         </Button>
         <Dialog
           disableBackdropClick
@@ -59,22 +60,21 @@ const DuplicateSession = ({sessionNames, classes, handleDuplicateSession}) => {
           open={open}
           onClose={handleClose}
         >
-          <DialogTitle>Fill the session to duplicate:</DialogTitle>
+          <DialogTitle>Selected to duplicate</DialogTitle>
           <DialogContent>
             <form className={classes.container}>
               <DropBox placeholder={"Duplicate From"}
-                       handleChange={handleChangeFrom}
-                       session={sessionStart}
-                       items={sessionNames ? sessionNames : []}
+                       items={items ? items : []}
+                       value = {valFrom}
+                       disable
                   />
 
               <DropBox placeholder={"Duplicate To"}
                        handleChange={handleChangeTo}
-                       items={sessionNames ? sessionNames : []}
-                      //  items={sessionNames ? sessionNames.filter(e=> e > sessionStart) : []}
-                       value = {selected}
+                       items={items ? items.filter(e=> e !== valFrom) : []}
                        checkBox
-                       selected={selected}/>
+                       selected={selected}
+                       clearSelected={clearSelected}/>
             </form>
           </DialogContent>
           <DialogActions>

@@ -1,97 +1,18 @@
 import React, {useState, useEffect} from 'react'
-import { Grid, Paper, Table, TableBody, TableCell, TableHead, TableRow, withStyles,
-} from "@material-ui/core";
+import { Grid, Paper, Table, TableBody, TableHead, TableRow, Divider} from "@material-ui/core";
 import PropTypes from "prop-types";
 import FacultyDateNavigator from "./FacultyDateNavigator";
 import moment from 'moment'
 import { requestFacultyTimeTable } from '../../redux/ActionCreator/apiRequest'
 import {connect} from 'react-redux'
+import CustomTableCell from '../Table/CustomTableCell'
+import tableStyle from '../Table/TableStyle'
 
-
-
-const CustomTableCell = withStyles(theme => ({
-    head: {
-        backgroundColor: theme.palette.primary.light,
-        color: "#fff",
-        fontSize: 14
-    },
-      body: {
-        fontSize: 14,
-        paddingRight: 5,
-        paddingLeft: 5,
-        textAlign: "center",
-        margin: 0
-    }
-}))(TableCell);
-
-const styles = theme => ({
-    root: {
-        width: '100%',
-        marginTop: theme.spacing(3) *3 ,
-        overflow: 'auto',
-    },
-    table: {
-        minWidth: 540,
-    },
-    row: {
-        '&:nth-of-type(odd)': {
-            backgroundColor: '#CFD8DC',
-            fontSize: 14,
-            paddingRight:5,
-            paddingLeft:5
-
-        },
-    },
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        marginTop: -15,
-        marginBottom:10,
-        marginLeft: 15,
-        marginRight:15,
-    },
-    outLinedInput:{
-        color: 'primary'
-    },
-    heading: {
-        fontSize: theme.typography.pxToRem(15),
-        marginLeft:20,
-
-    },
-    margin: {
-        width:'100%',
-        margin:0,
-        textRendering: 'auto',
-        letterSpacing: 'normal',
-        textAlign:'center',
-        fontSize:14,
-        wordSpacing: 'normal',
-        whiteSpace: 'pre-wrap',
-        overflowWrap: 'break-word',
-
-    },
-    gridContainer:{
-        display:1,
-        marginBottom:-5,
-        marginTop:5
-    },
-
-    left: {
-        flexGrow:1
-    },
-    right: {
-
-    },
-    middle: {
-        flexGrow:1
-    }
-
-})
 const headData = ["Date", 'Session' ,'Time', 'Subject', 'Batch', 'Group', 'Semester', 'Course', 'Week'];
 
 const weekOfYear = moment.utc().week();
 
-const FacultyTimeTableView = ({classes, userIden, facultyTT, dispatch, subjectInfo}) =>{
+const FacultyTimeTableView = ({userIden, facultyTT, dispatch, subjectInfo}) =>{
 
     const [week, setWeek] = useState(weekOfYear)
 
@@ -111,19 +32,14 @@ const FacultyTimeTableView = ({classes, userIden, facultyTT, dispatch, subjectIn
         dispatch(requestFacultyTimeTable({date:moment('2017-11-05', 'YYYY-MM-DD').format('YYYY-MM-DD')}))
     }, [week])
 
+    const classes = tableStyle();
 
     return(
         <>
-            <Grid container className={classes.gridContainer}>
-                <Grid item  className={classes.left} style={{marginLeft:23}}>
-                    <b>Faculty: {userIden['user']}</b>
-
-                </Grid>
-                <Grid item style={{marginRight:23}}>
-                    <b>Faculty Code: 110101212</b>
-
-                </Grid>
-            </Grid>
+            <div>
+                <h2><i>Faculty:</i> {userIden['user']}</h2>
+                <h3><i>Faculty Code:</i> 110101212</h3>
+            </div>
             <FacultyDateNavigator
                 week={week}
                 handleLastWeek={handleLastWeek}
@@ -154,7 +70,7 @@ const FacultyTimeTableView = ({classes, userIden, facultyTT, dispatch, subjectIn
                                                     </CustomTableCell>: null
                                                 }
                                                 <CustomTableCell align='center'>
-                                                    {Object.keys(subjectInfo).length !== 0 ? subjectInfo[item.course][item.batch][item.semester]['session'].findIndex(e=> e === item.session)+1:null}
+                                                    {Object.keys(subjectInfo).length !== 0 ? subjectInfo[item.course][item.batch][item.semester][item.group]['session'].findIndex(e=> e === item.session)+1:null}
                                                 </CustomTableCell>
                                                 <CustomTableCell align='center'>
                                                     {item.session}
@@ -197,4 +113,4 @@ FacultyTimeTableView.propTypes = {
 
 export default connect(state=>({
     facultyTT: state.initData.facultyTT,
-})) (withStyles(styles)(FacultyTimeTableView))
+}))(FacultyTimeTableView)

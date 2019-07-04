@@ -5,11 +5,8 @@ import {
   Paper,
   Table,
   TableRow,
-  TableCell,
-  withStyles,
   Divider,
   Button,
-  makeStyles,
   TableHead,
   TableBody,
   Box,
@@ -17,55 +14,9 @@ import {
 import InsertData from "./InsertData";
 import {saveTimeTable} from '../../redux/ActionCreator/apiRequest'
 import { connect } from 'react-redux'
-const CustomTableCell = withStyles(theme => ({
-  head: {
-    backgroundColor: theme.palette.primary.light,
-    color: "#fff",
-    fontSize: 14
-  },
-  body: {
-    fontSize: 14,
-    paddingRight: 5,
-    paddingLeft: 5,
-    textAlign: "center",
-    margin: 0
-  }
-}))(TableCell);
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    width: "100%",
-    marginTop: theme.spacing(3) * 3,
-    overflow: "auto"
-  },
-  table: {
-    minWidth: 540
-  },
-  row: {
-    "&:nth-of-type(odd)": {
-      backgroundColor: "#CFD8DC",
-      fontSize: 14,
-      paddingRight: 5,
-      paddingLeft: 5,
-      margin: 0
-    }
-  },
-  generateTimetable: {
-    padding: 0,
-    marginTop: -60,
-    marginBottom: theme.spacing(2)
-  },
-  container: {
-    flexWrap: "wrap"
-    // margin:'-150 5 5 0',
-  },
-  submitButton: {
-    display: "flex",
-    justifyContent: "flex-end",
-    padding: " 10px 0 15px 0"
-  }
-}));
-
+import moment from 'moment'
+import CustomTableCell from '../Table/CustomTableCell'
+import tableStyle from '../Table/TableStyle'
 
 const TimeTable = ({
   header,
@@ -76,7 +27,7 @@ const TimeTable = ({
   selectedFaculty,
   weekStr,
   dispatch,
-  columns
+  ...rest
 }) => {
   const sortedSession = useMemo(
     () =>
@@ -91,6 +42,7 @@ const TimeTable = ({
   );
 
   const handleSaveTimeTable = () => {
+    if(!selectedFaculty) return
     let { course, batch, semester, group} = header
     let line1 = []
     let line2 = []
@@ -99,8 +51,7 @@ const TimeTable = ({
     let line5 = []
     let line6 = []
     let line7 = []
-    if(selectedFaculty.res === undefined) return
-    let data = selectedFaculty.res[weekStr][course][batch][semester][group]
+    let data = selectedFaculty[weekStr][course][batch][semester][group]
     for(let day in data){
       for(let entrie of Object.entries(data[day])){
         switch(day.split(' ')[0]){
@@ -167,8 +118,26 @@ const TimeTable = ({
     }
     dispatch(saveTimeTable(res))
   }
+  const classes = tableStyle();
 
-  const classes = useStyles();
+  let columns = []
+  if(header){
+    let {subjectInfo} = rest
+    let {course, semester, batch, group} = header
+    if(subjectInfo[course][batch][semester][group]['week'].length !== 0){
+      let weekIndex = subjectInfo[course][batch][semester][group]['week'].findIndex(e => e.name === weekStr)
+      if(weekIndex === -1) weekIndex = 0
+      columns = ["Session"];
+      for (let i = 1; i < 7; i++) {
+        columns.push(
+          moment(subjectInfo[course][batch][semester][group]['week'][weekIndex].startDate, 'YYYY-MM-DD')
+            .add(i, 'days')
+            .utc()
+            .format("ddd MM/DD")
+      );
+    }
+    }
+  }
 
   return (
     <>

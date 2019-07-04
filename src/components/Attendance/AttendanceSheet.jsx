@@ -12,7 +12,8 @@ const styles = theme => ({
   }
 });
 
-const AttendancesSheet = ({classes, dispatch, date, course, batch, group, semester, session, subjectInfo, userIden}) => {
+const AttendancesSheet = ({classes, dispatch, date, course, batch, group, faculty, semester, session, subjectInfo, userIden}) => {
+
   const uid = localStorage.getItem('uid')
   const yyyy = date.getFullYear()
   const mm = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() +1
@@ -20,15 +21,16 @@ const AttendancesSheet = ({classes, dispatch, date, course, batch, group, semest
 
   useEffect(()=>{
     if(date == 'Invalid Date') return
-    dispatch(requestUserIdentity({date:`${yyyy}-${mm}-${dd}`, uid}))
-  }, [date])
+    if(date > new Date()) return
+    dispatch(requestUserIdentity({date:`${yyyy}-${mm}-${dd}`, uid, course, batch, group, faculty}))
+  }, [date, faculty, course, batch, group])
 
   const [sessionNumber, setSessionNumber] = useState(1)
 
   useEffect(()=>{
     if(Object.keys(subjectInfo).length !== 0){
       if(!session) return
-      setSessionNumber(subjectInfo[course][batch][semester]['session'].findIndex(e=> e === session)+1)
+      setSessionNumber(subjectInfo[course][batch][semester][group]['session'].findIndex(e=> e === session)+1)
     }
   }, [session])
 
@@ -40,7 +42,7 @@ const AttendancesSheet = ({classes, dispatch, date, course, batch, group, semest
   let allSessions = []
   try{
     if(Object.keys(subjectInfo).length !== 0) {
-      allSessions = subjectInfo[course][batch][semester]['session']
+      allSessions = subjectInfo[course][batch][semester][group]['session']
       let availableSession = Object.keys(userIden[course][batch][semester][group])
       allSessions.forEach((e,i) => {
         if(availableSession.includes(e)){
@@ -68,7 +70,7 @@ const AttendancesSheet = ({classes, dispatch, date, course, batch, group, semest
             </Tabs>
           </AppBar>
           <HeadPicker sessionNumber={sessionNumber} userIden={userIden} />
-          <SessionTable sessions = {uid == 1 ? allSessions.map((e,i)=> i+1):availableTab} />
+          <SessionTable sessions = {uid == 1 ? allSessions.map((e,i)=> i+1):availableTab} sessionNumber={sessionNumber}/>
         </div>
 }
 
@@ -79,6 +81,7 @@ export default connect(state => ({
   course: state.changePicker.course,
   batch: state.changePicker.batch,
   group: state.changePicker.group,
+  faculty: state.changePicker.faculty,
   semester: state.changePicker.semester,
   subjectInfo: state.initData.subjectInfo,
   userIden: state.initData.userIden

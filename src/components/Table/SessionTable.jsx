@@ -179,10 +179,10 @@ class SessionTable extends Component {
   }
 
   handleDuplicateSession = (newSelected) => {
-    let {course, batch, semester, subjectInfo, session} = this.props
+    let {course, batch, semester, group, subjectInfo, session} = this.props
     let {selected} = this.state
     if(!(session in selected)) return
-    let sessions = subjectInfo[course][batch][semester]['session']
+    let sessions = subjectInfo[course][batch][semester][group]['session']
     sessions.filter((e,i) => newSelected.includes(i+1))
     .forEach(element => {
       selected[element] = selected[session]
@@ -200,7 +200,7 @@ class SessionTable extends Component {
   }
 
   render() {
-    const { classes, studentData, batch, session ,subjectInfo, sessions} = this.props
+    const { classes, studentData, batch, session, sessions, sessionNumber} = this.props
     const { order, orderBy, selected } = this.state
     let numSelected = 0
     if(session in selected){
@@ -217,7 +217,7 @@ class SessionTable extends Component {
         data.length === 0 ? <LinearProgress /> 
         : <>
         <Box className={classes.root} boxShadow={2}>
-          <SessionTableToolBar numSelected={numSelected} handleDuplicateSession={this.handleDuplicateSession} sessions={sessions}/>
+          <SessionTableToolBar numSelected={numSelected} handleDuplicateSession={this.handleDuplicateSession} sessions={sessions} sessionNumber={sessionNumber}/>
           <div className={classes.tableWrapper}>
             <Table aria-labelledby="tableTitle"  >
               <SessionTableHead

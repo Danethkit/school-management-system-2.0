@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect} from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import {InputLabel, Input,
@@ -26,7 +26,7 @@ const MenuProps = {
 
 
 
-function DropBox ({classes, items, placeholder,handleChange, session, selected, checkBox=false}) {
+function DropBox ({classes, items,value, placeholder,handleChange, selected, checkBox=false, disable, clearSelected}) {
 
   return (
         <FormControl className={classes.formControl}>
@@ -49,7 +49,8 @@ function DropBox ({classes, items, placeholder,handleChange, session, selected, 
               </Select>
             :
             <Select
-              value={session}
+              value={value}
+              disabled= {disable}
               onChange={handleChange}
               input={<Input id="age-simple"/>}
               >
