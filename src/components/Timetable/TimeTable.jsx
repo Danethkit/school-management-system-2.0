@@ -17,6 +17,8 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import CustomTableCell from '../Table/CustomTableCell'
 import tableStyle from '../Table/TableStyle'
+import Fade from '@material-ui/core/Fade';
+
 
 const TimeTable = ({
   header,
@@ -57,50 +59,50 @@ const TimeTable = ({
         switch(day.split(' ')[0]){
           case 'Sun':
               line1.push({
-                subject: entrie[1].split('(')[0].substring(0, entrie[1].split('(')[0].length -1),
-                faculty: entrie[1].split('(')[1].substring(0, entrie[1].split('(')[1].length -1),
+                subject: entrie[1].split('~')[0].substring(0, entrie[1].split('~')[0].length -1),
+                faculty: entrie[1].split('~')[1].substring(1, entrie[1].split('~')[1].length),
                 session: entrie[0]
               })
             break
           case 'Mon':
               line2.push({
-                subject: entrie[1].split('(')[0].substring(0, entrie[1].split('(')[0].length -1),
-                faculty: entrie[1].split('(')[1].substring(0, entrie[1].split('(')[1].length -1),
+                subject: entrie[1].split('~')[0].substring(0, entrie[1].split('~')[0].length -1),
+                faculty: entrie[1].split('~')[1].substring(1, entrie[1].split('~')[1].length),
                 session: entrie[0]
               })
             break
           case 'Tue':
               line3.push({
-                subject: entrie[1].split('(')[0].substring(0, entrie[1].split('(')[0].length -1),
-                faculty: entrie[1].split('(')[1].substring(0, entrie[1].split('(')[1].length -1),
+                subject: entrie[1].split('~')[0].substring(0, entrie[1].split('~')[0].length -1),
+                faculty: entrie[1].split('~')[1].substring(1, entrie[1].split('~')[1].length),
                 session: entrie[0]
               })
             break
           case 'Wed':
               line4.push({
-                subject: entrie[1].split('(')[0].substring(0, entrie[1].split('(')[0].length -1),
-                faculty: entrie[1].split('(')[1].substring(0, entrie[1].split('(')[1].length -1),
+                subject: entrie[1].split('~')[0].substring(0, entrie[1].split('~')[0].length -1),
+                faculty: entrie[1].split('~')[1].substring(1, entrie[1].split('~')[1].length),
                 session: entrie[0]
               })
             break
           case 'Thu':
               line5.push({
-                subject: entrie[1].split('(')[0].substring(0, entrie[1].split('(')[0].length -1),
-                faculty: entrie[1].split('(')[1].substring(0, entrie[1].split('(')[1].length -1),
+                subject: entrie[1].split('~')[0].substring(0, entrie[1].split('~')[0].length -1),
+                faculty: entrie[1].split('~')[1].substring(1, entrie[1].split('~')[1].length),
                 session: entrie[0]
               })
             break
           case 'Fri':
               line6.push({
-                subject: entrie[1].split('(')[0].substring(0, entrie[1].split('(')[0].length -1),
-                faculty: entrie[1].split('(')[1].substring(0, entrie[1].split('(')[1].length -1),
+                subject: entrie[1].split('~')[0].substring(0, entrie[1].split('~')[0].length -1),
+                faculty: entrie[1].split('~')[1].substring(1, entrie[1].split('~')[1].length),
                 session: entrie[0]
               })
             break
           case 'Sat':
               line7.push({
-                subject: entrie[1].split('(')[0].substring(0, entrie[1].split('(')[0].length -1),
-                faculty: entrie[1].split('(')[1].substring(0, entrie[1].split('(')[1].length -1),
+                subject: entrie[1].split('~')[0].substring(0, entrie[1].split('~')[0].length -1),
+                faculty: entrie[1].split('~')[1].substring(1, entrie[1].split('~')[1].length),
                 session: entrie[0]
               })
             break
@@ -149,6 +151,11 @@ const TimeTable = ({
             boxShadow={3}
             zIndex="modal"
           >
+            <Fade
+                in={true}
+                style={{ transformOrigin: '0 0 0' }}
+                {...(true ? { timeout: 250 } : {})}
+              >
             <div className={classes.container}>
               <Paper className={classes.root}>
                 <Table className={classes.table}>
@@ -194,6 +201,7 @@ const TimeTable = ({
                 </Table>
               </Paper>
             </div>
+            </Fade>
             <Divider style={{ marginLeft: 15, marginRight: 15 }} />
             <div className={classes.submitButton}>
               <Button

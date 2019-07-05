@@ -205,7 +205,6 @@ class AdminTimeTable extends Component {
         assign(data, [w, course, batch, semester, group], temp2 )
       }
     })
-    (data)
     this.setState({data:{...data}});
   }
 
@@ -259,7 +258,9 @@ class AdminTimeTable extends Component {
           handleDuplicateTimetable = {this.handleDuplicateTimetable}
           {...others}
         />
-        <ToggleButton onChange={this.onChangeMode} mode={mode}/>
+        <div>
+         <ToggleButton onChange={this.onChangeMode} mode={mode}/>
+        </div>
       {
         mode === 'view' ? <AdminTimeTableTreeView dispatch={dispatch} {...others}/> :
         <>
@@ -268,7 +269,7 @@ class AdminTimeTable extends Component {
           try {
             for (let e of subjectInfo[table.course][table.batch][table.semester][table.group]['subjects']) {
               if (e.faculty) {
-                faculties.push(`${e.subject} (${e.faculty})`);
+                faculties.push(`${e.subject} ~ ${e.faculty}`);
               }
             }
           } catch {}

@@ -11,7 +11,9 @@ import {
     SET_REPORT_B64,
     SET_USER_IDENTITY,
     SET_FACULTY_TIMETABLE,
-    SET_STUDENT_TIMETABLE
+    SET_STUDENT_TIMETABLE,
+    SET_TIMETABLE_VIEW,
+    SET_EDIT_TT
 } from '../../constants/env'
 
 const initialData = {
@@ -31,7 +33,9 @@ const initialData = {
     sessionData: {},
     userIden: {},
     facultyTT : {},
-    studentTT: {}
+    studentTT: {},
+    TTView:{},
+    editTT: {},
 }
 
 export const initData = (state= initialData, action={}) => {
@@ -62,6 +66,10 @@ export const initData = (state= initialData, action={}) => {
             return {...state, ...{facultyTT:action.payload}}
         case SET_STUDENT_TIMETABLE:
             return {...state, ...{studentTT:action.payload}}
+        case SET_TIMETABLE_VIEW:
+            return {...state, ...{TTView:action.payload}}
+        case SET_EDIT_TT:
+            return {...state, ...{editTT:action.payload}}
         default:
             return state
     }

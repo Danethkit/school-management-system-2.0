@@ -94,7 +94,7 @@ if __name__ == "__main__":
             self.prob_mutation = prob_mutation
             pass
 
-        # GeneticFunctions interface impls
+        GeneticFunctions interface impls
         def probability_crossover(self):
             return self.prob_crossover
 
@@ -112,7 +112,6 @@ if __name__ == "__main__":
             self.counter += 1
             if self.counter % 10 == 0:
                 best_match = list(sorted(fits_populations))[-1][1]
-                # print("=============",best_match)
                 fits = [f for f, ch in fits_populations]
                 best = max(fits)
                 worst = min(fits)
@@ -165,6 +164,5 @@ if __name__ == "__main__":
         def random_chromo(self):
             return [random.randint(1, 255) for i in range(len(self.target))]
         pass
-
-    GeneticAlgorithm(GuessText("Burithy")).run()
+    GeneticAlgorithm(GuessText('Hello World')).run()
     pass

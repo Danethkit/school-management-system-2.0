@@ -18,7 +18,7 @@ const SemesterPicker = ({dispatch, semester, subjectInfo, batch, userIden, cours
     if(!semester) {
       dispatch(onGroupChange(null))
     }
-    if(Object.keys(userIden).length) dispatch(actions(userIden['semester']))
+    // if(Object.keys(userIden).length) dispatch(actions(userIden['semester']))
   },[userIden])
 
   return <AutoComplete
@@ -27,7 +27,6 @@ const SemesterPicker = ({dispatch, semester, subjectInfo, batch, userIden, cours
           onChange ={actions}
           label = "Semester"
           suggestions = {semesters}
-          disable
         />
 }
 export default connect(state => ({

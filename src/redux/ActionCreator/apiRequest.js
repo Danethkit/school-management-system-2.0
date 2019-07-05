@@ -11,7 +11,9 @@ import {
     GET_SESSION_DATA,
     SET_USER_IDENTITY,
     SET_FACULTY_TIMETABLE,
-    SET_STUDENT_TIMETABLE
+    SET_STUDENT_TIMETABLE,
+    SET_TIMETABLE_VIEW,
+    SET_EDIT_TT
 } from '../../constants/env'
 import {odooRequest, odooPrintReport} from '../api'
 // Helper functino
@@ -188,5 +190,31 @@ export const requestStudentTimeTable = (data) => (dispatch) => {
        })
     .then(response => response.json())
     .then(data => dispatch({type: SET_STUDENT_TIMETABLE, payload:JSON.parse(data.result)}))
+    .catch(err => console.log(err));
+}
+
+export const requestTimeTableView = (data) => (dispatch) => {
+    fetch('http://192.168.7.222:8069/get-timetable-view',{
+        method: 'post',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+            params : data
+        })
+       })
+    .then(response => response.json())
+    .then(data => dispatch({type: SET_TIMETABLE_VIEW, payload:JSON.parse(data.result)}))
+    .catch(err => console.log(err));
+}
+
+export const requestTimeTableData = (data) => (dispatch) => {
+    fetch('http://192.168.7.222:8069/get-timetable-data',{
+        method: 'post',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+            params : data
+        })
+       })
+    .then(response => response.json())
+    .then(data => dispatch({type: SET_EDIT_TT, payload:JSON.parse(data.result)}))
     .catch(err => console.log(err));
 }

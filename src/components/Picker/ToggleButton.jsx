@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
   toggleContainer: {
     margin: theme.spacing(1),
     right:0,
-    position:'absolute'
+    position:'absolute',
   },
   active:{
       color: theme.palette.primary.main

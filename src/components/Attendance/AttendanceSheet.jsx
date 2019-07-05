@@ -22,8 +22,8 @@ const AttendancesSheet = ({classes, dispatch, date, course, batch, group, facult
   useEffect(()=>{
     if(date == 'Invalid Date') return
     if(date > new Date()) return
-    dispatch(requestUserIdentity({date:`${yyyy}-${mm}-${dd}`, uid, course, batch, group, faculty}))
-  }, [date, faculty, course, batch, group])
+    dispatch(requestUserIdentity({date:`${yyyy}-${mm}-${dd}`, uid, course, batch, group, faculty, semester}))
+  }, [date, faculty, course, batch, group, semester])
 
   const [sessionNumber, setSessionNumber] = useState(1)
 

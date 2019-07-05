@@ -105,15 +105,16 @@ class SessionTable extends Component {
     let { createAttendanceSheet, session } = this.props
     let selectedStu = this.state.selected[session]
     let storeData = store.getState()
-    let {subject, date, batch, remark} = storeData.changePicker
+    let {subject, date, batch, remark, semester} = storeData.changePicker
     // let { subjectData } = storeData.initData'
     let data = {
-      subject: subject,
+      subject,
       date: date.toDateString(),
-      session: session,
-      batch: batch,
+      session,
+      batch,
       lines: selectedStu,
-      remark: remark
+      remark: remark,
+      semester
     }
     createAttendanceSheet(data)
   }
@@ -239,8 +240,7 @@ class SessionTable extends Component {
                       aria-checked={isSelected}
                       tabIndex={-1}
                       key={n.roll_number}
-                      selected={isSelected}
-                    >
+                      selected={isSelected}>
                       <TableCell padding="checkbox" onClick={event => this.handleClick(event, n.roll_number)}>
                         <Checkbox checked={isSelected} />
                       </TableCell>

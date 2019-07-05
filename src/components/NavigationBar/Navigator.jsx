@@ -88,8 +88,6 @@ const NavigationBar = ({classes, history}) => {
       items = [
         {path: "attendance/attendance_sheet", label: "Attendance Sheet"},
         {path: "attendance/attendance_line", label: "Attendance Lines"},
-        {path: "attendance/generate_attendance", label: "Generate Attendance"},
-        {path: "attendance/attendance_result", label: "Attendance Result"},
         {path: "attendance/generate_report", label: "Generate Report"}
       ];
     }
