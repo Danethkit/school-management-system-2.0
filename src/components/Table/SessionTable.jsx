@@ -12,7 +12,6 @@ import {
   Typography,
   InputBase,
   Box,
-  LinearProgress
 } from "@material-ui/core"
 import SessionTableHead from "./SessionTableHead"
 import SessionTableToolBar from "./SessionTableToolBar"
@@ -20,8 +19,6 @@ import AttendanceButton from "../Button/AttendanceButton"
 import { connect } from 'react-redux'
 import { store } from '../../redux/store'
 import AttendanceSheetDialog from '../Alert/AttendanceSheetDialog'
-
-
 
 const styles = theme => ({
   root: {
@@ -73,9 +70,11 @@ const mapStateToProps = (state) => {
     subjectInfo: state.initData.subjectInfo,
     error: state.initData.error,
     batch: state.changePicker.batch,
+    group: state.changePicker.group,
     course: state.changePicker.course,
     semester: state.changePicker.semester,
     session: state.changePicker.session,
+    createAttendanceRequested: state.changePicker.createAttendanceRequested
   }
 }
 
@@ -96,31 +95,41 @@ class SessionTable extends Component {
       selected: {},
     };
   }
-// close success dialog when request success
-  closeSuccessDialog = () => {
-    this.setState({successDialog:false})
-  }
   // get all inputed data and request for create attendance sheet
   createAttendanceSheet = () => {
-    let { createAttendanceSheet, session } = this.props
-    let selectedStu = this.state.selected[session]
+    let { createAttendanceSheet, session, group, createAttendanceRequested } = this.props
+    console.log('========>',createAttendanceRequested);
+    let selected = this.state.selected
+    let selectedStu = selected[session][group]
     let storeData = store.getState()
-    let {subject, date, batch, remark, semester} = storeData.changePicker
-    // let { subjectData } = storeData.initData'
+    let {subject, date, batch, remark, semester, course} = storeData.changePicker
     let data = {
       subject,
+      course,
       date: date.toDateString(),
       session,
       batch,
       lines: selectedStu,
       remark: remark,
-      semester
+      semester,
+      group
     }
     createAttendanceSheet(data)
   }
 
   componentDidMount() {
     this.props.requestStudent()
+  }
+
+  componentWillReceiveProps(props){
+    let {createAttendanceRequested, session} = props
+    let selected = this.state.selected
+    if(createAttendanceRequested !== false){
+      if (createAttendanceRequested.result === 'ok'){
+        delete selected[session]
+        this.setState({selected})
+      }
+    }
   }
 
   handleRequestSort = (event, property) => {
@@ -135,13 +144,19 @@ class SessionTable extends Component {
 // select all students at one
   handleSelectAllClick = (event, data) => {
     let {selected} = this.state
-    let {session} = this.props
+    let {session, group} = this.props
+    if(!session) return
     if (event.target.checked) {
-      selected[session] = data.map(n => n.roll_number)
-      this.setState({selected})
-      return;
+      if(!(session in selected)){
+        let temp = {}
+        temp[group] = data.map(n => n.roll_number)
+        selected[session] = temp
+      }else {
+        selected[session][group] =  data.map(n => n.roll_number)
+      }
+    }else {
+      selected[session][group] = []
     }
-    selected[session] = []
     this.setState({ selected });
   }
 // user input remark data
@@ -155,26 +170,32 @@ class SessionTable extends Component {
 
   handleClick = (event, roll_number) => {
     const { selected } = this.state;
-    const {session} = this.props
+    const {session, group} = this.props
     if(!session) return
     if(session in selected){
-      const selectedIndex = selected[session].indexOf(roll_number);
-      let newSelected = [];
-      if (selectedIndex === -1) {
-        newSelected = newSelected.concat(selected[session], roll_number);
-      } else if (selectedIndex === 0) {
-        newSelected = newSelected.concat(selected[session].slice(1));
-      } else if (selectedIndex === selected.length - 1) {
-        newSelected = newSelected.concat(selected[session].slice(0, -1));
-      } else if (selectedIndex > 0) {
-        newSelected = newSelected.concat(
-          selected[session].slice(0, selectedIndex),
-          selected[session].slice(selectedIndex + 1)
-        );
+      if(group in selected[session]){
+        const selectedIndex = selected[session][group].indexOf(roll_number);
+        let newSelected = [];
+        if (selectedIndex === -1) {
+          newSelected = newSelected.concat(selected[session][group], roll_number);
+        } else if (selectedIndex === 0) {
+          newSelected = newSelected.concat(selected[session][group].slice(1));
+        } else if (selectedIndex === selected.length - 1) {
+          newSelected = newSelected.concat(selected[session][group].slice(0, -1));
+        } else if (selectedIndex > 0) {
+          newSelected = newSelected.concat(
+            selected[session][group].slice(0, selectedIndex),
+            selected[session][group].slice(selectedIndex + 1)
+          );
+        }
+        selected[session][group] = newSelected
+      }else {
+        selected[session][group] = [roll_number]
       }
-      selected[session] = newSelected
     }else {
-      selected[session] = [roll_number]
+      let temp = {}
+      temp[group] = [roll_number]
+      selected[session] = temp
     }
     this.setState({ selected });
   }
@@ -185,37 +206,43 @@ class SessionTable extends Component {
     if(!(session in selected)) return
     let sessions = subjectInfo[course][batch][semester][group]['session']
     sessions.filter((e,i) => newSelected.includes(i+1))
-    .forEach(element => {
-      selected[element] = selected[session]
+    .forEach(sess => {
+      if(sess in selected){
+        selected[sess][group] = selected[session][group]
+      }else{
+        let temp = {}
+        temp[group] = selected[session][group]
+        selected[sess] = temp
+      }
     });
-    this.setState(selected)
+    this.setState({selected})
   }
 
   isSelected = roll_number =>{
-    let {session} = this.props
+    let {session, group} = this.props
     let {selected} = this.state
     if(session in selected){
-      return this.state.selected[session].indexOf(roll_number) !== -1;
+      return selected[session][group] !== undefined ? selected[session][group].indexOf(roll_number) !== -1 : false;
     }
     return false
   }
 
   render() {
-    const { classes, studentData, batch, session, sessions, sessionNumber} = this.props
+    const { classes, studentData, batch, session, sessions, sessionNumber, course, group} = this.props
     const { order, orderBy, selected } = this.state
     let numSelected = 0
     if(session in selected){
-      numSelected =  selected[session].length
+      numSelected =  selected[session][group] !== undefined ? selected[session][group].length : 0
     }
     let data = []
     try{
-      data = batch in studentData ? studentData[batch] : []
+      data = batch in studentData[course] ? studentData[course][batch][group] : []
     }catch(err){data = []}
 
     return (
       <>
       {
-        data.length === 0 ? <LinearProgress /> 
+        !data ? <h4>Please set course, batch, and group properly</h4>
         : <>
         <Box className={classes.root} boxShadow={2}>
           <SessionTableToolBar numSelected={numSelected} handleDuplicateSession={this.handleDuplicateSession} sessions={sessions} sessionNumber={sessionNumber}/>

@@ -7,10 +7,22 @@ import {
   Tabs,
   Toolbar
 } from "@material-ui/core";
+import {connect} from 'react-redux'
 import MenuIcon from '@material-ui/icons/Menu';
 import { withStyles } from "@material-ui/core";
-import { AccountCircle, Chat, AlternateEmail } from "@material-ui/icons";
+import { Chat, AlternateEmail } from "@material-ui/icons";
 import SideBarDrawer from '../NavigationBar/SideBarDrawer'
+import CalendarToday from '@material-ui/icons/CalendarToday'
+import Input from '@material-ui/icons/Input'
+import Person from '@material-ui/icons/Person'
+import Group from '@material-ui/icons/Group'
+import Subtitles from '@material-ui/icons/Subtitles'
+import List from '@material-ui/icons/List'
+import Print from '@material-ui/icons/Print'
+import Avatar from '@material-ui/core/Avatar';
+import Typography from '@material-ui/core/Typography'
+
+
 
 const styles = theme => ({
   root: {
@@ -52,7 +64,7 @@ const navBar = [
   "App Setting"
 ];
 
-const NavigationBar = ({classes, history}) => {
+const NavigationBar = ({classes, history, userIden}) => {
 
   const [menuOpen, setMenuOpen] = useState(false)
   const [route, setRoute] = useState("/sms/attendance")
@@ -78,19 +90,19 @@ const NavigationBar = ({classes, history}) => {
   var items = [];
     if(history.location.pathname.includes("/timetable")){
       items = [
-        {path: "timetable/admin-view", label: "Current Timetable"},
-        {path: "timetable/admin-create", label: "Create TimeTable"},
-        {path: "timetable/student", label: "Student"},
-        {path: "timetable/faculty", label: "Faculty"}
+        {path: "timetable/admin-create", label: "Generate Timetable", icon:<Input/>},
+        {path: "timetable/student", label: "Student", icon:<Group/>},
+        {path: "timetable/faculty", label: "Faculty", icon: <Person/>}
       ];
     }
     else {
       items = [
-        {path: "attendance/attendance_sheet", label: "Attendance Sheet"},
-        {path: "attendance/attendance_line", label: "Attendance Lines"},
-        {path: "attendance/generate_report", label: "Generate Report"}
+        {path: "attendance/attendance_sheet", label: "Attendance Sheet", icon:<Subtitles/>},
+        {path: "attendance/attendance_line", label: "Attendance Lines", icon:<List/>},
+        {path: "attendance/generate_report", label: "Generate Report", icon:<Print/>}
       ];
     }
+
 
     return (
       <>
@@ -104,7 +116,7 @@ const NavigationBar = ({classes, history}) => {
             className={menuOpen ? classes.hide : classes.menuButton}>
                 <MenuIcon />
             </IconButton>
-            <SideBarDrawer open={menuOpen} toggleDrawer={toggleDrawer} items={items}/>
+            <SideBarDrawer open={menuOpen} toggleDrawer={toggleDrawer} items={items} userIden={userIden}/>
             <Tabs
               variant="scrollable"
               scrollButtons="off"
@@ -135,11 +147,11 @@ const NavigationBar = ({classes, history}) => {
             </IconButton>
 
             <IconButton className={classes.iconButtonBlock} color="inherit">
-              <AccountCircle />
+              <Avatar alt="avatar"  src={`data:image/png;base64, ${userIden['img']}`}/>
             </IconButton>
           </Toolbar>
         </AppBar>
       </>
     );
 }
-export default withStyles(styles)(NavigationBar);
+export default connect(state=>({userIden: state.initData.userIden}))(withStyles(styles)(NavigationBar))

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import PropTypes from "prop-types";
 import { withStyles} from "@material-ui/core";
 import {
@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogTitle
 } from "@material-ui/core";
+import IconButton from '@material-ui/core/IconButton';
 import DropBox from './DropBox'
 
 const styles = theme => ({
@@ -51,9 +52,9 @@ const DuplicateSession = ({items, classes, handleDuplicateSession, valFrom, labe
 
   return (
     <div>
-        <Button onClick={handleClickOpen} color='primary' variant='outlined'>
+        <IconButton onClick={handleClickOpen} color='primary' >
           {label}
-        </Button>
+        </IconButton>
         <Dialog
           disableBackdropClick
           disableEscapeKeyDown

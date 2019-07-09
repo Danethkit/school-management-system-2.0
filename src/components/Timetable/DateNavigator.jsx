@@ -4,6 +4,7 @@ from '@material-ui/core'
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import DuplicateSession from '../DuplicateSession/DuplicateSession'
+import OpenInNew from '@material-ui/icons/OpenInNew'
 import moment from 'moment'
 
 const styles = theme => ({
@@ -85,7 +86,7 @@ const DateNavigator = ({classes, handleLastWeek, handleDuplicateTimetable,
             </span>
             <span className={classes.right}>
             <DuplicateSession
-                label="Duplicate Week"
+                label={<OpenInNew/>}
                 valFrom = {weekStr}
                 items={items}
                 handleDuplicateSession={handleDuplicateTimetable}/>

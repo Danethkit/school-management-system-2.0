@@ -76,9 +76,9 @@ class AttendanceLineTable extends Component {
     }
     this.setState({ order, orderBy });
   };
-  componentDidMount() {
-    this.props.dispatch(getAttendanceLine())
-  }
+  // componentDidMount() {
+  //   this.props.dispatch(getAttendanceLine())
+  // }
   render() {
     const { classes, attendanceLine, searchField } = this.props;
     const { rowsPerPage, page, order, orderBy } = this.state;

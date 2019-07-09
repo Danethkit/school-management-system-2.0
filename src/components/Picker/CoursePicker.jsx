@@ -4,10 +4,9 @@ import { bindActionCreators } from 'redux'
 import { onCourseChange, onBatchChange } from '../../redux/ActionCreator/userBehavior'
 import AutoComplete from './AutoComplete'
 
-const CoursePicker = ({course, subjectInfo, userIden, dispatch}) => {
-  const uid = localStorage.getItem('uid')
+const CoursePicker = ({course, subjectInfo, userIden, uid, dispatch}) => {
   let data = {}
-  if(uid == 1){
+  if(uid.uid === 'admin'){
     data = subjectInfo
   }else {
     data = userIden
@@ -19,8 +18,6 @@ const CoursePicker = ({course, subjectInfo, userIden, dispatch}) => {
     }
   })
   return <AutoComplete
-          width={280}
-          defaultSelectedItem={{ name: "dara" }}
           value={course}
           onChange={actions.onCourseChange}
           label = "Course"
@@ -28,5 +25,6 @@ const CoursePicker = ({course, subjectInfo, userIden, dispatch}) => {
 }
 export default connect(state => ({
   course : state.changePicker.course,
-  subjectInfo: state.initData.subjectInfo
+  subjectInfo: state.initData.subjectInfo,
+  uid: state.initData.uid
 }))(CoursePicker)

@@ -8,22 +8,40 @@ import {Paper,
 import CustomTableCell from '../Table/CustomTableCell'
 import tableStyle from '../Table/TableStyle'
 import moment from 'moment'
+import AutoComplete from '../Picker/AutoComplete'
 
 
 
-export default ({week, editTT, ...rest})=> {
+export default ({currentWeek, editTT, editMode, ...rest})=> {
+
+    const {subjectInfo, course, batch, semester, group} = rest
 
     const header = ['Session']
-    if(week.startDate){
+    if(currentWeek.startDate){
         for (let i = 1; i <= 7; i++) {
             header.push(
-              moment(week.startDate, 'YYYY-MM-DD')
+              moment(currentWeek.startDate, 'YYYY-MM-DD')
                 .add(i, 'days')
                 .utc()
                 .format("ddd MM/DD"))
         }
     }
 
+    const handleChangeData = (value) => {
+        console.log('check', value);
+    }
+
+    let faculties = [];
+    try {
+        console.log({subjectInfo, course, batch, semester,group});
+    for (let e of subjectInfo[course][batch][semester][group]['subjects']) {
+        if (e.faculty) {
+        faculties.push(`${e.subject} ~ ${e.faculty}`);
+        }
+    }
+    } catch {}
+
+    console.log({faculties});
 
     const classes = tableStyle()
     return (
@@ -44,10 +62,15 @@ export default ({week, editTT, ...rest})=> {
                         <TableBody>
                             {Object.keys(editTT).map(session => {
                                 if(session === 'header') return null
-                                const temp = []
+                                let temp = []
                                 for(let i =0; i < 7; i++){
-                                    temp.push(<CustomTableCell align="center" key={i} >
-                                    { i+1 in editTT[session] ? editTT[session][i+1] : null}
+                                    temp.push(<CustomTableCell text-align="center" key={i}>
+                                    {
+                                        i+1 in editTT[session] ? editMode ?
+                                        <AutoComplete value={editTT[session][i+1]} onChange={handleChangeData} suggestions={faculties}/>:
+                                        editTT[session][i+1]
+                                        : null
+                                    }
                                     </CustomTableCell>)
                                 }
                                 return <TableRow className={classes.row} key={session}>
@@ -56,10 +79,11 @@ export default ({week, editTT, ...rest})=> {
                                         </CustomTableCell>
                                         {temp}
                                 </TableRow>
-                            })}
+                                })
+                            }
                         </TableBody>
                     </Table>
                 </Paper>
-            </div>
+        </div>
     )
 }

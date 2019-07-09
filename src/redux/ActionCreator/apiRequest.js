@@ -13,7 +13,8 @@ import {
     SET_FACULTY_TIMETABLE,
     SET_STUDENT_TIMETABLE,
     SET_TIMETABLE_VIEW,
-    SET_EDIT_TT
+    SET_EDIT_TT,
+    SET_UID
 } from '../../constants/env'
 import {odooRequest, odooPrintReport} from '../api'
 // Helper functino
@@ -23,10 +24,24 @@ const groupByBatch = (data) =>  {
     let res = {}
     data.forEach(e => {
         let batch = e.batch_id[1]
-        if(batch in res){
-            res[batch].push(e)
-        }else {
-            res[batch] = [e]
+        let course = e.course_id[1]
+        let group = e.class_id[1]
+        if(course in res){
+            if(batch in res[course]){
+                if(group in res[course][batch]){
+                    res[course][batch][group].push(e)
+                }else{
+                    res[course][batch][group] = [e]
+                }
+            }else {
+                let temp = {}
+                temp[group] = [e]
+                res[course][batch] = temp
+            }
+        }  else{
+            res[course] = {}
+            res[course][batch] = {}
+            res[course][batch][group] = [e]
         }
     })
     return res
@@ -37,7 +52,7 @@ const groupByBatch = (data) =>  {
 
 // request student data
 export const requestStudent= () => (dispatch) => {
-    odooRequest('op.student', 'search_read', ['name', 'last_name', 'roll_number', 'batch_id'])
+    odooRequest('op.student', 'search_read', ['name', 'last_name', 'roll_number', 'class_id', 'batch_id', 'course_id'])
     .then(data => {
         dispatch({type: REQUEST_STUDENTS_SUCCESS, payload:groupByBatch(data)})
     })
@@ -96,7 +111,7 @@ export const requestStudent= () => (dispatch) => {
 // }
 
 export const createAttendanceSheet= (data) => (dispatch) => {
-    fetch('http://192.168.7.222:8069/create-attendance-sheet',{
+    fetch('http://192.168.7.240:8008/create-attendance-sheet',{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -108,39 +123,56 @@ export const createAttendanceSheet= (data) => (dispatch) => {
     .catch(err => dispatch({type: TOGGLE_DIALOG, payload: err}))
 }
 
-export const getAttendanceLine = () => (dispatch) => {
+export const getAttendanceLine = (data) => (dispatch) => {
     dispatch({type: REQUEST_ATTENDANCE_LINE_PENDING})
-    fetch('http://192.168.7.222:8069/get-attendance-line')
+    fetch('http://192.168.7.240:8008/get-attendance-line', {
+        method: 'post',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+            params : data
+        })
+    })
     .then(res => res.json())
-    .then( data => dispatch({type: REQUEST_ATTENDANCE_LINE_SUCCESS, payload:data.data}))
+    .then( data => dispatch({type: REQUEST_ATTENDANCE_LINE_SUCCESS, payload:JSON.parse(data.result)}))
     .catch(err => dispatch({type:REQUEST_ATTENDANCE_LINE_FAILED, payload:err}))
 }
 
 export const getSubjectData = () => (dispatch) => {
-    fetch('http://192.168.7.222:8069/get-subject-data')
+    fetch('http://192.168.7.240:8008/get-subject-data')
     .then(res => res.json())
     .then(data => dispatch({type:REQUEST_SUBJECT_DATA, payload:data}))
     .catch( err => console.log(err))
+
 }
 
 export const getSessionData = () => (dispatch) => {
-    fetch('http://192.168.7.222:8069/get-session-data')
+    fetch('http://192.168.7.240:8008/get-session-data')
     .then(res => res.json())
     .then(data => dispatch({type:GET_SESSION_DATA, payload:data}))
     .catch( err => console.log(err))
 }
 
-export const printAttendanceReport = () => (dispatch) => {
-    odooPrintReport('sms2.attendance_report_qweb', ['10/10/2019', '10/11/2019'])
-    .then(value =>{
-        const b64 = value.result
-        dispatch({type:PRINT_ATTENDANCE_REPORT, payload:b64})
-        dispatch({type:SET_REPORT_B64, payload:b64})
+export const printAttendanceReport = (data) => (dispatch) => {
+    console.log({data});
+    fetch('http://192.168.7.240:8008/print-attendance-report',{
+        method: 'post',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+            params : data
+        })
+       })
+    .then(response => response.json())
+    .then(data => {
+        console.log('data',data)
+        dispatch({type:SET_REPORT_B64, payload:JSON.parse(data.result).data})
+        dispatch({type: PRINT_ATTENDANCE_REPORT, payload: JSON.parse(data.result).data})
     })
-    .catch(err => console.log(err))
+    .catch(err => dispatch({type: TOGGLE_DIALOG, payload: err}))
+
 }
+
 export const saveTimeTable = (data) => (dispatch) => {
-    fetch('http://192.168.7.222:8069/create-timetable',{
+    fetch('http://192.168.7.240:8008/create-timetable',{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -153,7 +185,7 @@ export const saveTimeTable = (data) => (dispatch) => {
 }
 
 export const requestUserIdentity = (data) => (dispatch) => {
-    fetch('http://192.168.7.222:8069/get-user-identity',{
+    fetch('http://192.168.7.240:8008/get-user-identity',{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -167,7 +199,7 @@ export const requestUserIdentity = (data) => (dispatch) => {
 
 export const requestFacultyTimeTable = (data) => (dispatch) => {
     console.log('data',data);
-    fetch('http://192.168.7.222:8069/get-faculty-timetable',{
+    fetch('http://192.168.7.240:8008/get-faculty-timetable',{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -181,7 +213,7 @@ export const requestFacultyTimeTable = (data) => (dispatch) => {
 
 export const requestStudentTimeTable = (data) => (dispatch) => {
     console.log('data',data);
-    fetch('http://192.168.7.222:8069/get-student-timetable',{
+    fetch('http://192.168.7.240:8008/get-student-timetable',{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -194,7 +226,7 @@ export const requestStudentTimeTable = (data) => (dispatch) => {
 }
 
 export const requestTimeTableView = (data) => (dispatch) => {
-    fetch('http://192.168.7.222:8069/get-timetable-view',{
+    fetch('http://192.168.7.240:8008/get-timetable-view',{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -207,7 +239,7 @@ export const requestTimeTableView = (data) => (dispatch) => {
 }
 
 export const requestTimeTableData = (data) => (dispatch) => {
-    fetch('http://192.168.7.222:8069/get-timetable-data',{
+    fetch('http://192.168.7.240:8008/get-timetable-data',{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -216,5 +248,18 @@ export const requestTimeTableData = (data) => (dispatch) => {
        })
     .then(response => response.json())
     .then(data => dispatch({type: SET_EDIT_TT, payload:JSON.parse(data.result)}))
+    .catch(err => console.log(err));
+}
+
+export const getUid = () => (dispatch) => {
+    fetch('http://192.168.7.240:8008/get-uid',{
+        method: 'post',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+            params : {}
+        })
+       })
+    .then(response => response.json())
+    .then(data => dispatch({type: SET_UID, payload:JSON.parse(data.result)}))
     .catch(err => console.log(err));
 }

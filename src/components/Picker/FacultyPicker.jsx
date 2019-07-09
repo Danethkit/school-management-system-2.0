@@ -5,12 +5,11 @@ import { onFacultyChange } from '../../redux/ActionCreator/userBehavior'
 import AutoComplete from './AutoComplete'
 
 
-const FacultyPicker = ({dispatch, faculty, course, batch, semester, group, session, userIden}) => {
-  const uid = localStorage.getItem('uid')
+const FacultyPicker = ({dispatch, faculty, course, batch, semester, group, session, userIden, uid}) => {
   let actions = bindActionCreators(onFacultyChange, dispatch)
   let suggestions = []
   let temp = {}
-  if(uid == 1){
+  if(uid.uid === 'admin'){
     try{
       temp = userIden[course][batch][semester][group]
       for (let e in temp) {
@@ -47,4 +46,5 @@ export default connect(state => ({
   batch:state.changePicker.batch,
   group:state.changePicker.group,
   semester:state.changePicker.semester,
+  uid: state.initData.uid
 }))(FacultyPicker)

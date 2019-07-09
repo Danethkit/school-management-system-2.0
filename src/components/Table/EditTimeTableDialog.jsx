@@ -52,7 +52,7 @@ export default ({open, handleClose, currentWeek, editTT, header, ...rest}) =>{
             </IconButton>
             <Typography variant="h6" className={classes.title}>
                 Edit
-            <Switch
+              <Switch
                 checked={editMode}
                 onChange={handleChange()}
                 value="checkedA"
@@ -66,7 +66,7 @@ export default ({open, handleClose, currentWeek, editTT, header, ...rest}) =>{
         </AppBar>
         <DialogTitle id="alert-dialog-title">{`${header.course} / ${header.batch} / ${header.semester} / ${header.group} / ${currentWeek.name}`}</DialogTitle>
         <DialogContent>
-            <EditTimeTable week ={currentWeek} editTT={editTT} {...rest} editMode={editMode}/>
+            <EditTimeTable currentWeek ={currentWeek} editTT={editTT} {...rest} editMode={editMode}/>
         </DialogContent>
         <DialogActions>
         </DialogActions>

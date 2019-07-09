@@ -27,6 +27,7 @@ const SemesterPicker = ({dispatch, semester, subjectInfo, batch, userIden, cours
           onChange ={actions}
           label = "Semester"
           suggestions = {semesters}
+          // disable
         />
 }
 export default connect(state => ({

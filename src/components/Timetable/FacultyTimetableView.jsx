@@ -107,10 +107,6 @@ const FacultyTimeTableView = ({userIden, facultyTT, dispatch, subjectInfo}) =>{
     )
 }
 
-FacultyTimeTableView.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
-
 export default connect(state=>({
     facultyTT: state.initData.facultyTT,
 }))(FacultyTimeTableView)

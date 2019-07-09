@@ -52,8 +52,10 @@ const filterTable = (
   if (Object.keys(data).length === 0) {
     return res;
   }
+  console.log({course, batch, semester, group});
   if (group && semester && batch && course) {
     let session = data[course][batch][semester][group]['session'];
+    if(!session) return res
     if (session.length !== 0) {
       res.push({
         course,
@@ -71,6 +73,7 @@ const filterTable = (
         continue;
       }
       let session = data[course][batch][semester][group]['session'];
+      if(!session) continue
       if (session.length === 0) continue;
       res.push({
         course: course,
@@ -86,6 +89,7 @@ const filterTable = (
     for (const semester in data[course][batch]) {
       for (const group in data[course][batch][semester]) {
         let session = data[course][batch][semester][group]['session'];
+        if(!session) continue
         if (session.length === 0) continue;
         let header = { course, batch, semester, group, session };
         res.push(header);
@@ -98,6 +102,7 @@ const filterTable = (
       for (const semester in data[course][batch]) {
         for (const group in data[course][batch][semester]) {
           let session = data[course][batch][semester][group]['session'];
+          if(!session) continue
           if (session.length === 0) continue;
           let header = { course, batch, semester, group, session };
           res.push(header);
@@ -111,6 +116,7 @@ const filterTable = (
         for (const semester in data[course][batch]) {
           for (const group in data[course][batch][semester]) {
             let session = data[course][batch][semester][group]['session'];
+            if(!session) continue
             if (session.length === 0) continue;
             let header = { course, batch, semester, group, session };
             res.push(header);

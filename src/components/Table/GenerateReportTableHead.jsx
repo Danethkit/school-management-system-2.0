@@ -18,7 +18,7 @@ const styles = theme => ({
 })
 
 
-const GenerateReportTableHead = (order, orderBy, classes, subjects) => {
+const GenerateReportTableHead = ({order, orderBy, classes, subjects}) => {
         return (
             <TableHead className={classes.header}>
                 <TableRow>
@@ -30,7 +30,7 @@ const GenerateReportTableHead = (order, orderBy, classes, subjects) => {
                      label="Name" order={order} orderBy={orderBy} classes={classes} />
                     {
                         subjects.map(subject => <TableColumn numeric={true} disablePadding={true} order={order} orderBy={orderBy}
-                        classes={classes} label={subject} key={subject}/>)
+                        classes={classes} label={subject.subject} key={subject.subject}/>)
                     }
                     <TableColumn numeric={false} disablePadding={true} id ="total"
                      label="Total" order={order} orderBy={orderBy} classes={classes} />
@@ -43,6 +43,4 @@ GenerateReportTableHead.propTypes = {
     order: PropTypes.string.isRequired,
     orderBy: PropTypes.string.isRequired
 };
-export default connect(state => ({
-  subjects : state.changePicker.subjects,
-})) (withStyles(styles)(GenerateReportTableHead))
+export default withStyles(styles)(GenerateReportTableHead)

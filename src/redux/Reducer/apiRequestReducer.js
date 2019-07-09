@@ -13,7 +13,8 @@ import {
     SET_FACULTY_TIMETABLE,
     SET_STUDENT_TIMETABLE,
     SET_TIMETABLE_VIEW,
-    SET_EDIT_TT
+    SET_EDIT_TT,
+    SET_UID
 } from '../../constants/env'
 
 const initialData = {
@@ -24,7 +25,7 @@ const initialData = {
     semesterData: {},
     groupData: [],
     facultyData: [],
-    attendanceLine : [],
+    attendanceLine : {},
     initDataPending: false,
     requestAttendanceLinePending: false,
     subjectInfo : {},
@@ -36,6 +37,7 @@ const initialData = {
     studentTT: {},
     TTView:{},
     editTT: {},
+    uid: {}
 }
 
 export const initData = (state= initialData, action={}) => {
@@ -70,6 +72,8 @@ export const initData = (state= initialData, action={}) => {
             return {...state, ...{TTView:action.payload}}
         case SET_EDIT_TT:
             return {...state, ...{editTT:action.payload}}
+        case SET_UID:
+            return {...state, ...{uid:action.payload}}
         default:
             return state
     }

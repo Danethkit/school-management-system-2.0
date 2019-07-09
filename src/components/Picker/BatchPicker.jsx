@@ -4,10 +4,9 @@ import { connect } from 'react-redux'
 import { onBatchChange, onSemesterChange } from '../../redux/ActionCreator/userBehavior'
 import AutoComplete from './AutoComplete'
 
-const BatchPicker = ({dispatch, batch, subjectInfo, userIden, course}) => {
-  const uid = localStorage.getItem('uid')
+const BatchPicker = ({dispatch, uid, batch, subjectInfo, userIden, course}) => {
   let data = {}
-  if(uid == 1){
+  if(uid.uid === 'admin'){
     data = subjectInfo
   }else {
     data = userIden
@@ -35,5 +34,6 @@ const BatchPicker = ({dispatch, batch, subjectInfo, userIden, course}) => {
 export default connect(state => ({
   batch:state.changePicker.batch,
   course: state.changePicker.course,
-  subjectInfo: state.initData.subjectInfo
+  subjectInfo: state.initData.subjectInfo,
+  uid: state.initData.uid,
 }))(BatchPicker)

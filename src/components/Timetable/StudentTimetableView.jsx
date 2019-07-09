@@ -17,8 +17,6 @@ const weekOfYear = moment.utc().week();
 
 const StudentView = ({dispatch, studentTT}) => {
 
-    console.log({studentTT});
-
     const [week, setWeek] = useState(weekOfYear)
 
     const handleLastWeek= () => {

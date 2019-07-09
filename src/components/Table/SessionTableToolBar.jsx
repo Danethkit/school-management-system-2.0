@@ -4,6 +4,7 @@ import PropTypes from "prop-types"
 import DuplicateSession from "../DuplicateSession/DuplicateSession"
 import { Toolbar, Typography, withStyles } from "@material-ui/core"
 import { lighten } from "@material-ui/core/styles/colorManipulator"
+import OpenInNew from '@material-ui/icons/OpenInNew'
 
 const toolbarStyles = theme => ({
   root: {
@@ -53,7 +54,7 @@ const SessionTableToolBar = props => {
       </div>
       <div className={classes.spacer} />
       <div className={classes.actions}>
-        <DuplicateSession items={sessions} label="Duplicate Session" handleDuplicateSession={handleDuplicateSession} valFrom={sessionNumber}/>
+        <DuplicateSession items={sessions} label={<OpenInNew/>}handleDuplicateSession={handleDuplicateSession} valFrom={sessionNumber}/>
       </div>
     </Toolbar>
   );

@@ -8,6 +8,7 @@ import successImg from './Done.png'
 import DefaultAlert from './DefaultDialog'
 
 const AttendanceSheetDialog = ({createAttendanceRequested, dispatch}) =>{
+  console.log('cj',createAttendanceRequested);
   let img = ''
   let title = ''
   let detail = ''

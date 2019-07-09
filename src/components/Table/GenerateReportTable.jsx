@@ -1,11 +1,12 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux'
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import { Box, Table, TableBody, TableCell, TableRow } from "@material-ui/core";
+import { Box, Table, TableBody, TableCell, TableRow, Button } from "@material-ui/core";
 import GenerateReportTableHead from "./GenerateReportTableHead";
 import DownloadButton from '../Button/DownloadButton'
 import {getAttendanceLine,requestStudent, printAttendanceReport } from '../../redux/ActionCreator/apiRequest'
+import printJS from 'print-js'
 
 const styles = theme => ({
     root: {
@@ -59,44 +60,47 @@ function getSorting(order, orderBy) {
         : (a, b) => -desc(a, b, orderBy);
 }
 
-class GenerateReportTable extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            order: "asc",
-            orderBy: "roll_number",
-        };
-    }
+const GenerateReportTable = (props) => {
+    const [order, setOrder] = useState('asc')
+    const [orderBy, setOrderBy] = useState('roll_number')
 
-    handleRequestSort = (event, property) => {
+    let { attendanceLine, dispatch, studentData, batch, group, endDate, startDate, course, classes, subjectInfo, semester } = props
+
+    console.log({subjectInfo});
+    const handleRequestSort = (event, property) => {
         const orderBy = property;
         let order = "desc";
 
-        if (this.state.orderBy === property && this.state.order === "desc") {
+        if (orderBy === property && order === "desc") {
             order = "asc";
         }
-        this.setState({ order, orderBy });
+        setOrder(order)
+        setOrderBy(orderBy)
     };
 
-    componentDidMount(){
-        let { attendanceLine, dispatch, studentData } = this.props
-        if(attendanceLine.length === 0){
-            dispatch(getAttendanceLine())
-        }
+    const handleClickPrintReport =  () => {
+        dispatch(getAttendanceLine({course, batch, group, endDate, startDate, semester }))
+    }
+
+    useEffect(() => {
         if(Object.keys(studentData).length === 0){
             dispatch(requestStudent())
         }
-    }
+    }, [])
 
-    render() {
 
-        const { classes, batch, group, subjects, attendanceLine, endDate, startDate, studentData, dispatch } = this.props;
-        let filterLine = attendanceLine.filter(line => {
-            return new Date(line.date) >=  startDate && new Date(line.date) <= endDate && line.present && subjects.includes(line.subject) && line.group === group && line.batch === batch
-        } )
 
-        let res = {}
-        filterLine.forEach(line => {
+    let subjects = []
+    try{
+        if(Object.keys(subjectInfo).length !== 0){
+            subjects = subjectInfo[course][batch][semester][group]['subjects']
+        }
+    }catch{}
+
+
+    let res = {}
+    if(attendanceLine.data !== undefined) {
+        attendanceLine.data.forEach(line => {
             if(line.student in res){
                 if(line.subject in res[line.student]){
                     res[line.student][line.subject] += 1
@@ -109,63 +113,80 @@ class GenerateReportTable extends Component {
                 res[line.student] = temp
             }
         })
-        const { order, orderBy } = this.state;
-        return (
-            Object.keys(res).length !== 0 ?
-            <>
-                <Box className={classes.root} boxShadow={3}>
-                        <Table className={classes.table}>
-                            <GenerateReportTableHead
-                                subjects = {subjects }
-                                order={order}
-                                orderBy={orderBy}
-                                onRequestSort={this.handleRequestSort}
-                            />
-                            <TableBody>
-                                {stableSort(studentData[batch], getSorting(order, orderBy)).map((row,i) => {
-                                    return (
-                                        <TableRow hover key={row.roll_number}>
-                                            <TableCell className={classes.textRow}>
-                                               {++i}
-                                            </TableCell>
-                                            <TableCell className={classes.textRow} >
-                                                {row.roll_number}
-                                            </TableCell>
-                                            <TableCell className={classes.textRow} padding="none">
-                                                {row.last_name +' '+ row.name}
-                                            </TableCell>
-                                            {
-                                                subjects.map((e, i)=> {
-                                                    return <TableCell  className={classes.textRow} padding="none" key={i}>{
-                                                        e in res[row.last_name +' '+ row.name] ? res[row.last_name +' '+ row.name][e]: 0}
-                                                        </TableCell>
-                                                })
-                                            }
-                                            <TableCell className={classes.textRow}>
-                                                {row.total}
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                            </TableBody>
-                        </Table>
-                </Box>
-                <DownloadButton classes ={classes} handleClick={()=> dispatch(printAttendanceReport())} />
-            </>: <h1>No Record...</h1>
-        );
     }
+    const printReport = () => {
+        printJS({
+            printable: 'attendanceReport',
+            type: 'html',
+            style:'#attendanceReport {min-width:2000}',
+            targetStyle:['min-width']
+          })
+    }
+    return (
+        <>
+        <Button variant='contained' color='secondary' onClick={handleClickPrintReport}>Print Report</Button>
+        {
+        Object.keys(res).length !== 0 ?
+        <>
+            <Box className={classes.root} boxShadow={3} >
+                    <Table className={classes.table} id="attendanceReport">
+                        <GenerateReportTableHead
+                            subjects = {subjects }
+                            order={order}
+                            orderBy={orderBy}
+                            onRequestSort={handleRequestSort}
+                        />
+                        <TableBody>
+                            {stableSort(studentData[course][batch][group], getSorting(order, orderBy)).map((row,i) => {
+                                return (
+                                    <TableRow hover key={row.roll_number}>
+                                        <TableCell className={classes.textRow}>
+                                            {++i}
+                                        </TableCell>
+                                        <TableCell className={classes.textRow} >
+                                            {row.roll_number}
+                                        </TableCell>
+                                        <TableCell className={classes.textRow} padding="none">
+                                            {row.last_name +' '+ row.name}
+                                        </TableCell>
+                                        {
+                                            subjects.map((e, i)=> {
+                                                let key = row.last_name +' '+ row.name
+                                                return <TableCell  className={classes.textRow} padding="none" key={i}>{
+                                                    res[row.last_name +' '+ row.name] === undefined ? 0 :
+                                                    e.subject in res[key] ? res[key][e.subject]: 0}
+                                                    </TableCell>
+                                            })
+                                        }
+                                        <TableCell className={classes.textRow}>
+                                            {row.total}
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
+                        </TableBody>
+                    </Table>
+            </Box>
+            <DownloadButton classes ={classes} handleClick={printReport} />
+                </>
+            :null}
+            </>
+    );
 }
+
 
 GenerateReportTable.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
 export default connect(state => ({
-    subjects: state.changePicker.subjects,
     endDate: state.changePicker.endDate,
     startDate: state.changePicker.startDate,
     batch: state.changePicker.batch,
     group: state.changePicker.group,
+    semester: state.changePicker.semester,
+    course: state.changePicker.course,
     attendanceLine: state.initData.attendanceLine,
-    studentData : state.initData.studentData
+    studentData : state.initData.studentData,
+    subjectInfo : state.initData.subjectInfo,
 })) (withStyles(styles)(GenerateReportTable))

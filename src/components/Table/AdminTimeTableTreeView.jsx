@@ -29,7 +29,6 @@ const styles = makeStyles(theme => ({
 }));
 export default  connect(state=> ({TTView:  state.initData.TTView, editTT:state.initData.editTT}))(({dispatch, TTView, editTT, ...others})=> {
 
-    console.log({editTT});
     const classes = styles()
     const {course, batch, semester, group} = others
     const columns = ['Week', 'Course', 'Batch', 'Semester', 'Start Date', 'End Date', 'State']

@@ -11,7 +11,7 @@
 // opt-in, read http://bit.ly/CRA-PWA
 
 const isLocalhost = Boolean(
-  window.location.hostname === '192.168.7.222' ||
+  window.location.hostname === '10.10.14.123' ||
     // [::1] is the IPv6 localhost address.
     window.location.hostname === '[::1]' ||
     // 127.0.0.1/8 is considered localhost for IPv4.

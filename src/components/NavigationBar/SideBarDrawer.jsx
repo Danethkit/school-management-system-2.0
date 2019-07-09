@@ -2,6 +2,9 @@ import React from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import { withStyles } from "@material-ui/core";
 import MenuContent from './MenuContent'
+import Grid from '@material-ui/core/Grid';
+import Avatar from '@material-ui/core/Avatar';
+import Divider from '@material-ui/core/Divider';
 
 
 const style = theme => ({
@@ -13,14 +16,18 @@ const style = theme => ({
   },
 });
 
-function SideBarDrawer  ({toggleDrawer, open, classes, items}) {
+function SideBarDrawer  ({toggleDrawer, userIden, open, classes, items}) {
   return (
     <Drawer anchor='left' open={open} onClose={toggleDrawer(false)}>
         <div
         className={classes.list}
         role="presentation"
-        onClick={toggleDrawer(false)}
-        onKeyDown={toggleDrawer(false)}>
+        onClick={()=>toggleDrawer(false)}
+        onKeyDown={()=>toggleDrawer(false)}>
+              <Grid container justify="center" alignItems="center" style={{padding:30}}>
+                <Avatar style={{margin: 10,width: 60,height: 60}} alt="avatar" src={`data:image/png;base64, ${userIden['img']}`}/>
+              </Grid>
+              <Divider/>
             <MenuContent items={items} toggleDrawer={toggleDrawer}/>
         </div>
     </Drawer>);
