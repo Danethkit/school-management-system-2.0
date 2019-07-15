@@ -16,7 +16,7 @@ const AttendanceSheetDialog = ({createAttendanceRequested, dispatch}) =>{
   if (createAttendanceRequested !==  false){
     if (createAttendanceRequested.result === 'ok') {
       title = 'Success'
-      detail = 'Data has been saved to Databse'
+      detail = 'Data has been saved to Database.'
       img = successImg
     }else {
       title = 'Failed'

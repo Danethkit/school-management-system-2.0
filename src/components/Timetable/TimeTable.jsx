@@ -19,8 +19,8 @@ import CustomTableCell from '../Table/CustomTableCell'
 import tableStyle from '../Table/TableStyle'
 import Fade from '@material-ui/core/Fade';
 
-
 const TimeTable = ({
+  styles,
   header,
   week,
   onDataInsert,
@@ -232,4 +232,4 @@ const TimeTable = ({
     </>
   );
 };
-export default connect()(TimeTable)
+export default connect()(TimeTable);

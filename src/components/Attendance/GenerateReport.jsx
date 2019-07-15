@@ -4,7 +4,7 @@ import GenerateReportTable from "../Table/GenerateReportTable";
 import AttendanceReportDailog from '../Alert/AttendanceReportDialog'
 export default function GenerateReport  ()  {
     return <>
-        <h1>Generate Report</h1>
+        <h2>Generate Report</h2>
         <GenerateReportHeadPicker />
         <GenerateReportTable />
         <AttendanceReportDailog />

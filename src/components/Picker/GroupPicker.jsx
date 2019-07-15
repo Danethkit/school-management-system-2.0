@@ -20,7 +20,6 @@ const GroupPicker = ({dispatch, group, batch, course, subjectInfo, userIden, sem
   }, [semester])
 
   return <AutoComplete
-          width={280}
           value ={group}
           onChange ={actions}
           label = "Group"

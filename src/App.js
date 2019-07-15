@@ -33,6 +33,4 @@ const App = ({dispatch}) => {
     </>
 }
 export default connect()(App)
-
-
 serviceWorker.register();

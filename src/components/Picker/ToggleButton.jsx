@@ -8,8 +8,6 @@ import {Button} from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
   toggleContainer: {
-    margin: theme.spacing(1),
-    right:0,
     position:'absolute',
   },
   active:{
@@ -29,7 +27,7 @@ export default function ToggleButtons({onChange, mode}) {
   const classes = useStyles();
 
   return (
-    <Grid container spacing={2}>
+    <Grid container justify="flex-end" alignItems="baseline">
         <div className={classes.toggleContainer}>
             <Button variant="contained" className={mode === 'create' ? classes.active : classes.disable} onClick={()=>handleChangeMode('create')}>
                 <TodayIcon  />

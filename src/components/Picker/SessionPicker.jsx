@@ -28,7 +28,6 @@ const SessionPicker = ({dispatch, session, subjectInfo, userIden, course, batch,
     },[sessionNumber, subjectInfo, userIden])
 
     return <AutoComplete
-            width={280}
             value ={session}
             onChange = {action}
             label = "Session"
