@@ -78,14 +78,16 @@ const NavigationBar = ({ classes, history, userIden }) => {
           return  window.location.href = 'http://192.168.7.222:8069/web#page=0&limit=80&view_type=list&model=op.assignment&menu_id=209&action=264'
         case "/sms/event":
           return window.location.href = 'http://192.168.7.222:8069/web#view_type=kanban&model=event.event&menu_id=392&action=405'
-        case "/sms/facultices":
-          return window.location.href ='http://192.168.7.222:8069/web#view_type=form&model=board.board&menu_id=192&action=247'
+        case "/sms/discuss":
+          return window.location.href ='http://192.168.7.222:8069/web#action=106&active_id=channel_inbox'
         case "/sms/exams":
           return window.location.href = "http://192.168.7.222:8069/web#page=0&limit=80&view_type=list&model=op.exam.session&menu_id=270&action=327"
         case "/sms/library":
           return window.location.href ="http://192.168.7.222:8069/web#view_type=form&model=board.board&menu_id=222&action=295"
         case "/sms/apps":
           return window.location.href ="http://192.168.7.222:8069/web#view_type=kanban&model=ir.module.module&menu_id=51&action=36"
+        case "/sms/openeducat":
+          return window.location.href ="http://192.168.7.222:8069/web#view_type=kanban&model=op.student&menu_id=175&action=238"
         default:
           return
       }

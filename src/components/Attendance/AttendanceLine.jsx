@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import AttendanceLineTable from "../Table/AttendanceLineTable";
 import SearchBox from "../Attendance/SearchBox";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import Typography from '@material-ui/core/Typography'
 
 const AttendanceLine = ({ attendanceLine }) => {
   return (
@@ -15,7 +16,7 @@ const AttendanceLine = ({ attendanceLine }) => {
         maxWidth: 1400
       }}
     >
-      <h1>Attendance Line</h1>
+      <div style={{margin:'auto', width:'40vh'}}><Typography variant='h4'>Attendance Line</Typography></div>
       {attendanceLine.length === 0 ? <LinearProgress /> : null}
       <SearchBox />
       <br />

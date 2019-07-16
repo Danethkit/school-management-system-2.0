@@ -8,15 +8,17 @@ import {connect} from 'react-redux'
 import { onSemesterChange } from '../redux/ActionCreator/userBehavior'
 
 const AttendanceScreen = props => {
-  const { subjectInfo, course, batch, semester, group, uid, dispatch } = props;
+  const { subjectInfo, course, batch, group, uid, dispatch } = props;
   const [week, setWeek] = useState(moment.utc().week());
   const [weekStr, setWeekStr] = useState('');
   const [disableCurrentWeek, setDisableCurrentWeek] = useState(false)
 
   let currentWeek = ''
   let currentSem = ''
+
   if(Object.keys(subjectInfo).length !== 0 ){
     for(let semester in subjectInfo[course][batch]){
+      if(!(group && course && batch)) continue
       for(let week of subjectInfo[course][batch][semester][group]['week']){
         let today = new Date()
         if(today >= new Date(week.startDate) && today <= new Date(week.endDate)){

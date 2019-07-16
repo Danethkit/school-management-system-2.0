@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { AppBar, Tabs, Tab, withStyles } from "@material-ui/core";
+import { AppBar, Tabs, Tab, withStyles, Typography } from "@material-ui/core";
 import HeadPicker from "../../components/Picker/HeadPicker";
 import SessionTable from "../../components/Table/SessionTable";
 import { connect } from "react-redux";
@@ -17,7 +17,7 @@ const styles = theme => ({
     marginLeft: "auto",
     marginRight: "auto",
     width: "100%",
-    maxWidth: 1400
+    maxWidth: 1400,
   }
 });
 
@@ -67,7 +67,7 @@ const AttendancesSheet = (props) => {
 
   return (
     <div className={classes.format}>
-      <h2>Attendance Sheet</h2>
+      <div style={{margin:'auto', width:'40vh'}}><Typography variant='h4'>Attendance Sheet</Typography></div>
       <ElevationScroll {...props}>
         <AppBar position="static" color="default" >
           <Tabs
