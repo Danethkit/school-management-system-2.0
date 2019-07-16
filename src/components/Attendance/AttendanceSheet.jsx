@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
-<<<<<<< HEAD
-import { AppBar, Tabs, Tab, withStyles, CssBaseline } from "@material-ui/core";
-=======
-import { AppBar, Tabs, Tab, withStyles, Typography } from "@material-ui/core";
->>>>>>> 9f454ca769a90333ed043e7b233bdf4df56d27b8
+import { AppBar, Tabs, Tab, withStyles } from "@material-ui/core";
 import HeadPicker from "../../components/Picker/HeadPicker";
 import SessionTable from "../../components/Table/SessionTable";
 import { connect } from "react-redux";
@@ -81,12 +77,7 @@ const AttendancesSheet = (props) => {
 
   return (
     <div className={classes.format}>
-<<<<<<< HEAD
       <h1>Attendance Sheet</h1>
-    
-=======
-      <div style={{margin:'auto', width:'40vh'}}><Typography variant='h4'>Attendance Sheet</Typography></div>
->>>>>>> 9f454ca769a90333ed043e7b233bdf4df56d27b8
       <ElevationScroll {...props}>
         <AppBar position="sticky" color="default" >
           <Tabs
