@@ -3,6 +3,7 @@ import GenerateReportHeadPicker from "../Picker/GenerateReportHeadPicker";
 import GenerateReportTable from "../Table/GenerateReportTable";
 import AttendanceReportDailog from '../Alert/AttendanceReportDialog'
 import {connect} from 'react-redux'
+import Typography from '@material-ui/core/Typography'
 
 function GenerateReport  (props)  {
     return <div
@@ -15,7 +16,7 @@ function GenerateReport  (props)  {
           }}
         >
 
-        <h1>Generate Report</h1>
+        <div style={{margin:'auto', width:'40vh', marginBottom:10}}><Typography variant='h4'>Generate Report</Typography></div>
         <GenerateReportHeadPicker {...props} />
         <GenerateReportTable {...props}/>
         <AttendanceReportDailog {...props}/>
