@@ -34,10 +34,11 @@ export default  connect(state=> ({TTView:  state.initData.TTView, editTT:state.i
     const columns = ['Week', 'Course', 'Batch', 'Semester', 'Start Date', 'End Date', 'State']
     const [open, setOpen] = useState(false);
     const [week, setWeek] = useState({})
+    const [editMode, setEditMode] = useState(false)
 
     useEffect(()=>{
         dispatch(requestTimeTableView({course, batch, semester, group}))
-    }, [])
+    }, [course, batch, semester, group])
 
     const handleRowClick = (data)  => {
         dispatch(requestTimeTableData({course, batch, semester, group, 'week': data.name}))
@@ -46,7 +47,13 @@ export default  connect(state=> ({TTView:  state.initData.TTView, editTT:state.i
     }
     const handleClose = () => {
         setOpen(false)
+        setEditMode(false)
     }
+
+    const handleChange = () => event => {
+        setEditMode(!editMode);
+    };
+
     return (
         <Box className={classes.root} boxShadow={2}>
             <Table>
@@ -80,7 +87,15 @@ export default  connect(state=> ({TTView:  state.initData.TTView, editTT:state.i
                         }
                 </TableBody>
             </Table>
-            <EditTimeTableDialog open={open} handleClose={handleClose} header={{course, batch, semester, group}} currentWeek={week} editTT={editTT} {...others}/>
+            <EditTimeTableDialog
+                handleChange={handleChange}
+                open={open}
+                editMode={editMode}
+                handleClose={handleClose}
+                header={{course, batch, semester, group}}
+                currentWeek={week}
+                editTT={editTT}
+                {...others}/>
         </Box>
     )
 })

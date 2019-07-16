@@ -8,7 +8,7 @@ import EndDatePicker from "./EndDatePicker";
 import { Box, Grid } from "@material-ui/core";
 
 
-export default function GenerateReportHeadPicker() {
+export default function GenerateReportHeadPicker(props) {
     return (
         <Box display='flex' boxShadow={3}>
             <Grid container spacing={10} style={{padding:50}}>
@@ -17,12 +17,12 @@ export default function GenerateReportHeadPicker() {
                     <BatchPicker />
                 </Grid>
                 <Grid item sm >
-                    <SemesterPicker />
+                    <SemesterPicker/>
                     <GroupPicker />
                 </Grid>
                 <Grid item sm >
-                    <StartDatePicker/>
-                    <EndDatePicker />
+                    <StartDatePicker {...props}/>
+                    <EndDatePicker {...props}/>
                 </Grid>
             </Grid>
         </Box>

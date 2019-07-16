@@ -1,45 +1,60 @@
-import React, {useState, useMemo, memo} from "react";
+import React, {useState, memo, useEffect} from "react";
 import { Route, Switch } from "react-router-dom"
 import AdminGenerateTimeTable from '../components/Timetable/AdminGenerateTimetable'
 import FacultyTimeTable from '../components/Timetable/FacultyTimetableView'
 import StudentTimeTableView from '../components/Timetable/StudentTimetableView'
 import moment from 'moment'
 import {connect} from 'react-redux'
+import { onSemesterChange } from '../redux/ActionCreator/userBehavior'
+
 
 
 const AttendanceScreen = (props) => {
 
-  const {subjectInfo, course, batch, semester, group, uid} = props
+  const {subjectInfo, course, batch, group, uid, dispatch} = props
 
   const [week, setWeek] = useState(moment.utc().week());
   const [weekStr, setWeekStr] = useState('');
+  const [disableCurrentWeek, setDisableCurrentWeek] = useState(false)
 
   let currentWeek = ''
-  let lastSemIndex = ''
-  let endSemDate = useMemo(()=>{
-    try{
-      if(Object.keys(subjectInfo).length !== 0 && course){
-        for(let semester in subjectInfo[course][batch]){
-          for(let week of subjectInfo[course][batch][semester][group]['week']){
-            let today = new Date()
-            if(today >= new Date(week.startDate) && today <= new Date(week.endDate)){
-              currentWeek = week.name
-              setWeekStr(currentWeek)
-              break
-            }
-          }
-        }
-        if(course && batch && semester){
-          lastSemIndex = Object.keys(subjectInfo[course][batch])[Object.keys(subjectInfo[course][batch]).length -1]
-          let lastWeekIndex = subjectInfo[course][batch][lastSemIndex][group]['week'].length -1
-          try{
-            endSemDate = subjectInfo[course][batch][semester][group]['week'][lastWeekIndex].endDate
-          }catch{}
+  let currentSem = ''
+  if(Object.keys(subjectInfo).length !== 0 ){
+    for(let semester in subjectInfo[course][batch]){
+      for(let week of subjectInfo[course][batch][semester][group]['week']){
+        let today = new Date()
+        if(today >= new Date(week.startDate) && today <= new Date(week.endDate)){
+          currentWeek = week
+          currentSem = semester
+          break
         }
       }
-    } catch{ return ""}
-    return endSemDate
-  }, [subjectInfo, batch, course, group])
+    }
+  }
+  // let endSemDate = useMemo(()=>{
+  //   try{
+  //     if(Object.keys(subjectInfo).length !== 0 && course){
+  //       for(let semester in subjectInfo[course][batch]){
+  //         for(let week of subjectInfo[course][batch][semester][group]['week']){
+  //           let today = new Date()
+  //           if(today >= new Date(week.startDate) && today <= new Date(week.endDate)){
+  //             currentWeek = week.name
+  //             setWeekStr(currentWeek)
+  //             break
+  //           }
+  //         }
+  //       }
+  //       if(course && batch && semester){
+  //         lastSemIndex = Object.keys(subjectInfo[course][batch])[Object.keys(subjectInfo[course][batch]).length -1]
+  //         let lastWeekIndex = subjectInfo[course][batch][lastSemIndex][group]['week'].length -1
+  //         try{
+  //           endSemDate = subjectInfo[course][batch][semester][group]['week'][lastWeekIndex].endDate
+  //         }catch{}
+  //       }
+  //     }
+  //   } catch{ return ""}
+  //   return endSemDate
+  // }, [subjectInfo, batch, course, group])
 
   const handleChangeWeekStr = value => {
     if(!value) return
@@ -60,9 +75,21 @@ const AttendanceScreen = (props) => {
   };
 
   const handleCurrentWeek = () => {
-    setWeek(moment.utc().week());
-    setWeekStr(currentWeek)
+    setWeek(moment(currentWeek.startDate, 'YYYY-MM-DD').week());
+    setWeekStr(currentWeek.name)
+    dispatch(onSemesterChange(currentSem))
   };
+
+  useEffect(()=>{
+    if(currentWeek.name) {
+      setWeekStr(currentWeek.name)
+      setWeek(moment(currentWeek.startDate, 'YYYY-MM-DD').week())
+      dispatch(onSemesterChange(currentSem))
+      setDisableCurrentWeek(false)
+    }else {
+      setDisableCurrentWeek(true)
+    }
+  }, [currentWeek])
 
   const handleNextWeek = () => {
     let weekInt = parseInt(weekStr.split(' ')[1]) +1
@@ -83,15 +110,15 @@ const AttendanceScreen = (props) => {
       <Route path = {`${route}/admin-create`}
         render={routerProps=>{
           return <AdminGenerateTimeTable
-            handleChangeWeekStr={handleChangeWeekStr}
-            handleLastWeek = {handleLastWeek}
-            handleCurrentWeek = {handleCurrentWeek}
-            handleNextWeek = {handleNextWeek}
-            week={week}
-            endSemDate = {endSemDate}
-            weekStr={weekStr}
-            {...props}
-            {...routerProps}/>
+                  disableCurrentWeek ={disableCurrentWeek}
+                  handleChangeWeekStr={handleChangeWeekStr}
+                  handleLastWeek = {handleLastWeek}
+                  handleCurrentWeek = {handleCurrentWeek}
+                  handleNextWeek = {handleNextWeek}
+                  week={week}
+                  weekStr={weekStr}
+                  {...props}
+                  {...routerProps}/>
         }
       }
       />
@@ -103,7 +130,6 @@ const AttendanceScreen = (props) => {
             handleCurrentWeek = {handleCurrentWeek}
             handleNextWeek = {handleNextWeek}
             week={week}
-            endSemDate = {endSemDate}
             weekStr={weekStr}
             {...props}
             {...routerProps}/>}}/>
@@ -111,12 +137,12 @@ const AttendanceScreen = (props) => {
       <Route
         render={routerProps=>{
           return <AdminGenerateTimeTable
+            disableCurrentWeek ={disableCurrentWeek}
             handleChangeWeekStr={handleChangeWeekStr}
             handleLastWeek = {handleLastWeek}
             handleCurrentWeek = {handleCurrentWeek}
             handleNextWeek = {handleNextWeek}
             week={week}
-            endSemDate = {endSemDate}
             weekStr={weekStr}
             {...props}
             {...routerProps}/>
@@ -132,7 +158,6 @@ const AttendanceScreen = (props) => {
             handleCurrentWeek = {handleCurrentWeek}
             handleNextWeek = {handleNextWeek}
             week={week}
-            endSemDate = {endSemDate}
             weekStr={weekStr}
             {...props}
             {...routerProps}/>}}/> :

@@ -32,7 +32,7 @@ const StudentView = ({dispatch, studentTT}) => {
     }
 
     useEffect(()=>{
-        dispatch(requestStudentTimeTable({date:moment('2017-11-05', 'YYYY-MM-DD').format('YYYY-MM-DD')}))
+        dispatch(requestStudentTimeTable({date:moment.utc().week(week).weekday(0).format('YYYY-MM-DD')}))
     }, [week])
 
     const header = ['Session']

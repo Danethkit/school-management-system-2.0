@@ -14,7 +14,9 @@ import {
     SET_STUDENT_TIMETABLE,
     SET_TIMETABLE_VIEW,
     SET_EDIT_TT,
-    SET_UID
+    SET_UID,
+    SET_SEM_DATE,
+    SET_ATTENDANCE_REPORT_DATA
 } from '../../constants/env'
 
 const initialData = {
@@ -37,7 +39,10 @@ const initialData = {
     studentTT: {},
     TTView:{},
     editTT: {},
-    uid: {}
+    uid: {},
+    editTTStatus: {},
+    semDate: [],
+    attendanceReportData: {}
 }
 
 export const initData = (state= initialData, action={}) => {
@@ -57,7 +62,7 @@ export const initData = (state= initialData, action={}) => {
         case REQUEST_SUBJECT_DATA:
             return { ...state, ...{subjectInfo:action.payload}}
         case PRINT_ATTENDANCE_REPORT:
-            return {...state,...{report:action.payload}}
+            return {...state,...{reportOpen:action.payload}}
         case SET_REPORT_B64:
             return {...state,...{b64Report:action.payload}}
         case GET_SESSION_DATA:
@@ -74,6 +79,10 @@ export const initData = (state= initialData, action={}) => {
             return {...state, ...{editTT:action.payload}}
         case SET_UID:
             return {...state, ...{uid:action.payload}}
+        case SET_SEM_DATE:
+            return {...state, ...{semDate:action.payload}}
+        case SET_ATTENDANCE_REPORT_DATA:
+            return {...state, ...{attendanceReportData:action.payload}}
         default:
             return state
     }

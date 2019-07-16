@@ -1,6 +1,6 @@
-import React, { useMemo } from "react";
+import React, { useMemo,useState } from "react";
 import DisplayTimetableHeader from "../TimetablePicker/DisplayTimetableHeader";
-import AttendanceSheetDialog from '../Alert/AttendanceSheetDialog'
+import OdooServerStatusDialog from '../Alert/OdooServerStatusDialog'
 import {
   Paper,
   Table,
@@ -18,6 +18,8 @@ import moment from 'moment'
 import CustomTableCell from '../Table/CustomTableCell'
 import tableStyle from '../Table/TableStyle'
 import Fade from '@material-ui/core/Fade';
+import DefaultAlert from '../../components/Alert/DefaultDialog'
+import Report from '@material-ui/icons/Report'
 
 
 const TimeTable = ({
@@ -29,8 +31,12 @@ const TimeTable = ({
   selectedFaculty,
   weekStr,
   dispatch,
+  odooServerStatus,
   ...rest
 }) => {
+
+  const [warning, setWarning] = useState(false)
+  const handleCloseWarning = () => setWarning(false)
   const sortedSession = useMemo(
     () =>
       sessions.sort((a, b) => {
@@ -44,7 +50,7 @@ const TimeTable = ({
   );
 
   const handleSaveTimeTable = () => {
-    if(!selectedFaculty) return
+    if(selectedFaculty[weekStr] === undefined) return setWarning(true)
     let { course, batch, semester, group} = header
     let line1 = []
     let line2 = []
@@ -206,18 +212,6 @@ const TimeTable = ({
             <div className={classes.submitButton}>
               <Button
                 size="medium"
-                variant="outlined"
-                color="primary"
-                disabled={true}
-                style={{ marginLeft: 15, marginRight: 15 }}
-              >
-                Edit
-              </Button>
-              <Button size="medium" variant="outlined" color="primary">
-                Discard
-              </Button>
-              <Button
-                size="medium"
                 color="primary"
                 onClick = {handleSaveTimeTable}
                 style={{ marginLeft: 15, marginRight: 15 }}
@@ -226,10 +220,15 @@ const TimeTable = ({
               </Button>
             </div>
           </Box>
-          <AttendanceSheetDialog />
+          <OdooServerStatusDialog odooServerStatus={odooServerStatus} />
         </>
       )}
+      <DefaultAlert
+          icon={<Report style={{width:150, height:150,marginLeft:60, marginRight:60, marginTop:30}} color='secondary'/>}
+          onClick={handleCloseWarning}
+          detail = "Insufficient Data"
+          open={warning}/>
     </>
   );
 };
-export default connect()(TimeTable)
+export default connect(state => ({odooServerStatus : state.changePicker.odooServerStatus}))(TimeTable)

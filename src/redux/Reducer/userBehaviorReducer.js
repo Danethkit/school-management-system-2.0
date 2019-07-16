@@ -13,7 +13,8 @@ import {
     SET_SUBJECTS,
     CHANGE_REPORT_END_DATE,
     CHANGE_REPORT_START_DATE,
-    SET_SELECTED_FACULTY
+    SET_SELECTED_FACULTY,
+    PRINT_REPORT_LOADING
 } from '../../constants/env'
 
 const initialPicker = {
@@ -27,11 +28,12 @@ const initialPicker = {
     semester : 'Semester 1',
     course: 'Software Engineering',
     searchField: '',
-    createAttendanceRequested : false,
+    odooServerStatus : false,
     subjects : [],
     endDate : new Date(),
     startDate : new Date(),
-    selectedFaculty : {}
+    selectedFaculty : {},
+    printReportLoading : false,
 }
 
 export const changePicker = (state=initialPicker, action={}) => {
@@ -49,6 +51,7 @@ export const changePicker = (state=initialPicker, action={}) => {
         case CHANGE_SEMESTER:
             return Object.assign({}, state, {semester:action.payload})
         case CHANGE_COURSE:
+            if(!action.payload) return state
             return Object.assign({}, state, {course:action.payload})
         case CHANGE_FACULTY:
             return Object.assign({}, state, {faculty:action.payload})
@@ -57,7 +60,7 @@ export const changePicker = (state=initialPicker, action={}) => {
         case CHANGE_SEARCH_FIELD:
             return { ...state, ...{searchField:action.payload}}
         case TOGGLE_DIALOG:
-            return { ...state, ...{createAttendanceRequested:action.payload}}
+            return { ...state, ...{odooServerStatus:action.payload}}
         case SET_SUBJECTS:
             return {...state, ...{subjects:action.payload}}
         case CHANGE_REPORT_END_DATE:
@@ -66,6 +69,8 @@ export const changePicker = (state=initialPicker, action={}) => {
             return {...state,...{startDate:action.payload}}
         case SET_SELECTED_FACULTY:
             return {...state, ...{selectedFaculty:action.payload}}
+        case PRINT_REPORT_LOADING:
+            return {...state, ...{printReportLoading:action.payload}}
         default:
             return state
     }

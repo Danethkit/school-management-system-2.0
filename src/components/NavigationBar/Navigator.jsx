@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from "react";
 import {
   AppBar,
-  Badge,
   IconButton,
   Tab,
   Tabs,
@@ -10,9 +9,7 @@ import {
 import {connect} from 'react-redux'
 import MenuIcon from '@material-ui/icons/Menu';
 import { withStyles } from "@material-ui/core";
-import { Chat, AlternateEmail } from "@material-ui/icons";
 import SideBarDrawer from '../NavigationBar/SideBarDrawer'
-import CalendarToday from '@material-ui/icons/CalendarToday'
 import Input from '@material-ui/icons/Input'
 import Person from '@material-ui/icons/Person'
 import Group from '@material-ui/icons/Group'
@@ -20,7 +17,6 @@ import Subtitles from '@material-ui/icons/Subtitles'
 import List from '@material-ui/icons/List'
 import Print from '@material-ui/icons/Print'
 import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography'
 
 
 
@@ -61,7 +57,6 @@ const navBar = [
   "Exams",
   "Library",
   "Apps",
-  "App Setting"
 ];
 
 const NavigationBar = ({classes, history, userIden}) => {
@@ -76,6 +71,25 @@ const NavigationBar = ({classes, history, userIden}) => {
   })
 
   const changeNavigateRoute = (event, route) => {
+    if(!(route.includes('timetable') || route.includes('attendance')) ){
+      console.log({route});
+      switch(route){
+        case "/sms/assignments" :
+          return  window.location.href = 'http://192.168.7.222:8069/web#page=0&limit=80&view_type=list&model=op.assignment&menu_id=209&action=264'
+        case "/sms/event":
+          return window.location.href = 'http://192.168.7.222:8069/web#view_type=kanban&model=event.event&menu_id=392&action=405'
+        case "/sms/facultices":
+          return window.location.href ='http://192.168.7.222:8069/web#view_type=form&model=board.board&menu_id=192&action=247'
+        case "/sms/exams":
+          return window.location.href = "http://192.168.7.222:8069/web#page=0&limit=80&view_type=list&model=op.exam.session&menu_id=270&action=327"
+        case "/sms/library":
+          return window.location.href ="http://192.168.7.222:8069/web#view_type=form&model=board.board&menu_id=222&action=295"
+        case "/sms/apps":
+          return window.location.href ="http://192.168.7.222:8069/web#view_type=kanban&model=ir.module.module&menu_id=51&action=36"
+        default:
+          return
+      }
+    }
     setRoute(route)
     history.push(route);
   };
@@ -134,20 +148,11 @@ const NavigationBar = ({classes, history, userIden}) => {
               ))}
             </Tabs>
 
-            <IconButton color="inherit">
-              <Badge badgeContent={7} color="secondary">
-                <AlternateEmail />
-              </Badge>
-            </IconButton>
-
-            <IconButton color="inherit" className={classes.iconButtonBlock}>
-              <Badge badgeContent={17} color="secondary">
-                <Chat />
-              </Badge>
-            </IconButton>
-
             <IconButton className={classes.iconButtonBlock} color="inherit">
-              <Avatar alt="avatar"  src={`data:image/png;base64, ${userIden['img']}`}/>
+              {
+                userIden['img'] !== undefined ?
+                <Avatar alt="avatar"  src={`data:image/png;base64, ${userIden['img']}`}/>: null
+              }
             </IconButton>
           </Toolbar>
         </AppBar>

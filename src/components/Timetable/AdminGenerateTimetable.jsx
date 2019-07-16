@@ -7,6 +7,7 @@ import DefaultAlert from '../../components/Alert/DefaultDialog'
 import { Prompt } from 'react-router-dom'
 import ToggleButton from '../Picker/ToggleButton'
 import AdminTimeTableTreeView from '../Table/AdminTimeTableTreeView'
+import Report from '@material-ui/icons/Report'
 
 
 // helper functoin to asign nested key object
@@ -21,6 +22,7 @@ function assign(obj, keyPath, value) {
 }
 
 const weekday = {'Sun':0, 'Mon':1, 'Tue':2, 'Wed':3, 'Thu':4, 'Fri':5, 'Sat':6}
+
 const areEqual = (prevProps, nextProps) => {
   if (
     nextProps.course === null &&
@@ -52,7 +54,7 @@ const filterTable = (
   if (Object.keys(data).length === 0) {
     return res;
   }
-  console.log({course, batch, semester, group});
+  try{
   if (group && semester && batch && course) {
     let session = data[course][batch][semester][group]['session'];
     if(!session) return res
@@ -125,6 +127,7 @@ const filterTable = (
       }
     }
   }
+}catch{}
   return res;
 };
 // weekStr, handleChangeWeekStr, handleCurrentWeek, handleLastWeek, handleNextWeek, ...others
@@ -228,11 +231,10 @@ class AdminTimeTable extends Component {
 
   render() {
     const {weekStr, handleChangeWeekStr, handleCurrentWeek, handleLastWeek, handleNextWeek, ...others} = this.props
-    const {subjectInfo, course, batch, semester, group, week, endSemDate, dispatch} = others
+    const {subjectInfo, course, batch, semester, group, week, dispatch} = others
 
     const {data, open, warning, mode}= this.state
-
-    let allTables =  filterTable(subjectInfo, course, batch, semester, group);
+    let  allTables =  filterTable(subjectInfo, course, batch, semester, group);
     let weekStartDate = ''
     let weekEndDate = ''
     try{
@@ -243,6 +245,7 @@ class AdminTimeTable extends Component {
           }
         }
     }catch{}
+
     return (
       <>
       <Prompt
@@ -250,10 +253,9 @@ class AdminTimeTable extends Component {
         message='You have unsaved changes, are you sure you want to leave?'
       />
       <TimeTableSearchBox setWeekNumber={handleChangeWeekStr} value={weekStr} />
-        <DateNavigator
+      <DateNavigator
           week={week}
           weekStr={weekStr}
-          endSemDate = {endSemDate}
           handleLastWeek={handleLastWeek}
           handleNextWeek={handleNextWeek}
           handleCurrentWeek={handleCurrentWeek}
@@ -296,9 +298,9 @@ class AdminTimeTable extends Component {
         </>
       }
       <DefaultAlert
-          icon
+          icon={<Report style={{width:150, height:150,marginLeft:60, marginRight:60, marginTop:30}} color='secondary'/>}
           onClick={this.handleCloseWarning}
-          title = "You must select week first"
+          detail = "You must select week first"
           open={warning}/>
       </>
     );

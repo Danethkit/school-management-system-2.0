@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { onCourseChange, onBatchChange } from '../../redux/ActionCreator/userBehavior'
+import { onCourseChange } from '../../redux/ActionCreator/userBehavior'
 import AutoComplete from './AutoComplete'
 
 const CoursePicker = ({course, subjectInfo, userIden, uid, dispatch}) => {
@@ -12,11 +12,6 @@ const CoursePicker = ({course, subjectInfo, userIden, uid, dispatch}) => {
     data = userIden
   }
   let actions = bindActionCreators({onCourseChange}, dispatch)
-  useEffect(()=> {
-    if(!(course)){
-      dispatch(onBatchChange(null))
-    }
-  })
   return <AutoComplete
           value={course}
           onChange={actions.onCourseChange}

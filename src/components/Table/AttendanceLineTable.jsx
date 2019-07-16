@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -51,38 +51,50 @@ function getSorting(order, orderBy) {
     : (a, b) => -desc(a, b, orderBy);
 }
 
-class AttendanceLineTable extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      page: 0,
-      rowsPerPage: 20,
-      order: "asc",
-      orderBy: "student"
-    };
-  }
-  handleChangePage = (event, page) => {
-    this.setState({ page });
+const AttendanceLineTable = ({classes, attendanceLine, searchField, dispatch}) => {
+
+  const [page, setPage] = useState(0)
+  const [rowsPerPage, setRowPerPage] = useState(20)
+  const [order, setOrder] = useState("asc")
+  const [orderBy, setOrderBy] = useState("student")
+
+  const handleChangePage = (event, page) => {
+    setPage(page)
   };
-  handleChangeRowsPerPage = event => {
-    this.setState({ page: 0, rowsPerPage: event.target.value });
+
+  const handleChangeRowsPerPage = event => {
+    console.log('value', event.target.value);
+    setPage(0)
+    setRowPerPage(parseInt(event.target.value))
   };
-  handleRequestSort = (event, property) => {
+
+  const handleRequestSort = (event, property) => {
     const orderBy = property;
     let order = "desc";
 
-    if (this.state.orderBy === property && this.state.order === "desc") {
+    if (orderBy === property && order === "desc") {
       order = "asc";
     }
-    this.setState({ order, orderBy });
+    setOrder(order)
+    setOrderBy(orderBy)
   };
-  // componentDidMount() {
-  //   this.props.dispatch(getAttendanceLine())
-  // }
-  render() {
-    const { classes, attendanceLine, searchField } = this.props;
-    const { rowsPerPage, page, order, orderBy } = this.state;
-    let filteredData = attendanceLine.filter(line => line.student.toLowerCase().includes(searchField.toLowerCase()))
+
+  useEffect(()=>{
+    let data = {}
+    data['lineNumber'] = rowsPerPage
+    if('lastId' in attendanceLine){
+      data['lastId'] = attendanceLine.lastId
+    }
+    console.log({page, rowsPerPage});
+    if(attendanceLine.data === undefined || page >= attendanceLine.data.length) dispatch(getAttendanceLine(data))
+  }, [page])
+
+
+  let filteredData = []
+  if(attendanceLine.data !== undefined){
+    console.log({attendanceLine});
+    filteredData = attendanceLine.data.filter(line => line.student.toLowerCase().includes(searchField.toLowerCase()))
+  }
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, filteredData.length - page * rowsPerPage);
     return (
@@ -92,7 +104,7 @@ class AttendanceLineTable extends Component {
             <AttendanceLineTableHead
               order={order}
               orderBy={orderBy}
-              onRequestSort={this.handleRequestSort}
+              onRequestSort={handleRequestSort}
             />
             <TableBody>
               {stableSort(filteredData, getSorting(order, orderBy))
@@ -149,8 +161,8 @@ class AttendanceLineTable extends Component {
                   SelectProps={{
                     native: true
                   }}
-                  onChangePage={this.handleChangePage}
-                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                  onChangePage={handleChangePage}
+                  onChangeRowsPerPage={handleChangeRowsPerPage}
                   ActionsComponent={TablePaginationActions}
                 />
               </TableRow>
@@ -160,7 +172,7 @@ class AttendanceLineTable extends Component {
       </Paper>
     );
   }
-}
+
 
 AttendanceLineTable.propTypes = {
   classes: PropTypes.object.isRequired

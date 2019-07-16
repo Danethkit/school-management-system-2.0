@@ -4,21 +4,21 @@ import DateFnsUtils from "@date-io/date-fns";
 import { InputAdornment } from '@material-ui/core'
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 
-export default ({value, onChange , label}) =>{
+export default ({value, onChange , label, maxDate=new Date(), minDate}) =>{
     return (
       <MuiPickersUtilsProvider
           style={{width:280}} utils={DateFnsUtils}>
         <KeyboardDatePicker
           format="MM/dd/yyyy"
           autoOk
-          maxDate ={new Date()}
+          minDate = {minDate}
+          maxDate ={maxDate}
           inputVariant='outlined'
           autoFocus
           fullWidth
           variant="inline"
           value={value}
           onChange={onChange}
-          // style={{marginBottom:4}}
           InputProps={{
             startAdornment: (
               <InputAdornment

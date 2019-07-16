@@ -5,7 +5,7 @@ import { onSemesterChange, onGroupChange } from '../../redux/ActionCreator/userB
 import AutoComplete from './AutoComplete'
 
 
-const SemesterPicker = ({dispatch, semester, subjectInfo, batch, userIden, course}) => {
+const SemesterPicker = ({dispatch, semester, subjectInfo, batch, userIden, course, disable=false}) => {
 
   let actions = bindActionCreators(onSemesterChange, dispatch)
 
@@ -18,7 +18,7 @@ const SemesterPicker = ({dispatch, semester, subjectInfo, batch, userIden, cours
     if(!semester) {
       dispatch(onGroupChange(null))
     }
-    // if(Object.keys(userIden).length) dispatch(actions(userIden['semester']))
+    if(Object.keys(userIden).length) dispatch(actions(userIden['semester']))
   },[userIden])
 
   return <AutoComplete
@@ -27,7 +27,7 @@ const SemesterPicker = ({dispatch, semester, subjectInfo, batch, userIden, cours
           onChange ={actions}
           label = "Semester"
           suggestions = {semesters}
-          // disable
+          disable = {disable}
         />
 }
 export default connect(state => ({

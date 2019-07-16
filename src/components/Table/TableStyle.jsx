@@ -3,7 +3,6 @@ import {makeStyles} from '@material-ui/core'
 export default makeStyles(theme => ({
     root: {
       width: "100%",
-      marginTop: theme.spacing(3)*3,
       overflow: "auto",
       marginBottom: theme.spacing(2),
     },
@@ -21,7 +20,6 @@ export default makeStyles(theme => ({
     },
     generateTimetable: {
       padding: 0,
-      marginTop: -60,
       marginBottom: theme.spacing(2)
     },
     container: {

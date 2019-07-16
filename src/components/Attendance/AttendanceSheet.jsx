@@ -13,6 +13,7 @@ const styles = theme => ({
 });
 
 const AttendancesSheet = ({classes, dispatch, date, course, batch, group, faculty, semester, session, subjectInfo, userIden}) => {
+
   let yyyy = ""
   let mm = ""
   let dd = ""
@@ -40,7 +41,7 @@ const AttendancesSheet = ({classes, dispatch, date, course, batch, group, facult
     if(date == 'Invalid Date') return
     if(!date) return
     if(date > new Date()) return
-    dispatch(requestUserIdentity({date:`${yyyy}-${mm}-${dd}`, course, batch, group, faculty, semester}))
+    dispatch(requestUserIdentity({date:`${yyyy}-${mm}-${dd}`, course, batch, group, semester}))
   }, [date, faculty, course, batch, group, semester])
 
   const [sessionNumber, setSessionNumber] = useState(1)

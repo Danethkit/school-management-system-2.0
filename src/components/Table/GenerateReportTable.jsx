@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { connect } from 'react-redux'
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import { Box, Table, TableBody, TableCell, TableRow, Button } from "@material-ui/core";
+import { Box, Table, TableBody, TableCell, TableRow, Button, Typography, LinearProgress } from "@material-ui/core";
 import GenerateReportTableHead from "./GenerateReportTableHead";
 import DownloadButton from '../Button/DownloadButton'
-import {getAttendanceLine,requestStudent, printAttendanceReport } from '../../redux/ActionCreator/apiRequest'
-import printJS from 'print-js'
+import {getReportAttendanceLine,requestStudent, printAttendanceReport } from '../../redux/ActionCreator/apiRequest'
+import moment from 'moment'
 
 const styles = theme => ({
     root: {
@@ -61,12 +60,12 @@ function getSorting(order, orderBy) {
 }
 
 const GenerateReportTable = (props) => {
+
     const [order, setOrder] = useState('asc')
     const [orderBy, setOrderBy] = useState('roll_number')
 
-    let { attendanceLine, dispatch, studentData, batch, group, endDate, startDate, course, classes, subjectInfo, semester } = props
+    let { attendanceReportData, dispatch, studentData, batch, group, endDate, startDate, course, classes, subjectInfo, semester } = props
 
-    console.log({subjectInfo});
     const handleRequestSort = (event, property) => {
         const orderBy = property;
         let order = "desc";
@@ -79,7 +78,23 @@ const GenerateReportTable = (props) => {
     };
 
     const handleClickPrintReport =  () => {
-        dispatch(getAttendanceLine({course, batch, group, endDate, startDate, semester }))
+        dispatch(getReportAttendanceLine({
+            course,
+            batch,
+            semester,
+            group,
+            endDate:moment(endDate).format('YYYY-MM-DD'),
+            startDate:moment(startDate).format('YYYY-MM-DD') }))
+    }
+
+    const printPdfReport = () => {
+        dispatch(printAttendanceReport({
+            course,
+            semester,
+            batch,
+            group,
+            startDate: moment(startDate).format('YYYY-MM-DD'),
+            endDate:moment(endDate).format('YYYY-MM-DD')}))
     }
 
     useEffect(() => {
@@ -88,8 +103,6 @@ const GenerateReportTable = (props) => {
         }
     }, [])
 
-
-
     let subjects = []
     try{
         if(Object.keys(subjectInfo).length !== 0){
@@ -97,10 +110,9 @@ const GenerateReportTable = (props) => {
         }
     }catch{}
 
-
     let res = {}
-    if(attendanceLine.data !== undefined) {
-        attendanceLine.data.forEach(line => {
+    if(attendanceReportData.data !== undefined) {
+        attendanceReportData.data.forEach(line => {
             if(line.student in res){
                 if(line.subject in res[line.student]){
                     res[line.student][line.subject] += 1
@@ -114,17 +126,13 @@ const GenerateReportTable = (props) => {
             }
         })
     }
-    const printReport = () => {
-        printJS({
-            printable: 'attendanceReport',
-            type: 'html',
-            style:'#attendanceReport {min-width:2000}',
-            targetStyle:['min-width']
-          })
-    }
+    let total = 0
+
     return (
         <>
-        <Button variant='contained' color='secondary' onClick={handleClickPrintReport}>Print Report</Button>
+        <div style={{margin:'auto', width:'12%'}}>
+        <Button variant='contained' color='secondary' onClick={handleClickPrintReport} style={{width:'100%', marginTop:10}}>Print Report</Button>
+        </div>
         {
         Object.keys(res).length !== 0 ?
         <>
@@ -137,7 +145,9 @@ const GenerateReportTable = (props) => {
                             onRequestSort={handleRequestSort}
                         />
                         <TableBody>
-                            {stableSort(studentData[course][batch][group], getSorting(order, orderBy)).map((row,i) => {
+                            {studentData[course] === undefined ? null :
+                                stableSort(studentData[course][batch][group], getSorting(order, orderBy)).map((row,i) => {
+                                total = 0
                                 return (
                                     <TableRow hover key={row.roll_number}>
                                         <TableCell className={classes.textRow}>
@@ -152,14 +162,19 @@ const GenerateReportTable = (props) => {
                                         {
                                             subjects.map((e, i)=> {
                                                 let key = row.last_name +' '+ row.name
+                                                if(res[key] !== undefined){
+                                                    if( e.subject in res[key]){
+                                                        total += res[key][e.subject]
+                                                    }
+                                                }
                                                 return <TableCell  className={classes.textRow} padding="none" key={i}>{
-                                                    res[row.last_name +' '+ row.name] === undefined ? 0 :
+                                                    res[key] === undefined ? 0 :
                                                     e.subject in res[key] ? res[key][e.subject]: 0}
                                                     </TableCell>
                                             })
                                         }
                                         <TableCell className={classes.textRow}>
-                                            {row.total}
+                                            {total}
                                         </TableCell>
                                     </TableRow>
                                 );
@@ -167,9 +182,12 @@ const GenerateReportTable = (props) => {
                         </TableBody>
                     </Table>
             </Box>
-            <DownloadButton classes ={classes} handleClick={printReport} />
+            {
+             props.printReportLoading ? <LinearProgress /> : null
+            }
+            <DownloadButton classes ={classes} handleClick={printPdfReport} />
                 </>
-            :null}
+            :<Typography  variant='subtitle1' component='h2'>No Records...</Typography>}
             </>
     );
 }
@@ -179,14 +197,4 @@ GenerateReportTable.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default connect(state => ({
-    endDate: state.changePicker.endDate,
-    startDate: state.changePicker.startDate,
-    batch: state.changePicker.batch,
-    group: state.changePicker.group,
-    semester: state.changePicker.semester,
-    course: state.changePicker.course,
-    attendanceLine: state.initData.attendanceLine,
-    studentData : state.initData.studentData,
-    subjectInfo : state.initData.subjectInfo,
-})) (withStyles(styles)(GenerateReportTable))
+export default  withStyles(styles)(GenerateReportTable)

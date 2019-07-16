@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -13,6 +13,8 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Switch from '@material-ui/core/Switch';
+import {connect} from 'react-redux'
+import {editTimeTable} from '../../redux/ActionCreator/apiRequest'
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -27,17 +29,17 @@ const useStyles = makeStyles(theme => ({
       flex: 1,
     },
 }));
-export default ({open, handleClose, currentWeek, editTT, header, ...rest}) =>{
+export default connect()(({open, handleClose, handleChange, editMode ,currentWeek, editTT, header, dispatch, ...rest}) =>{
 
-    const [editMode, setEditMode] = useState(false)
-    const handleChange = () => event => {
-        setEditMode(!editMode);
-    };
+    const handleSaveEdit =() => {
+      dispatch(editTimeTable(editTT))
+    }
+
     const classes = useStyles()
     return (
     <div>
       <Dialog
-        fullScreen
+      fullScreen
         open={open}
         TransitionComponent={Transition}
         keepMounted
@@ -59,7 +61,7 @@ export default ({open, handleClose, currentWeek, editTT, header, ...rest}) =>{
                 inputProps={{ 'aria-label': 'secondary checkbox' }}
                 />
             </Typography>
-            <Button color="inherit" onClick={handleClose}>
+            <Button color="inherit" onClick={handleSaveEdit}>
               save
             </Button>
           </Toolbar>
@@ -73,4 +75,4 @@ export default ({open, handleClose, currentWeek, editTT, header, ...rest}) =>{
       </Dialog>
     </div>
   );
-}
+})

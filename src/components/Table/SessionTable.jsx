@@ -18,7 +18,9 @@ import SessionTableToolBar from "./SessionTableToolBar"
 import AttendanceButton from "../Button/AttendanceButton"
 import { connect } from 'react-redux'
 import { store } from '../../redux/store'
-import AttendanceSheetDialog from '../Alert/AttendanceSheetDialog'
+import OdooServerStatusDialog from '../Alert/OdooServerStatusDialog'
+import { Prompt } from 'react-router-dom'
+
 
 const styles = theme => ({
   root: {
@@ -74,7 +76,7 @@ const mapStateToProps = (state) => {
     course: state.changePicker.course,
     semester: state.changePicker.semester,
     session: state.changePicker.session,
-    createAttendanceRequested: state.changePicker.createAttendanceRequested
+    odooServerStatus : state.changePicker.odooServerStatus
   }
 }
 
@@ -97,10 +99,9 @@ class SessionTable extends Component {
   }
   // get all inputed data and request for create attendance sheet
   createAttendanceSheet = () => {
-    let { createAttendanceSheet, session, group, createAttendanceRequested } = this.props
-    console.log('========>',createAttendanceRequested);
+    let { createAttendanceSheet, session, group } = this.props
     let selected = this.state.selected
-    let selectedStu = selected[session][group]
+    let selectedStu = selected[session] !== undefined ? selected[session][group] : []
     let storeData = store.getState()
     let {subject, date, batch, remark, semester, course} = storeData.changePicker
     let data = {
@@ -121,16 +122,17 @@ class SessionTable extends Component {
     this.props.requestStudent()
   }
 
-  componentWillReceiveProps(props){
-    let {createAttendanceRequested, session} = props
-    let selected = this.state.selected
-    if(createAttendanceRequested !== false){
-      if (createAttendanceRequested.result === 'ok'){
-        delete selected[session]
-        this.setState({selected})
-      }
-    }
-  }
+// clear data once it saved
+  // componentWillReceiveProps(props){
+  //   let {odooServerStatus, session} = props
+  //   let selected = this.state.selected
+  //   if(odooServerStatus !== false){
+  //     if (odooServerStatus.result === 'ok'){
+  //       delete selected[session]
+  //       this.setState({selected})
+  //     }
+  //   }
+  // }
 
   handleRequestSort = (event, property) => {
     const orderBy = property;
@@ -228,7 +230,7 @@ class SessionTable extends Component {
   }
 
   render() {
-    const { classes, studentData, batch, session, sessions, sessionNumber, course, group} = this.props
+    const { classes, studentData, batch, session, sessions, sessionNumber, course, group, odooServerStatus} = this.props
     const { order, orderBy, selected } = this.state
     let numSelected = 0
     if(session in selected){
@@ -241,6 +243,10 @@ class SessionTable extends Component {
 
     return (
       <>
+      <Prompt
+        when={Object.keys(selected).length === 0 ? false : true}
+        message='You have unsaved changes, are you sure you want to leave?'
+      />
       {
         !data ? <h4>Please set course, batch, and group properly</h4>
         : <>
@@ -310,7 +316,7 @@ class SessionTable extends Component {
           </div>
         </Box>
         <AttendanceButton  onClick={this.createAttendanceSheet}/>
-        <AttendanceSheetDialog />
+        <OdooServerStatusDialog odooServerStatus={odooServerStatus}/>
         </>
       }
       </>

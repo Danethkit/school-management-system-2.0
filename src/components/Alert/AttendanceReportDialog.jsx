@@ -17,11 +17,12 @@ const styles = theme => ({
     height: '100%'
   },
   dialogPaper: {
-    minHeight: '80vh',
-    maxHeight: '80vh',
+    width: '100%',
+    height: '100%'
   },
   dialogContent: {
-    height: '700px',
+    height: '100%',
+    width:'100%'
   },
   icon: {
     width: 150,
@@ -36,28 +37,31 @@ const styles = theme => ({
   }
 });
 
-const AttendanceReportDialog = ({classes,report,dispatch, b64, startDate, endDate}) =>{
+const AttendanceReportDialog = ({classes, reportOpen, b64Report, dispatch, startDate, endDate}) =>{
+
 const onClick = () => dispatch({type:PRINT_ATTENDANCE_REPORT, payload:false})
-var link = React.createElement('a', {download:`Attendance Report ${startDate.toDateString()}~${endDate.toDateString()}.pdf`, href:'data:application/octet-stream;base64,' + b64}, 'Download');
-let obj = React.createElement('embed', {style:{width:'100%', height:'100%'},type:'application/pdf', src:'data:application/pdf;base64,' + report})
+let link = React.createElement('a', {style:{textDecoration:'none'},download:`Attendance Report ${startDate.toDateString()}~${endDate.toDateString()}.pdf`, href:'data:application/octet-stream;base64,' + b64Report}, 'Download');
+let obj = React.createElement('embed', {style:{width:'100%', height:'100%'},type:'application/pdf', src:'data:application/pdf;base64,' + b64Report})
+
 return (
     <Dialog
+        fullScreen
         fullWidth={true}
         maxWidth='sm'
         disableEscapeKeyDown
         classes={{paper: classes.dialogPaper}}
-        open={ report? true  :false}
+        open={ reportOpen? true  :false}
         className={classes.root}>
         <DialogContent className={classes.dialogContent}>{obj}</DialogContent>
         <DialogActions>
-            <Button
+            <div
                 className={classes.button}
                 onClick={onClick}
                 size='medium'
                 variant="outlined"
                 color="primary">
-                    {link}
-            </Button>
+                  {link}
+            </div>
             <Button
             className={classes.button}
             size='medium'
@@ -69,10 +73,8 @@ return (
             </Button>
         </DialogActions>
     </Dialog>)
-}  
+}
 export default connect(state=>({
-  report:state.initData.report,
-  b64: state.initData.b64Report,
-  endDate: state.changePicker.endDate,
-  startDate: state.changePicker.startDate,
+  reportOpen:state.initData.reportOpen,
+  b64Report:state.initData.b64Report,
 }))(withStyles(styles)(AttendanceReportDialog))

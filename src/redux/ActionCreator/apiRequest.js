@@ -14,7 +14,10 @@ import {
     SET_STUDENT_TIMETABLE,
     SET_TIMETABLE_VIEW,
     SET_EDIT_TT,
-    SET_UID
+    SET_UID,
+    SET_SEM_DATE,
+    PRINT_REPORT_LOADING,
+    SET_ATTENDANCE_REPORT_DATA
 } from '../../constants/env'
 import {odooRequest, odooPrintReport} from '../api'
 // Helper functino
@@ -58,57 +61,16 @@ export const requestStudent= () => (dispatch) => {
     })
     .catch(err => dispatch({type: REQUEST_FAILED, data:err}))
 }
-// request subejct data
 
-// export const requestSubject= () => (dispatch) => {
-//     odooRequest('op.subject', 'search_read', ['name','id', 'batch_id', 'semester_id', 'class_id', 'code'])
-//     .then(data => {
-//         dispatch({type: REQUEST_SUBJECT_SUCCESS, payload:groupByBatch(data)})
-//     })
-//     .catch(err => dispatch({type: REQUEST_FAILED, payload:err}))
-// }
-
-// request session data 
-// export const requestSession = () => (dispatch) => {
-//     odooRequest('op.period', 'search_read', ['name', 'sequence'])
-//     .then(data => {
-//         dispatch({type: REQUEST_SESSION_SUCCESS, payload:data})
-//     })
-//     .catch(err => dispatch({type: REQUEST_FAILED, payload:err}))
-// }
-// request facility data 
-// export const requestFaculty = () => (dispatch) => {
-//     odooRequest('op.faculty', 'search_read', ['name', 'id'])
-//     .then(data => {
-//         dispatch({type: REQUEST_FACULTY_SUCCESS, payload:data})
-//     })
-//     .catch(err => dispatch({type: REQUEST_FAILED, payload:err}))
-// }
-// request course 
-// export const requestCourse = () => (dispatch) => {
-//     odooRequest('op.course', 'search_read', ['name', 'id'])
-//     .then(data => {
-//         dispatch({type: REQUEST_COURSE_SUCCESS, payload:data})
-//     })
-//     .catch(err => dispatch({type: REQUEST_FAILED, payload:err}))
-// }
-// request semester 
-// export const requestSemester = () => (dispatch) => {
-//     odooRequest('op.semester', 'search_read', ['name', 'id', 'batch_id', 'class_id'])
-//     .then(data => {
-//         dispatch({type: REQUEST_SEMESTER_SUCCESS, payload:groupByBatch(data)})
-//     })
-//     .catch(err => dispatch({type: REQUEST_FAILED, payload:err}))
-// }
-
-// request group data
-// export const requestGroup = () => (dispatch) => {
-//     odooRequest('op.class', 'search_read', ['name', 'id'])
-//     .then(data => {
-//         dispatch({type: REQUEST_GROUP_SUCCESS, payload:data})
-//     })
-//     .catch(err => dispatch({type: REQUEST_FAILED, payload:err}))
-// }
+export const requestSemesterDate = ({course, batch, semester, group}) => (dispatch) => {
+    odooRequest('op.semester', 'search_read', ['start_date', 'end_date'],
+     [['course_id.name', '=', course],
+      ['batch_id.name', '=', batch],
+      ['class_id.name', '=', group],
+      ['name', '=', semester]])
+    .then(res => dispatch({type:SET_SEM_DATE, payload:res}))
+    .catch(err =>console.log(err))
+}
 
 export const createAttendanceSheet= (data) => (dispatch) => {
     fetch('http://192.168.7.240:8008/create-attendance-sheet',{
@@ -137,6 +99,20 @@ export const getAttendanceLine = (data) => (dispatch) => {
     .catch(err => dispatch({type:REQUEST_ATTENDANCE_LINE_FAILED, payload:err}))
 }
 
+export const getReportAttendanceLine = (data) => (dispatch) => {
+    dispatch({type: REQUEST_ATTENDANCE_LINE_PENDING})
+    fetch('http://192.168.7.240:8008/get-attendance-line', {
+        method: 'post',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+            params : data
+        })
+    })
+    .then(res => res.json())
+    .then( data => dispatch({type: SET_ATTENDANCE_REPORT_DATA, payload:JSON.parse(data.result)}))
+    .catch(err => dispatch({type:REQUEST_ATTENDANCE_LINE_FAILED, payload:err}))
+}
+
 export const getSubjectData = () => (dispatch) => {
     fetch('http://192.168.7.240:8008/get-subject-data')
     .then(res => res.json())
@@ -153,21 +129,15 @@ export const getSessionData = () => (dispatch) => {
 }
 
 export const printAttendanceReport = (data) => (dispatch) => {
-    console.log({data});
-    fetch('http://192.168.7.240:8008/print-attendance-report',{
-        method: 'post',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({
-            params : data
-        })
-       })
-    .then(response => response.json())
-    .then(data => {
-        console.log('data',data)
-        dispatch({type:SET_REPORT_B64, payload:JSON.parse(data.result).data})
-        dispatch({type: PRINT_ATTENDANCE_REPORT, payload: JSON.parse(data.result).data})
+    dispatch({type:PRINT_REPORT_LOADING, payload:true})
+    odooPrintReport('sms2.attendance_report_qweb',data)
+    .then(value =>{
+        const b64 = value.result
+        dispatch({type:PRINT_ATTENDANCE_REPORT, payload:b64})
+        dispatch({type:SET_REPORT_B64, payload:b64})
+        dispatch({type:PRINT_REPORT_LOADING, payload:false})
     })
-    .catch(err => dispatch({type: TOGGLE_DIALOG, payload: err}))
+    .catch(err => console.log(err))
 
 }
 
@@ -262,4 +232,17 @@ export const getUid = () => (dispatch) => {
     .then(response => response.json())
     .then(data => dispatch({type: SET_UID, payload:JSON.parse(data.result)}))
     .catch(err => console.log(err));
+}
+
+export const editTimeTable = (data) => (dispatch) => {
+    fetch('http://192.168.7.240:8008/edit-time-table',{
+        method: 'post',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+            params : data
+        })
+       })
+       .then(response => response.json())
+       .then(data => dispatch({type: TOGGLE_DIALOG, payload: data}))
+       .catch(err => dispatch({type: TOGGLE_DIALOG, payload: err}))
 }

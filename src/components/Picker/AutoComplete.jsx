@@ -11,6 +11,7 @@ import Popper from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
 
 
+
 function renderInput(inputProps) {
     const { InputProps, classes, ref,label,onClick,width, disable, ...other } = inputProps;
     return (
@@ -64,9 +65,9 @@ function renderSuggestion(suggestionProps) {
               if(!e) return
               if(!isBusy){
                   if(selectedItem){
-                      selectedFacultyArray.forEach(e => isBusy = selectedItem.includes(e.split('(')[1]))
+                      selectedFacultyArray.forEach(e => isBusy = selectedItem.includes(e.split(' ~ ')[1]))
                   } else{
-                      isBusy = suggestion.label.includes(e.split('(')[1])
+                      isBusy = suggestion.label.includes(e.split(' ~ ')[1])
                   }
               }
           })
@@ -102,6 +103,8 @@ function getSuggestions(value, { showEmpty = false } = {}, suggestions) {
 const useStyles = makeStyles(theme => ({
         root: {
             flexGrow: 1,
+            position: "absolute",
+            zIndex: 9999,
         },
         container: {
             flexGrow: 1,
@@ -109,7 +112,7 @@ const useStyles = makeStyles(theme => ({
         },
         paper: {
             position: "absolute",
-            zIndex: 999,
+            zIndex: 9999,
             marginTop: theme.spacing(1),
             left: 0,
             right: 0,
@@ -130,6 +133,7 @@ const useStyles = makeStyles(theme => ({
 );
 
 function AutoComplete({suggestions, value=null, onChange, disable = false, label, selectedFaculty,width, ...rest}) {
+
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -182,10 +186,10 @@ function AutoComplete({suggestions, value=null, onChange, disable = false, label
                         disable
                     })
                 }
-                <Popper id={id} open={open} anchorEl={anchorEl} transition >
+                <Popper id={id} open={open} anchorEl={anchorEl} transition className={classes.root} >
                     {({ TransitionProps }) => (
                         <Fade {...TransitionProps}>
-                            <Paper style={{minWidth:225}}>
+                            <Paper style={{minWidth:225}} >
                                 {getSuggestions(inputValue, { showEmpty: true }, suggestions.map(e=>({label:e}))).map(
                                     (suggestion, index) =>
                                         renderSuggestion({

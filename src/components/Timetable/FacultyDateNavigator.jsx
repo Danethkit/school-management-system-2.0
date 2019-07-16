@@ -1,9 +1,8 @@
 import React from 'react'
-import { Dialog,DialogActions,DialogContent,DialogTitle, Button, Toolbar, withStyles}
+import {Button, Toolbar, withStyles}
 from '@material-ui/core'
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import WeekPicker from '../Picker/WeekPicker'
 import moment from 'moment'
 
 const styles = theme => ({
@@ -65,7 +64,7 @@ const FacultyDateNavigator = ({classes, week, weekOfYear, handleLastWeek, handle
             </span>
             <span className={classes.middle}>
                 {
-                    <b>{moment.utc().week(week).weekday(0).format("ddd MM/DD")+ '~' + moment.utc().week(week).weekday(0).format("ddd MM/DD")}</b>
+                    <b>{moment.utc().week(week).weekday(0).format("ddd MM/DD")+ '~' + moment.utc().week(week).weekday(6).format("ddd MM/DD")}</b>
                 }
             </span>
         </Toolbar>

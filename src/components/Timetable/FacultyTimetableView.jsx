@@ -29,7 +29,7 @@ const FacultyTimeTableView = ({userIden, facultyTT, dispatch, subjectInfo}) =>{
     }
 
     useEffect(()=>{
-        dispatch(requestFacultyTimeTable({date:moment('2017-11-05', 'YYYY-MM-DD').format('YYYY-MM-DD')}))
+        dispatch(requestFacultyTimeTable({date:moment.utc().week(week).weekday(0).format('YYYY-MM-DD')}))
     }, [week])
 
     const classes = tableStyle();

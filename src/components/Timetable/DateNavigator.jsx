@@ -41,15 +41,17 @@ const styles = theme => ({
     }
 
 })
+
 const weekOfYear = moment.utc().week();
 
 const DateNavigator = ({classes, handleLastWeek, handleDuplicateTimetable,
-    handleCurrentWeek, weekEndDate,weekStartDate, handleNextWeek,
-    week, weekStr, open, setOpen, endSemDate, ...rest}) => {
+    handleCurrentWeek, weekEndDate,weekStartDate, handleNextWeek, disableCurrentWeek,
+    week, weekStr, open, setOpen, ...rest}) => {
 
     const {subjectInfo, course, batch, semester, group} = rest
 
-    let dateStr = moment.utc().week(week).format('YYYY-MM-DD')
+    console.log({disableCurrentWeek});
+
     let items = []
     let weekStartIndex = 0
     let weekEndIndex = 0
@@ -68,7 +70,7 @@ const DateNavigator = ({classes, handleLastWeek, handleDuplicateTimetable,
                 Last
             </Button>
 
-            <Button size="small" color="primary" className="button" variant="outlined" onClick={handleCurrentWeek} disabled={week === weekOfYear} >
+            <Button size="small" color="primary" className="button" variant="outlined" onClick={handleCurrentWeek} disabled={disableCurrentWeek} >
                 Current
             </Button>
 
