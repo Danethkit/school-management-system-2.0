@@ -53,8 +53,8 @@ export default connect(state=>({odooServerStatus : state.changePicker.odooServer
     const classes = tableStyle()
 
     return (
-        <div className={classes.container}>
-                <Paper className={classes.root}>
+        <>
+                <Paper className={classes.subRoot}>
                     <Table className={classes.table}>
                         <TableHead>
                                 <TableRow className={classes.row}>
@@ -95,6 +95,6 @@ export default connect(state=>({odooServerStatus : state.changePicker.odooServer
                     </Table>
                 </Paper>
                 <OdooServerStatusDialog odooServerStatus={odooServerStatus}/>
-        </div>
+        </>
     )
 })

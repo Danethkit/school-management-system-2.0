@@ -67,7 +67,7 @@ const AttendancesSheet = (props) => {
 
   return (
     <div className={classes.format}>
-      <h2>Attendance Sheet</h2>
+      <h1>Attendance Sheet</h1>
       <ElevationScroll {...props}>
         <AppBar position="static" color="default" >
           <Tabs
