@@ -14,7 +14,7 @@ export default function HeadPicker({ sessionNumber, userIden }) {
     <Box boxShadow={2} display={"flex"}>
       <Grid
         container
-        justify="center"
+        justify="flex-start"
         style={{ marginLeft: 20, marginRight: 20 }}
       >
         {userIden.length !== 0 ? (
@@ -22,7 +22,7 @@ export default function HeadPicker({ sessionNumber, userIden }) {
             item
             container
             spacing={10}
-            style={{ marginBottom: 2, marginTop: 8 }}
+            style={{ marginBottom: 2, marginTop: 8}}
             justify="flex-start"
             alignItems="center"
           >

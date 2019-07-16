@@ -7,10 +7,12 @@ import { requestUserIdentity } from "../../redux/ActionCreator/apiRequest";
 import ElevationScroll from "../NavigationBar/ElevationScroll";
 
 const styles = theme => ({
-  root: {
-    flexGrow: 1
+  root:{
+flexGrow: 1,
+width: "100%"
   },
   format: {
+    flexGrow: 1,
     marginLeft: "auto",
     marginRight: "auto",
     width: "100%",

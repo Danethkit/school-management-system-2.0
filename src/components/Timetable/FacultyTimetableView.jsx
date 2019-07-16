@@ -35,11 +35,11 @@ const FacultyTimeTableView = ({userIden, facultyTT, dispatch, subjectInfo}) =>{
     const classes = tableStyle();
 
     return(
-        <>
-            <div>
+        <div className={classes.format}>
+            {/* <div>
                 <h2><i>Faculty:</i> {userIden['user']}</h2>
                 <h3><i>Faculty Code:</i> 110101212</h3>
-            </div>
+            </div> */}
             <FacultyDateNavigator
                 week={week}
                 handleLastWeek={handleLastWeek}
@@ -48,7 +48,7 @@ const FacultyTimeTableView = ({userIden, facultyTT, dispatch, subjectInfo}) =>{
                 weekOfYear = {weekOfYear}
                 />
                 <div className={classes.container}>
-                    <Paper className={classes.root}>
+                    <Paper className={classes.subRoot}>
                         <Table className={classes.table}>
                             <TableHead>
                                 <TableRow className={classes.row} >
@@ -103,7 +103,7 @@ const FacultyTimeTableView = ({userIden, facultyTT, dispatch, subjectInfo}) =>{
                         </Table>
                     </Paper>
                 </div>
-        </>
+        </div>
     )
 }
 

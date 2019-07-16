@@ -9,13 +9,14 @@ import Paper from "@material-ui/core/Paper";
 import { TableFooter, TablePagination } from "@material-ui/core";
 import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
 import AttendanceLineTableHead from "./AttendanceLineTableHead";
-import { connect } from 'react-redux'
-import {getAttendanceLine} from '../../redux/ActionCreator/apiRequest'
+import { connect } from "react-redux";
+import { getAttendanceLine } from "../../redux/ActionCreator/apiRequest";
 
 const styles = theme => ({
   root: {
     width: "100%"
   },
+
   table: {
     minWidth: 1020
   },
@@ -82,82 +83,87 @@ class AttendanceLineTable extends Component {
   render() {
     const { classes, attendanceLine, searchField } = this.props;
     const { rowsPerPage, page, order, orderBy } = this.state;
-    let filteredData = attendanceLine.filter(line => line.student.toLowerCase().includes(searchField.toLowerCase()))
+    let filteredData = attendanceLine.filter(line =>
+      line.student.toLowerCase().includes(searchField.toLowerCase())
+    );
     const emptyRows =
-      rowsPerPage - Math.min(rowsPerPage, filteredData.length - page * rowsPerPage);
+      rowsPerPage -
+      Math.min(rowsPerPage, filteredData.length - page * rowsPerPage);
     return (
-      <Paper className={classes.root}>
-        <div className={classes.tableWrapper}>
-          <Table className={classes.table}>
-            <AttendanceLineTableHead
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={this.handleRequestSort}
-            />
-            <TableBody>
-              {stableSort(filteredData, getSorting(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  return (
-                    <TableRow hover key={index}>
-                      <TableCell
-                        component="th"
-                        className={classes.textRow}
-                        scope="row"
-                      >
-                        {row.student}
-                      </TableCell>
-                      <TableCell className={classes.textRow} padding="none">
-                        {row.subject}
-                      </TableCell>
-                      <TableCell className={classes.textRow} padding="none">
-                        {row.session}
-                      </TableCell>
-                      <TableCell className={classes.textRow}>
-                        {row.present ? <div>Yes</div> : <div>No</div>}
-                      </TableCell>
-                      <TableCell className={classes.textRow} padding="none">
-                        {row.date}
-                      </TableCell>
-                      <TableCell className={classes.textRow}>
-                        {row.absent}
-                      </TableCell>
-                      <TableCell className={classes.textRow}>
-                        {row.classes}
-                      </TableCell>
-                      <TableCell className={classes.textRow}>
-                        {row.percentile}
-                      </TableCell>
-                      <TableCell>{row.remark}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
+      <>
+        <Paper className={classes.root}>
+          <div className={classes.tableWrapper}>
+            <Table className={classes.table}>
+              <AttendanceLineTableHead
+                order={order}
+                orderBy={orderBy}
+                onRequestSort={this.handleRequestSort}
+              />
+              <TableBody>
+                {stableSort(filteredData, getSorting(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    return (
+                      <TableRow hover key={index}>
+                        <TableCell
+                          component="th"
+                          className={classes.textRow}
+                          scope="row"
+                        >
+                          {row.student}
+                        </TableCell>
+                        <TableCell className={classes.textRow} padding="none">
+                          {row.subject}
+                        </TableCell>
+                        <TableCell className={classes.textRow} padding="none">
+                          {row.session}
+                        </TableCell>
+                        <TableCell className={classes.textRow}>
+                          {row.present ? <div>Yes</div> : <div>No</div>}
+                        </TableCell>
+                        <TableCell className={classes.textRow} padding="none">
+                          {row.date}
+                        </TableCell>
+                        <TableCell className={classes.textRow}>
+                          {row.absent}
+                        </TableCell>
+                        <TableCell className={classes.textRow}>
+                          {row.classes}
+                        </TableCell>
+                        <TableCell className={classes.textRow}>
+                          {row.percentile}
+                        </TableCell>
+                        <TableCell>{row.remark}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow>
+                    <TableCell colSpan={9} />
+                  </TableRow>
+                )}
+              </TableBody>
+              <TableFooter>
                 <TableRow>
-                  <TableCell colSpan={9} />
+                  <TablePagination
+                    rowsPerPageOptions={[20, 30, 40, 50]}
+                    colSpan={9}
+                    count={filteredData.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      native: true
+                    }}
+                    onChangePage={this.handleChangePage}
+                    onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                  />
                 </TableRow>
-              )}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[20, 30, 40, 50]}
-                  colSpan={9}
-                  count={filteredData.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  SelectProps={{
-                    native: true
-                  }}
-                  onChangePage={this.handleChangePage}
-                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActions}
-                />
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </div>
-      </Paper>
+              </TableFooter>
+            </Table>
+          </div>
+        </Paper>
+      </>
     );
   }
 }
@@ -171,4 +177,4 @@ export default connect(state => ({
   requestAttendanceLinePending: state.initData.requestAttendanceLinePending,
   requestAttendanceLineFalied: state.initData.requestAttendanceLineFalied,
   searchField: state.changePicker.searchField
-}))(withStyles(styles)(AttendanceLineTable))
+}))(withStyles(styles)(AttendanceLineTable));

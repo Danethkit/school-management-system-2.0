@@ -121,9 +121,7 @@ const NavigationBar = ({ classes, history, userIden }) => {
   return (
     <div className={classes.root}>
       <AppBar position="static">
-        <Toolbar
-          variant="dense"
-        >
+        <Toolbar variant="dense">
           <IconButton
             color="inherit"
             aria-label="Open drawer"
@@ -157,19 +155,8 @@ const NavigationBar = ({ classes, history, userIden }) => {
           </Tabs>
 
           <IconButton color="inherit">
-            <Badge badgeContent={7} color="secondary">
-              <AlternateEmail />
-            </Badge>
-          </IconButton>
-
-          <IconButton color="inherit" >
-            <Badge badgeContent={17} color="secondary">
-              <Chat />
-            </Badge>
-          </IconButton>
-
-          <IconButton  color="inherit">
-            <Avatar className={classes.iconButtonBlock}
+            <Avatar
+              className={classes.iconButtonBlock}
               alt="avatar"
               src={`data:image/png;base64, ${userIden["img"]}`}
             />

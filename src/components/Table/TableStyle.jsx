@@ -7,7 +7,16 @@ export default makeStyles(theme => ({
     overflow: "auto",
     marginBottom: theme.spacing(2)
   },
-
+  subRoot:{
+    marginTop: theme.spacing(0)
+  },
+  format: {
+    flexGrow: 1,
+    marginLeft: "auto",
+    marginRight: "auto",
+    width: "100%",
+    maxWidth: 1400
+  },
   table: {
     minWidth: 540
   },
