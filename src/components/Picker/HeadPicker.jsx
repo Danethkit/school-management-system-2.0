@@ -14,7 +14,7 @@ export default function HeadPicker({ sessionNumber, userIden }) {
     <Box boxShadow={2} display={"flex"}>
       <Grid
         container
-        justify="flex-start"
+        justify="center"
         style={{ marginLeft: 20, marginRight: 20 }}
       >
         {userIden.length !== 0 ? (

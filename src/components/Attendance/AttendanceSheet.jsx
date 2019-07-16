@@ -9,8 +9,8 @@ import moment from 'moment'
 
 const styles = theme => ({
   root:{
-flexGrow: 1,
-width: "100%"
+  flexGrow: 1,
+  width: "100%"
   },
   format: {
     flexGrow: 1,

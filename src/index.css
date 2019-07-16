@@ -15,8 +15,9 @@ code {
 
 
 .MuiOutlinedInput-input {
-  padding: 4px 0px !important;
-  height: 32px !important;
+  padding: 0px 0px !important;
+  height: 38px !important;
+  max-width: 260px !important;
   /* max-width: 100px !important; */
 }
 .MuiGrid-spacing-xs-10  .MuiGrid-item {

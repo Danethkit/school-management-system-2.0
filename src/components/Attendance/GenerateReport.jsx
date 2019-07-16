@@ -5,12 +5,21 @@ import AttendanceReportDailog from '../Alert/AttendanceReportDialog'
 import {connect} from 'react-redux'
 
 function GenerateReport  (props)  {
-    return <>
+    return <div
+          style={{
+            flexGrow: 1,
+            marginLeft: "auto",
+            marginRight: "auto",
+            width: "100%",
+            maxWidth: 1400
+          }}
+        >
+
         <h1>Generate Report</h1>
         <GenerateReportHeadPicker {...props} />
         <GenerateReportTable {...props}/>
         <AttendanceReportDailog {...props}/>
-    </>
+    </div>
 }
 export default connect(state => ({
     endDate: state.changePicker.endDate,

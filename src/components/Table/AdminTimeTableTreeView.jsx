@@ -18,17 +18,18 @@ import EditTimeTableDialog from "../Table/EditTimeTableDialog";
 const styles = makeStyles(theme => ({
   root: {
     witdth: "100%",
-    marginTop: theme.spacing(2) * 3
+    marginTop: theme.spacing(3)*3,
   },
   table: {
-    minWroll_numberth: 1020
+      minWroll_numberth: 1020,
   },
   tableHead: {
-    backgroundColor: theme.palette.primary.light
+      backgroundColor: theme.palette.primary.light,
   },
-  tableCell: {
-    color: "white"
+  tableCell:{
+      color:'white'
   }
+
 }));
 export default  connect(state=> ({TTView:  state.initData.TTView, editTT:state.initData.editTT}))(({dispatch, TTView, editTT, ...others})=> {
 
