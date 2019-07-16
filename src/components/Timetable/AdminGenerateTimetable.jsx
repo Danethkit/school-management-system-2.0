@@ -3,12 +3,11 @@ import TimeTableSearchBox from "../TimetablePicker/TimeTableSearchBox";
 import DateNavigator from "./DateNavigator";
 import moment from "moment";
 import TimeTable from "./TimeTable";
-import DefaultAlert from '../../components/Alert/DefaultDialog'
-import { Prompt } from 'react-router-dom'
-import ToggleButton from '../Picker/ToggleButton'
-import AdminTimeTableTreeView from '../Table/AdminTimeTableTreeView'
-import Report from '@material-ui/icons/Report'
-
+import DefaultAlert from "../../components/Alert/DefaultDialog";
+import { Prompt } from "react-router-dom";
+import ToggleButton from "../Picker/ToggleButton";
+import AdminTimeTableTreeView from "../Table/AdminTimeTableTreeView";
+import Report from "@material-ui/icons/Report";
 
 // helper functoin to asign nested key object
 function assign(obj, keyPath, value) {
@@ -21,7 +20,7 @@ function assign(obj, keyPath, value) {
   obj[keyPath[lastKeyIndex]] = value;
 }
 
-const weekday = {'Sun':0, 'Mon':1, 'Tue':2, 'Wed':3, 'Thu':4, 'Fri':5, 'Sat':6}
+const weekday = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
 
 const areEqual = (prevProps, nextProps) => {
   if (
@@ -54,53 +53,40 @@ const filterTable = (
   if (Object.keys(data).length === 0) {
     return res;
   }
-  try{
-  if (group && semester && batch && course) {
-    let session = data[course][batch][semester][group]["session"];
-    if (!session) return res;
-    if (session.length !== 0) {
-      res.push({
-        course,
-        batch,
-        semester,
-        group,
-        session
-      });
-    }
-    return res;
-  }
-  if (semester && batch && course) {
-    for (const group in data[course][batch][semester]) {
-      if (!group.includes("Group")) {
-        continue;
-      }
+  try {
+    if (group && semester && batch && course) {
       let session = data[course][batch][semester][group]["session"];
-      if (!session) continue;
-      if (session.length === 0) continue;
-      res.push({
-        course: course,
-        batch: batch,
-        semester: semester,
-        group,
-        session
-      });
+      if (!session) return res;
+      if (session.length !== 0) {
+        res.push({
+          course,
+          batch,
+          semester,
+          group,
+          session
+        });
+      }
+      return res;
     }
-    return res;
-  }
-  if (batch && course) {
-    for (const semester in data[course][batch]) {
+    if (semester && batch && course) {
       for (const group in data[course][batch][semester]) {
+        if (!group.includes("Group")) {
+          continue;
+        }
         let session = data[course][batch][semester][group]["session"];
         if (!session) continue;
         if (session.length === 0) continue;
-        let header = { course, batch, semester, group, session };
-        res.push(header);
+        res.push({
+          course: course,
+          batch: batch,
+          semester: semester,
+          group,
+          session
+        });
       }
+      return res;
     }
-    return res;
-  }
-  if (course) {
-    for (const batch in data[course]) {
+    if (batch && course) {
       for (const semester in data[course][batch]) {
         for (const group in data[course][batch][semester]) {
           let session = data[course][batch][semester][group]["session"];
@@ -110,10 +96,9 @@ const filterTable = (
           res.push(header);
         }
       }
+      return res;
     }
-    return res;
-  } else {
-    for (const course in data) {
+    if (course) {
       for (const batch in data[course]) {
         for (const semester in data[course][batch]) {
           for (const group in data[course][batch][semester]) {
@@ -125,9 +110,23 @@ const filterTable = (
           }
         }
       }
+      return res;
+    } else {
+      for (const course in data) {
+        for (const batch in data[course]) {
+          for (const semester in data[course][batch]) {
+            for (const group in data[course][batch][semester]) {
+              let session = data[course][batch][semester][group]["session"];
+              if (!session) continue;
+              if (session.length === 0) continue;
+              let header = { course, batch, semester, group, session };
+              res.push(header);
+            }
+          }
+        }
+      }
     }
-  }
-}catch{}
+  } catch {}
   return res;
 };
 // weekStr, handleChangeWeekStr, handleCurrentWeek, handleLastWeek, handleNextWeek, ...others
@@ -238,30 +237,56 @@ class AdminTimeTable extends Component {
   };
 
   render() {
-    const {weekStr, handleChangeWeekStr, handleCurrentWeek, handleLastWeek, handleNextWeek, ...others} = this.props
-    const {subjectInfo, course, batch, semester, group, week, dispatch} = others
+    const {
+      weekStr,
+      handleChangeWeekStr,
+      handleCurrentWeek,
+      handleLastWeek,
+      handleNextWeek,
+      ...others
+    } = this.props;
+    const {
+      subjectInfo,
+      course,
+      batch,
+      semester,
+      group,
+      week,
+      dispatch
+    } = others;
 
-    const {data, open, warning, mode}= this.state
-    let  allTables =  filterTable(subjectInfo, course, batch, semester, group);
-    let weekStartDate = ''
-    let weekEndDate = ''
-    try{
-        for(let week of subjectInfo[course][batch][semester][group]['week']){
-          if(week.name === weekStr){
-            weekStartDate = week.startDate
-            weekEndDate = week.endDate
-          }
+    const { data, open, warning, mode } = this.state;
+    let allTables = filterTable(subjectInfo, course, batch, semester, group);
+    let weekStartDate = "";
+    let weekEndDate = "";
+    try {
+      for (let week of subjectInfo[course][batch][semester][group]["week"]) {
+        if (week.name === weekStr) {
+          weekStartDate = week.startDate;
+          weekEndDate = week.endDate;
         }
-    }catch{}
+      }
+    } catch {}
 
     return (
-      <>
-      <Prompt
-        when={Object.keys(data).length === 0 ? false : true}
-        message='You have unsaved changes, are you sure you want to leave?'
-      />
-      <TimeTableSearchBox setWeekNumber={handleChangeWeekStr} value={weekStr} />
-      <DateNavigator
+      <div
+        style={{
+          marginLeft: "auto",
+          marginRight: "auto",
+          width: "100%",
+          maxWidth: 1400
+        }}
+      >
+        <h1>Generate Timetable</h1>
+        <Prompt
+          when={Object.keys(data).length === 0 ? false : true}
+          message="You have unsaved changes, are you sure you want to leave?"
+        />
+        <TimeTableSearchBox
+          setWeekNumber={handleChangeWeekStr}
+          value={weekStr}
+        />
+        <DateNavigator
           week={week}
           weekStr={weekStr}
           handleLastWeek={handleLastWeek}
@@ -275,42 +300,57 @@ class AdminTimeTable extends Component {
           {...others}
         />
         <div>
-         <ToggleButton onChange={this.onChangeMode} mode={mode}/>
+          <ToggleButton onChange={this.onChangeMode} mode={mode} />
         </div>
-      {
-        mode === 'view' ? <AdminTimeTableTreeView dispatch={dispatch} {...others}/> :
-        <>
-        {allTables.map((table, i) => {
-          let faculties = [];
-          try {
-            for (let e of subjectInfo[table.course][table.batch][table.semester][table.group]['subjects']) {
-              if (e.faculty) {
-                faculties.push(`${e.subject} ~ ${e.faculty}`);
-              }
-            }
-          } catch {}
-          return (
-            <TimeTable
-              week={week}
-              header={table}
-              onDataInsert={this.getClickHandler}
-              sessions={table.session}
-              key={i}
-              facultyData={faculties}
-              selectedFaculty={data}
-              weekStr = {weekStr}
-              {...others}
+        {mode === "view" ? (
+          <AdminTimeTableTreeView dispatch={dispatch} {...others} />
+        ) : (
+          <>
+            {allTables.map((table, i) => {
+              let faculties = [];
+              try {
+                for (let e of subjectInfo[table.course][table.batch][
+                  table.semester
+                ][table.group]["subjects"]) {
+                  if (e.faculty) {
+                    faculties.push(`${e.subject} ~ ${e.faculty}`);
+                  }
+                }
+              } catch {}
+              return (
+                <TimeTable
+                  week={week}
+                  header={table}
+                  onDataInsert={this.getClickHandler}
+                  sessions={table.session}
+                  key={i}
+                  facultyData={faculties}
+                  selectedFaculty={data}
+                  weekStr={weekStr}
+                  {...others}
+                />
+              );
+            })}
+          </>
+        )}
+        <DefaultAlert
+          icon={
+            <Report
+              style={{
+                width: 150,
+                height: 150,
+                marginLeft: 60,
+                marginRight: 60,
+                marginTop: 30
+              }}
+              color="secondary"
             />
-          );
-        })}
-        </>
-      }
-      <DefaultAlert
-          icon={<Report style={{width:150, height:150,marginLeft:60, marginRight:60, marginTop:30}} color='secondary'/>}
+          }
           onClick={this.handleCloseWarning}
-          detail = "You must select week first"
-          open={warning}/>
-      </>
+          detail="You must select week first"
+          open={warning}
+        />
+      </div>
     );
   }
 }

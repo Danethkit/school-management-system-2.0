@@ -21,6 +21,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1,
+    marginLeft: "auto",
+    marginRight: "auto",
+    width: "100%",
+    maxWidth: 1400
+  },
+
     appBar: {
       position: 'relative',
     },
@@ -65,11 +73,14 @@ export default connect()(({open, handleClose, handleChange, editMode ,currentWee
               save
             </Button>
           </Toolbar>
+          
         </AppBar>
+        <div className={classes.root}>
         <DialogTitle id="alert-dialog-title">{`${header.course} / ${header.batch} / ${header.semester} / ${header.group} / ${currentWeek.name}`}</DialogTitle>
         <DialogContent>
             <EditTimeTable currentWeek ={currentWeek} editTT={editTT} {...rest} editMode={editMode}/>
         </DialogContent>
+        </div>
         <DialogActions>
         </DialogActions>
       </Dialog>

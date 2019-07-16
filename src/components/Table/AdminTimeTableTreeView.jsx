@@ -18,7 +18,7 @@ import EditTimeTableDialog from "../Table/EditTimeTableDialog";
 const styles = makeStyles(theme => ({
   root: {
     witdth: "100%",
-    marginTop: theme.spacing(3)*3,
+    marginTop: theme.spacing(2)*3,
   },
   table: {
       minWroll_numberth: 1020,
