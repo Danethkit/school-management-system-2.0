@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { AppBar, Tabs, Tab, withStyles, Typography } from "@material-ui/core";
+import { AppBar, Tabs, Tab, withStyles } from "@material-ui/core";
 import HeadPicker from "../../components/Picker/HeadPicker";
 import SessionTable from "../../components/Table/SessionTable";
 import { connect } from "react-redux";
 import { requestUserIdentity } from "../../redux/ActionCreator/apiRequest";
-import ElevationScroll from "../NavigationBar/ElevationScroll";
 import moment from 'moment'
+import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 
 const styles = theme => ({
   root:{
@@ -13,7 +13,6 @@ const styles = theme => ({
   width: "100%"
   },
   format: {
-    flexGrow: 1,
     marginLeft: "auto",
     marginRight: "auto",
     width: "100%",
@@ -21,6 +20,17 @@ const styles = theme => ({
   }
 });
 
+function ElevationScroll(props) {
+  const { children, window } = props;
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    treshold: 0,
+    target: window ? window() : undefined
+  });
+  return React.cloneElement(children, {
+    elevation: trigger ? 4 : 0
+  });
+}
 const AttendancesSheet = (props) => {
 
   const {classes, dispatch, date, course, batch, group, faculty, semester, session, subjectInfo, userIden} = props
@@ -67,9 +77,9 @@ const AttendancesSheet = (props) => {
 
   return (
     <div className={classes.format}>
-      <div style={{margin:'auto', width:'40vh'}}><Typography variant='h4'>Attendance Sheet</Typography></div>
+      <h1>Attendance Sheet</h1>
       <ElevationScroll {...props}>
-        <AppBar position="static" color="default" >
+        <AppBar position="sticky" color="default" >
           <Tabs
             value={sessionNumber}
             onChange={handleChangeSessionNumber}
