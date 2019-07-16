@@ -5,7 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  margin: 0 5px 0 5px;
+  margin: 0;
 }
 
 code {
@@ -17,7 +17,7 @@ code {
 .MuiOutlinedInput-input {
   padding: 4px 0px !important;
   height: 32px !important;
-  /*max-width: 260px !important;*/
+  /* max-width: 100px !important; */
 }
 .MuiGrid-spacing-xs-10  .MuiGrid-item {
   padding: 0px 30px 5px 30px !important;

@@ -93,7 +93,7 @@ class SessionTable extends Component {
     super(props);
     this.state = {
       order: "asc",
-      orderBy: "name",
+      orderBy: "roll_number",
       selected: {},
     };
   }

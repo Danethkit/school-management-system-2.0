@@ -7,12 +7,8 @@ import moment from 'moment'
 import {connect} from 'react-redux'
 import { onSemesterChange } from '../redux/ActionCreator/userBehavior'
 
-
-
-const AttendanceScreen = (props) => {
-
-  const {subjectInfo, course, batch, group, uid, dispatch} = props
-
+const AttendanceScreen = props => {
+  const { subjectInfo, course, batch, semester, group, uid, dispatch } = props;
   const [week, setWeek] = useState(moment.utc().week());
   const [weekStr, setWeekStr] = useState('');
   const [disableCurrentWeek, setDisableCurrentWeek] = useState(false)
@@ -57,7 +53,7 @@ const AttendanceScreen = (props) => {
   // }, [subjectInfo, batch, course, group])
 
   const handleChangeWeekStr = value => {
-    if(!value) return
+    if (!value) return;
     // let weekIdnex = subjectInfo[course][batch][semester][group]['week'].findIndex(e => e.name === value)
     // ('check---------->', subjectInfo[course][batch][semester][group]['week'][weekIdnex].startDate);
     // setWeek(moment(subjectInfo[course][batch][semester][group]['week'][weekIdnex].startDate, 'YYYY-MM-DD').utc().week())
@@ -65,13 +61,12 @@ const AttendanceScreen = (props) => {
   };
 
   const handleLastWeek = () => {
-    let weekInt = parseInt(weekStr.split(' ')[1]) -1
-    let weekstr = ''
-    if(weekInt <10)
-      weekstr = 'W 0'+weekInt
-    else weekstr = 'W '+ weekInt
+    let weekInt = parseInt(weekStr.split(" ")[1]) - 1;
+    let weekstr = "";
+    if (weekInt < 10) weekstr = "W 0" + weekInt;
+    else weekstr = "W " + weekInt;
     setWeek(week - 1);
-    setWeekStr(weekstr)
+    setWeekStr(weekstr);
   };
 
   const handleCurrentWeek = () => {
@@ -92,12 +87,11 @@ const AttendanceScreen = (props) => {
   }, [currentWeek])
 
   const handleNextWeek = () => {
-    let weekInt = parseInt(weekStr.split(' ')[1]) +1
-    let weekstr = ''
-    if(weekInt <10)
-      weekstr = 'W 0'+weekInt
-    else weekstr = 'W '+ weekInt
-    setWeekStr(weekstr)
+    let weekInt = parseInt(weekStr.split(" ")[1]) + 1;
+    let weekstr = "";
+    if (weekInt < 10) weekstr = "W 0" + weekInt;
+    else weekstr = "W " + weekInt;
+    setWeekStr(weekstr);
     setWeek(week + 1);
   };
 

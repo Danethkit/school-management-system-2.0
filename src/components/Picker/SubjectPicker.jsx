@@ -16,7 +16,6 @@ const SubjectPicker = ({dispatch, subject, userIden, course, batch, semester, gr
   },[session])
 
   return <AutoComplete
-          width={280}
           value ={subject}
           onChange={actions}
           label="Subject"

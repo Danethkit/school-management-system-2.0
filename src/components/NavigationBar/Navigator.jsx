@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   AppBar,
   IconButton,
@@ -6,8 +6,8 @@ import {
   Tabs,
   Toolbar
 } from "@material-ui/core";
-import {connect} from 'react-redux'
-import MenuIcon from '@material-ui/icons/Menu';
+import { connect } from "react-redux";
+import MenuIcon from "@material-ui/icons/Menu";
 import { withStyles } from "@material-ui/core";
 import SideBarDrawer from '../NavigationBar/SideBarDrawer'
 import Input from '@material-ui/icons/Input'
@@ -22,34 +22,32 @@ import Avatar from '@material-ui/core/Avatar';
 
 const styles = theme => ({
   root: {
-    flexGrow: 0,
-    padding: -10,
-    paddingLeft: -10
+    flexGrow: 1
   },
 
   iconButtonBlock: {
-    marginRight: -10,
-    fontSize: 10
+    fontSize: 10,
+    height: 10
   },
-
   menuButton: {
     marginRight: 0,
-    marginLeft: -20,
+    marginLeft: -20
   },
-  hide : {
-    display: 'none'
+  hide: {
+    display: "none"
   },
   tabs: {
-    flexGrow: 0
+    flexGrow: 1
   },
   tab: {
-    minWidth: 1,
-    textColor: "#fff",
+    minWidth: 0,
+    textColor: "#fff"
   }
 });
 
 const navBar = [
-  "Facultices",
+  "Discuss",
+  "OpenEduCat",
   "Attendance",
   "Assignments",
   "Event",
@@ -59,16 +57,18 @@ const navBar = [
   "Apps",
 ];
 
-const NavigationBar = ({classes, history, userIden}) => {
+const NavigationBar = ({ classes, history, userIden }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [route, setRoute] = useState("/sms/attendance");
 
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [route, setRoute] = useState("/sms/attendance")
+  useEffect(() => {
+    const pathnameSplit = history.location.pathname.split("/");
 
-  useEffect(()=>{
-    const pathnameSplit = history.location.pathname.split('/')
-
-    if(history.location.pathname !== route) setRoute([pathnameSplit[0], pathnameSplit[1], pathnameSplit[2]].join('/'))
-  })
+    if (history.location.pathname !== route)
+      setRoute(
+        [pathnameSplit[0], pathnameSplit[1], pathnameSplit[2]].join("/")
+      );
+  });
 
   const changeNavigateRoute = (event, route) => {
     if(!(route.includes('timetable') || route.includes('attendance')) ){
@@ -94,35 +94,52 @@ const NavigationBar = ({classes, history, userIden}) => {
     history.push(route);
   };
 
-  const toggleDrawer = (open) => event => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+  const toggleDrawer = open => event => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
       return;
     }
-    setMenuOpen(open)
+    setMenuOpen(open);
   };
 
   var items = [];
-    if(history.location.pathname.includes("/timetable")){
-      items = [
-        {path: "timetable/admin-create", label: "Generate Timetable", icon:<Input/>},
-        {path: "timetable/student", label: "Student", icon:<Group/>},
-        {path: "timetable/faculty", label: "Faculty", icon: <Person/>}
-      ];
-    }
-    else {
-      items = [
-        {path: "attendance/attendance_sheet", label: "Attendance Sheet", icon:<Subtitles/>},
-        {path: "attendance/attendance_line", label: "Attendance Lines", icon:<List/>},
-        {path: "attendance/generate_report", label: "Generate Report", icon:<Print/>}
-      ];
-    }
+  if (history.location.pathname.includes("/timetable")) {
+    items = [
+      {
+        path: "timetable/admin-create",
+        label: "Generate Timetable",
+        icon: <Input />
+      },
+      { path: "timetable/student", label: "Student", icon: <Group /> },
+      { path: "timetable/faculty", label: "Faculty", icon: <Person /> }
+    ];
+  } else {
+    items = [
+      {
+        path: "attendance/attendance_sheet",
+        label: "Attendance Sheet",
+        icon: <Subtitles />
+      },
+      {
+        path: "attendance/attendance_line",
+        label: "Attendance Lines",
+        icon: <List />
+      },
+      {
+        path: "attendance/generate_report",
+        label: "Generate Report",
+        icon: <Print />
+      }
+    ];
+  }
 
-
-    return (
-      <>
-        <AppBar position="static">
-          <Toolbar variant="dense" display="flex" className={classes.root} color='primary'>
-            <IconButton
+  return (
+    <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar variant="dense">
+          <IconButton
             color="inherit"
             aria-label="Open drawer"
             onClick={toggleDrawer(true)}
@@ -156,7 +173,7 @@ const NavigationBar = ({classes, history, userIden}) => {
             </IconButton>
           </Toolbar>
         </AppBar>
-      </>
+      </div>
     );
 }
 export default connect(state=>({userIden: state.initData.userIden}))(withStyles(styles)(NavigationBar))

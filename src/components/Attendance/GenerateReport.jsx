@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import GenerateReportHeadPicker from "../Picker/GenerateReportHeadPicker";
 import GenerateReportTable from "../Table/GenerateReportTable";
 import AttendanceReportDailog from '../Alert/AttendanceReportDialog'

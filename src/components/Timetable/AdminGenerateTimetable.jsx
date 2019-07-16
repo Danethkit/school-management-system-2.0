@@ -56,8 +56,8 @@ const filterTable = (
   }
   try{
   if (group && semester && batch && course) {
-    let session = data[course][batch][semester][group]['session'];
-    if(!session) return res
+    let session = data[course][batch][semester][group]["session"];
+    if (!session) return res;
     if (session.length !== 0) {
       res.push({
         course,
@@ -74,8 +74,8 @@ const filterTable = (
       if (!group.includes("Group")) {
         continue;
       }
-      let session = data[course][batch][semester][group]['session'];
-      if(!session) continue
+      let session = data[course][batch][semester][group]["session"];
+      if (!session) continue;
       if (session.length === 0) continue;
       res.push({
         course: course,
@@ -90,8 +90,8 @@ const filterTable = (
   if (batch && course) {
     for (const semester in data[course][batch]) {
       for (const group in data[course][batch][semester]) {
-        let session = data[course][batch][semester][group]['session'];
-        if(!session) continue
+        let session = data[course][batch][semester][group]["session"];
+        if (!session) continue;
         if (session.length === 0) continue;
         let header = { course, batch, semester, group, session };
         res.push(header);
@@ -103,8 +103,8 @@ const filterTable = (
     for (const batch in data[course]) {
       for (const semester in data[course][batch]) {
         for (const group in data[course][batch][semester]) {
-          let session = data[course][batch][semester][group]['session'];
-          if(!session) continue
+          let session = data[course][batch][semester][group]["session"];
+          if (!session) continue;
           if (session.length === 0) continue;
           let header = { course, batch, semester, group, session };
           res.push(header);
@@ -117,8 +117,8 @@ const filterTable = (
       for (const batch in data[course]) {
         for (const semester in data[course][batch]) {
           for (const group in data[course][batch][semester]) {
-            let session = data[course][batch][semester][group]['session'];
-            if(!session) continue
+            let session = data[course][batch][semester][group]["session"];
+            if (!session) continue;
             if (session.length === 0) continue;
             let header = { course, batch, semester, group, session };
             res.push(header);
@@ -134,27 +134,26 @@ const filterTable = (
 // const {subjectInfo, course, batch, semester, group, week, endSemDate} = others
 
 class AdminTimeTable extends Component {
-
-  clickHandlers = {}
+  clickHandlers = {};
   constructor(props) {
     super(props);
     this.state = {
       open: false,
       data: {},
       warning: false,
-      mode:'create'
+      mode: "create"
     };
   }
 
-  onFacultyInsert = (row, col, value, header)  => {
-    const { weekStr } = this.props
-    const {data} = this.state
-    if(!weekStr) return this.setState({warning:true})
+  onFacultyInsert = (row, col, value, header) => {
+    const { weekStr } = this.props;
+    const { data } = this.state;
+    if (!weekStr) return this.setState({ warning: true });
     let temp = {};
     let temp2 = {};
     temp2[row] = value;
     let { course, batch, semester, group } = header;
-    if(weekStr in data){
+    if (weekStr in data) {
       if (course in data[weekStr]) {
         if (batch in data[weekStr][course]) {
           if (semester in data[weekStr][course][batch]) {
@@ -182,52 +181,61 @@ class AdminTimeTable extends Component {
     } else {
       assign(data, [weekStr, course, batch, semester, group, col, row], value);
     }
-    this.setState({data:{...data}});
+    this.setState({ data: { ...data } });
   };
 
   handleCloseWarning = () => {
-    this.setState({warning:false})
-  }
+    this.setState({ warning: false });
+  };
 
-  openDuplicateDialog = (boo) => {
-    this.setState({open:boo})
-  }
+  openDuplicateDialog = boo => {
+    this.setState({ open: boo });
+  };
 
-  handleDuplicateTimetable = (selected) => {
-    const {weekStr, subjectInfo, course, batch, semester, group} = this.props
-    let {data} = this.state
-    if(!weekStr) return
-    selected.forEach(w=>{
-      let temp2 = {}
-      let temp = data[weekStr][course][batch][semester][group]
-      for(let day in temp){
-        let weekIndex = subjectInfo[course][batch][semester][group]['week'].findIndex(e => e.name === w)
-        let keyDay = moment(subjectInfo[course][batch][semester][group]['week'][weekIndex].startDate, 'YYYY-MM-DD').weekday(weekday[day.split(' ')[0]]).format("ddd MM/DD")
-        Object.keys(temp[day]).forEach(k=>{
-          if(keyDay in temp2){
-            temp2[keyDay][k]= temp[day][k]
-          }else {
-            temp2[keyDay] = {}
-            temp2[keyDay][k] = temp[day][k]
+  handleDuplicateTimetable = selected => {
+    const { weekStr, subjectInfo, course, batch, semester, group } = this.props;
+    let { data } = this.state;
+    if (!weekStr) return;
+    selected.forEach(w => {
+      let temp2 = {};
+      let temp = data[weekStr][course][batch][semester][group];
+      for (let day in temp) {
+        let weekIndex = subjectInfo[course][batch][semester][group][
+          "week"
+        ].findIndex(e => e.name === w);
+        let keyDay = moment(
+          subjectInfo[course][batch][semester][group]["week"][weekIndex]
+            .startDate,
+          "YYYY-MM-DD"
+        )
+          .weekday(weekday[day.split(" ")[0]])
+          .format("ddd MM/DD");
+        Object.keys(temp[day]).forEach(k => {
+          if (keyDay in temp2) {
+            temp2[keyDay][k] = temp[day][k];
+          } else {
+            temp2[keyDay] = {};
+            temp2[keyDay][k] = temp[day][k];
           }
-        })
-        assign(data, [w, course, batch, semester, group], temp2 )
+        });
+        assign(data, [w, course, batch, semester, group], temp2);
       }
-    })
-    this.setState({data:{...data}});
-  }
+    });
+    this.setState({ data: { ...data } });
+  };
 
-  getClickHandler = (key) => {
+  getClickHandler = key => {
     if (!Object.prototype.hasOwnProperty.call(this.clickHandlers, key)) {
-      this.clickHandlers[key] = (col, row, value, header) => this.onFacultyInsert(col, row, value, header)
+      this.clickHandlers[key] = (col, row, value, header) =>
+        this.onFacultyInsert(col, row, value, header);
     }
     return this.clickHandlers[key];
-  }
+  };
 
-  onChangeMode = (mode) => {
-    if(mode === this.state.mode) return
-    this.setState({mode})
-  }
+  onChangeMode = mode => {
+    if (mode === this.state.mode) return;
+    this.setState({ mode });
+  };
 
   render() {
     const {weekStr, handleChangeWeekStr, handleCurrentWeek, handleLastWeek, handleNextWeek, ...others} = this.props
@@ -261,9 +269,9 @@ class AdminTimeTable extends Component {
           handleCurrentWeek={handleCurrentWeek}
           open={open}
           setOpen={this.openDuplicateDialog}
-          weekEndDate = {weekEndDate}
-          weekStartDate = {weekStartDate}
-          handleDuplicateTimetable = {this.handleDuplicateTimetable}
+          weekEndDate={weekEndDate}
+          weekStartDate={weekStartDate}
+          handleDuplicateTimetable={this.handleDuplicateTimetable}
           {...others}
         />
         <div>
@@ -307,4 +315,4 @@ class AdminTimeTable extends Component {
   }
 }
 
-export default memo(AdminTimeTable, areEqual)
+export default memo(AdminTimeTable, areEqual);

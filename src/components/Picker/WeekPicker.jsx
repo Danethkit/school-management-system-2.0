@@ -11,7 +11,6 @@ const WeekPicker = ({value, onChange, course, batch, semester, group, subjectInf
   }catch{}
 
   return <AutoComplete
-          width={280}
           value ={value}
           onChange={onChange}
           label="Week"

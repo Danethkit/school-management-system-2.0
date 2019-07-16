@@ -21,8 +21,8 @@ import Fade from '@material-ui/core/Fade';
 import DefaultAlert from '../../components/Alert/DefaultDialog'
 import Report from '@material-ui/icons/Report'
 
-
 const TimeTable = ({
+  styles,
   header,
   week,
   onDataInsert,

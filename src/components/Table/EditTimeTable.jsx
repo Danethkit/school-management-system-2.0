@@ -14,8 +14,7 @@ import {connect} from 'react-redux'
 
 
 
-export default connect(state=>({odooServerStatus : state.changePicker.odooServerStatus}))
-(({currentWeek, editTT, editMode, dispatch, odooServerStatus, ...rest})=> {
+export default connect(state=>({odooServerStatus : state.changePicker.odooServerStatus}))(({currentWeek, editTT, editMode, dispatch, odooServerStatus, ...rest}) => {
 
     const {subjectInfo, course, batch, semester, group} = rest
 

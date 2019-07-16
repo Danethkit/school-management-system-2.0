@@ -1,31 +1,34 @@
-import React, {useEffect, useState} from 'react'
-import {requestTimeTableData, requestTimeTableView} from '../../redux/ActionCreator/apiRequest'
-import {connect} from 'react-redux'
+import React, { useEffect, useState } from "react";
 import {
-    TableBody,
-    TableRow,
-    TableHead,
-    TableCell,
-    Box,
-    Table,
-    makeStyles
-} from "@material-ui/core"
-import EditTimeTableDialog from '../Table/EditTimeTableDialog'
+  requestTimeTableData,
+  requestTimeTableView
+} from "../../redux/ActionCreator/apiRequest";
+import { connect } from "react-redux";
+import {
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+  Box,
+  Table,
+  makeStyles
+} from "@material-ui/core";
+import EditTimeTableDialog from "../Table/EditTimeTableDialog";
 
 const styles = makeStyles(theme => ({
-    root: {
-        witdth: "100%",
-        marginTop: theme.spacing(3)*3,
-    },
-    table: {
-        minWroll_numberth: 1020,
-    },
-    tableHead: {
-        backgroundColor: theme.palette.primary.light,
-    },
-    tableCell:{
-        color:'white'
-    }
+  root: {
+    witdth: "100%",
+    marginTop: theme.spacing(2) * 3
+  },
+  table: {
+    minWroll_numberth: 1020
+  },
+  tableHead: {
+    backgroundColor: theme.palette.primary.light
+  },
+  tableCell: {
+    color: "white"
+  }
 }));
 export default  connect(state=> ({TTView:  state.initData.TTView, editTT:state.initData.editTT}))(({dispatch, TTView, editTT, ...others})=> {
 
