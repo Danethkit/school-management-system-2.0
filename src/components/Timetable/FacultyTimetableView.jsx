@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { Grid, Paper, Table, TableBody, TableHead, TableRow, Divider} from "@material-ui/core";
-import PropTypes from "prop-types";
+import { Paper, Table, TableBody, TableHead, TableRow} from "@material-ui/core";
 import FacultyDateNavigator from "./FacultyDateNavigator";
 import moment from 'moment'
 import { requestFacultyTimeTable } from '../../redux/ActionCreator/apiRequest'
@@ -36,10 +35,6 @@ const FacultyTimeTableView = ({userIden, facultyTT, dispatch, subjectInfo}) =>{
 
     return(
         <div className={classes.format}>
-            {/* <div>
-                <h2><i>Faculty:</i> {userIden['user']}</h2>
-                <h3><i>Faculty Code:</i> 110101212</h3>
-            </div> */}
             <FacultyDateNavigator
                 week={week}
                 handleLastWeek={handleLastWeek}

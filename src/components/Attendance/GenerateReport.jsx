@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography'
 import LinearProgress from '@material-ui/core/LinearProgress'
 
 function GenerateReport  (props)  {
-  console.log('check pending---------->',props.requestPadding);
     return <div
             style={{
               flexGrow: 1,

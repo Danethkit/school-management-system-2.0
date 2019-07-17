@@ -63,7 +63,6 @@ const AttendanceLineTable = ({classes, attendanceLine, searchField, dispatch}) =
   };
 
   const handleChangeRowsPerPage = event => {
-    console.log('value', event.target.value);
     setPage(0)
     setRowPerPage(parseInt(event.target.value))
   };
@@ -85,14 +84,12 @@ const AttendanceLineTable = ({classes, attendanceLine, searchField, dispatch}) =
     if('lastId' in attendanceLine){
       data['lastId'] = attendanceLine.lastId
     }
-    console.log({page, rowsPerPage});
     if(attendanceLine.data === undefined || page >= attendanceLine.data.length) dispatch(getAttendanceLine(data))
   }, [page])
 
 
   let filteredData = []
   if(attendanceLine.data !== undefined){
-    console.log({attendanceLine});
     filteredData = attendanceLine.data.filter(line => line.student.toLowerCase().includes(searchField.toLowerCase()))
   }
     const emptyRows =

@@ -72,7 +72,6 @@ const NavigationBar = ({ classes, history, userIden }) => {
 
   const changeNavigateRoute = (event, route) => {
     if(!(route.includes('timetable') || route.includes('attendance')) ){
-      console.log({route});
       switch(route){
         case "/sms/assignments" :
           return  window.location.href = 'http://192.168.7.222:8069/web#page=0&limit=80&view_type=list&model=op.assignment&menu_id=209&action=264'

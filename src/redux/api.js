@@ -48,7 +48,6 @@ export const  odooPrintReport = (report_id, data)=>{
             odoo.execute_kw('op.attendance.sheet', 'search', params, function (err, value) {
                 if (err) { return console.log(err) }
                 if(value){
-                    console.log('----------->',value);
                     odoo.render_report(report_id, [[`${value[0]} ${data.startDate} ${data.endDate}`]], function (err2, value2) {
                         if (err2) { return reject('report error') }
                         return resolve(value2)

@@ -269,8 +269,6 @@ class AdminTimeTable extends Component {
       }
     } catch {}
 
-    console.log('render----------->');
-
     return (
       <div
         style={{

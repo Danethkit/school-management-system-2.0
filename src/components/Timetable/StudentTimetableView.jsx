@@ -31,14 +31,6 @@ const StudentView = ({ dispatch, studentTT }) => {
     setWeek(week + 1);
   };
 
-  useEffect(() => {
-    dispatch(
-      requestStudentTimeTable({
-        date: moment("2017-11-05", "YYYY-MM-DD").format("YYYY-MM-DD")
-      })
-    );
-  }, [week]);
-
   useEffect(()=>{
       dispatch(requestStudentTimeTable({date:moment.utc().week(week).weekday(0).format('YYYY-MM-DD')}))
   }, [week])
