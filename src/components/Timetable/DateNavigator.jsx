@@ -6,6 +6,7 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import DuplicateSession from '../DuplicateSession/DuplicateSession'
 import OpenInNew from '@material-ui/icons/OpenInNew'
 import moment from 'moment'
+import Typography from '@material-ui/core/Typography'
 
 const styles = theme => ({
 
@@ -42,30 +43,23 @@ const styles = theme => ({
 
 })
 
-const weekOfYear = moment.utc().week();
-
 const DateNavigator = ({classes, handleLastWeek, handleDuplicateTimetable,
     handleCurrentWeek, weekEndDate,weekStartDate, handleNextWeek, disableCurrentWeek,
     week, weekStr, open, setOpen, ...rest}) => {
 
     const {subjectInfo, course, batch, semester, group} = rest
 
-    console.log({disableCurrentWeek});
-
     let items = []
-    let weekStartIndex = 0
-    let weekEndIndex = 0
+    let endWeekNum
     try{
         let weeks = subjectInfo[course][batch][semester][group]['week']
-        weekStartIndex = weeks.findIndex(e => e.name === weekStr)
-        weekEndIndex = weeks.length -1
-        items = weeks.map(e=>e.name)
+        endWeekNum = weeks[weeks.length -1].name
     }catch{}
 
     return (
         <Toolbar>
             <span className={classes.left}>
-            <Button size="small" color="primary" className="button" variant="outlined" onClick={handleLastWeek} disabled={weekStartIndex <= 0} >
+            <Button size="small" color="primary" className="button" variant="outlined" onClick={handleLastWeek} disabled={weekStr === 'W 01'} >
                 <KeyboardArrowLeft fontSize={'inherit'} />
                 Last
             </Button>
@@ -74,7 +68,7 @@ const DateNavigator = ({classes, handleLastWeek, handleDuplicateTimetable,
                 Current
             </Button>
 
-            <Button size="small"  color="primary" className="button" variant="outlined" onClick={handleNextWeek} disabled={weekStartIndex === weekEndIndex}>
+            <Button size="small"  color="primary" className="button" variant="outlined" onClick={handleNextWeek} disabled={weekStr === endWeekNum} >
                 Next
                 <KeyboardArrowRight fontSize={'inherit'}/>
             </Button>
@@ -83,7 +77,7 @@ const DateNavigator = ({classes, handleLastWeek, handleDuplicateTimetable,
             <span className={classes.middle}>
                 {
                     weekEndDate && weekStartDate ?
-                    <b>{moment(weekStartDate, 'YYYY-MM-DD').format("ddd MM/DD")+ '~' + moment(weekEndDate, 'YYYY-MM-DD').format("ddd MM/DD")}</b> : null
+                    <Typography variant='subtitle2'>{moment(weekStartDate, 'YYYY-MM-DD').format("DD ddd MMMM")+ '~' + moment(weekEndDate, 'YYYY-MM-DD').format("DD ddd MMMM")}</Typography> : null
                 }
             </span>
             <span className={classes.right}>

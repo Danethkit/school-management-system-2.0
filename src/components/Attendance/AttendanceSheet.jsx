@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { AppBar, Tabs, Tab, withStyles } from "@material-ui/core";
+import { AppBar, Tabs, Tab, withStyles, Typography, Box } from "@material-ui/core";
 import HeadPicker from "../../components/Picker/HeadPicker";
 import SessionTable from "../../components/Table/SessionTable";
 import { connect } from "react-redux";
@@ -77,21 +77,23 @@ const AttendancesSheet = (props) => {
 
   return (
     <div className={classes.format}>
-      <h1>Attendance Sheet</h1>
+      <div style={{width:'40vh', margin:'auto', marginBottom:10, marginTop:10}}><Typography variant='h4'><b>Attendance Sheet</b></Typography></div>
       <ElevationScroll {...props}>
         <AppBar position="sticky" color="default" >
-          <Tabs
-            value={sessionNumber}
-            onChange={handleChangeSessionNumber}
-            indicatorColor="secondary"
-            textColor="secondary"
-            variant="scrollable"
-            scrollButtons="on"
-          >
-            {availableTab.map(i => (
-              <Tab label={"session " + i} key={i} value={i} />
-            ))}
-          </Tabs>
+          <Box boxShadow={3}>
+            <Tabs
+              value={sessionNumber}
+              onChange={handleChangeSessionNumber}
+              indicatorColor="secondary"
+              textColor="secondary"
+              variant="scrollable"
+              scrollButtons="on"
+            >
+              {availableTab.map(i => (
+                <Tab label={"session " + i} key={i} value={i} />
+              ))}
+            </Tabs>
+          </Box>
         </AppBar>
       </ElevationScroll>
 

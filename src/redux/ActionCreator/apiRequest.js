@@ -100,7 +100,7 @@ export const getAttendanceLine = (data) => (dispatch) => {
 }
 
 export const getReportAttendanceLine = (data) => (dispatch) => {
-    dispatch({type: REQUEST_ATTENDANCE_LINE_PENDING})
+    dispatch({type: REQUEST_ATTENDANCE_LINE_PENDING, payload:true})
     fetch('http://192.168.7.240:8008/get-attendance-line', {
         method: 'post',
         headers: {'Content-Type':'application/json'},
@@ -109,7 +109,10 @@ export const getReportAttendanceLine = (data) => (dispatch) => {
         })
     })
     .then(res => res.json())
-    .then( data => dispatch({type: SET_ATTENDANCE_REPORT_DATA, payload:JSON.parse(data.result)}))
+    .then( data =>{
+        dispatch({type: SET_ATTENDANCE_REPORT_DATA, payload:JSON.parse(data.result)})
+        dispatch({type: REQUEST_ATTENDANCE_LINE_PENDING, payload:false})
+    })
     .catch(err => dispatch({type:REQUEST_ATTENDANCE_LINE_FAILED, payload:err}))
 }
 

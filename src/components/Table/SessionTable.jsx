@@ -20,6 +20,7 @@ import { connect } from 'react-redux'
 import { store } from '../../redux/store'
 import OdooServerStatusDialog from '../Alert/OdooServerStatusDialog'
 import { Prompt } from 'react-router-dom'
+import moment from 'moment'
 
 
 const styles = theme => ({
@@ -107,7 +108,7 @@ class SessionTable extends Component {
     let data = {
       subject,
       course,
-      date: date.toDateString(),
+      date: moment(date).format('MM/DD/YY'),
       session,
       batch,
       lines: selectedStu,
@@ -121,18 +122,6 @@ class SessionTable extends Component {
   componentDidMount() {
     this.props.requestStudent()
   }
-
-// clear data once it saved
-  // componentWillReceiveProps(props){
-  //   let {odooServerStatus, session} = props
-  //   let selected = this.state.selected
-  //   if(odooServerStatus !== false){
-  //     if (odooServerStatus.result === 'ok'){
-  //       delete selected[session]
-  //       this.setState({selected})
-  //     }
-  //   }
-  // }
 
   handleRequestSort = (event, property) => {
     const orderBy = property;

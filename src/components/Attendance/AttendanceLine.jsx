@@ -16,7 +16,7 @@ const AttendanceLine = ({ attendanceLine }) => {
         maxWidth: 1400
       }}
     >
-      <div style={{margin:'auto', width:'40vh'}}><Typography variant='h4'>Attendance Line</Typography></div>
+      <div style={{margin:'auto', width:'40vh'}}><Typography variant='h4'><b>Attendance Line</b></Typography></div>
       {attendanceLine.length === 0 ? <LinearProgress /> : null}
       <SearchBox />
       <br />

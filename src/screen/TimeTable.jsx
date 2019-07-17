@@ -8,6 +8,7 @@ import {connect} from 'react-redux'
 import { onSemesterChange } from '../redux/ActionCreator/userBehavior'
 
 const AttendanceScreen = props => {
+
   const { subjectInfo, course, batch, group, uid, dispatch } = props;
   const [week, setWeek] = useState(moment.utc().week());
   const [weekStr, setWeekStr] = useState('');

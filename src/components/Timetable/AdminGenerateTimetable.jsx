@@ -8,6 +8,7 @@ import { Prompt } from "react-router-dom";
 import ToggleButton from "../Picker/ToggleButton";
 import AdminTimeTableTreeView from "../Table/AdminTimeTableTreeView";
 import Report from "@material-ui/icons/Report";
+import Typography from "@material-ui/core/Typography";
 
 // helper functoin to asign nested key object
 function assign(obj, keyPath, value) {
@@ -268,6 +269,8 @@ class AdminTimeTable extends Component {
       }
     } catch {}
 
+    console.log('render----------->');
+
     return (
       <div
         style={{
@@ -277,7 +280,7 @@ class AdminTimeTable extends Component {
           maxWidth: 1400
         }}
       >
-        <h1>Generate Timetable</h1>
+        <div style={{margin:'auto', width:'40vh', marginBottom:20}}><Typography variant='h4'><b>Generate Timetable</b></Typography></div>
         <Prompt
           when={Object.keys(data).length === 0 ? false : true}
           message="You have unsaved changes, are you sure you want to leave?"

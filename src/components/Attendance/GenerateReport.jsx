@@ -4,20 +4,22 @@ import GenerateReportTable from "../Table/GenerateReportTable";
 import AttendanceReportDailog from '../Alert/AttendanceReportDialog'
 import {connect} from 'react-redux'
 import Typography from '@material-ui/core/Typography'
+import LinearProgress from '@material-ui/core/LinearProgress'
 
 function GenerateReport  (props)  {
+  console.log('check pending---------->',props.requestPadding);
     return <div
-          style={{
-            flexGrow: 1,
-            marginLeft: "auto",
-            marginRight: "auto",
-            width: "100%",
-            maxWidth: 1400
-          }}
-        >
-
-        <div style={{margin:'auto', width:'40vh', marginBottom:10}}><Typography variant='h4'>Generate Report</Typography></div>
+            style={{
+              flexGrow: 1,
+              marginLeft: "auto",
+              marginRight: "auto",
+              width: "100%",
+              maxWidth: 1400
+            }}
+          >
+        <div style={{width:'40vh', margin:'auto', marginBottom:10, marginTop:10}}><Typography variant='h4'><b>Generate Report</b></Typography></div>
         <GenerateReportHeadPicker {...props} />
+        {props.requestPadding ? <LinearProgress /> : null}
         <GenerateReportTable {...props}/>
         <AttendanceReportDailog {...props}/>
     </div>
@@ -33,4 +35,5 @@ export default connect(state => ({
     attendanceReportData: state.initData.attendanceReportData,
     studentData : state.initData.studentData,
     subjectInfo : state.initData.subjectInfo,
+    requestPadding: state.initData.requestAttendanceLinePending
 }))(GenerateReport)

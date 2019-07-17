@@ -50,15 +50,15 @@ export const initData = (state= initialData, action={}) => {
         case REQUEST_FAILED:
             return Object.assign({}, state, {error: action.payload})
         case REQUEST_STUDENTS_SUCCESS:
-            return Object.assign({}, state, {studentData: action.payload, initDataPending:false})
+            return Object.assign({}, state, {studentData: action.payload, initDataPending:action.payload})
         case REQUEST_SUBJECT_SUCCESS:
             return Object.assign({}, state, {subjectData: action.payload})
         case REQUEST_ATTENDANCE_LINE_SUCCESS:
             return {...state, ...{attendanceLine:action.payload}}
         case REQUEST_ATTENDANCE_LINE_PENDING:
-            return {...state, ...{requestAttendanceLinePending:true}}
+            return {...state, ...{requestAttendanceLinePending:action.payload}}
         case REQUEST_ATTENDANCE_LINE_FAILED:
-            return {...state, ...{requestAttendanceLineFalied:true}}
+            return {...state, ...{requestAttendanceLineFalied:action.payload}}
         case REQUEST_SUBJECT_DATA:
             return { ...state, ...{subjectInfo:action.payload}}
         case PRINT_ATTENDANCE_REPORT:

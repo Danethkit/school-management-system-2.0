@@ -166,13 +166,6 @@ const NavigationBar = ({ classes, history, userIden }) => {
                 />
               ))}
             </Tabs>
-
-            <IconButton className={classes.iconButtonBlock} color="inherit">
-              {
-                userIden['img'] !== undefined ?
-                <Avatar alt="avatar"  src={`data:image/png;base64, ${userIden['img']}`}/>: null
-              }
-            </IconButton>
           </Toolbar>
         </AppBar>
       </div>

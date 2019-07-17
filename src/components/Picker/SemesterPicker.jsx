@@ -18,6 +18,7 @@ const SemesterPicker = ({dispatch, semester, subjectInfo, batch, userIden, cours
     if(!semester) {
       dispatch(onGroupChange(null))
     }
+    console.log({userIden});
     if(Object.keys(userIden).length) dispatch(actions(userIden['semester']))
   },[userIden])
 

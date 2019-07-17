@@ -22,7 +22,7 @@ export default connect(state=>({odooServerStatus : state.changePicker.odooServer
 
     const header = ['Session']
     if(currentWeek.startDate){
-        for (let i = 1; i <= 7; i++) {
+        for (let i = 0; i <= 6; i++) {
             header.push(
               moment(currentWeek.startDate, 'YYYY-MM-DD')
                 .add(i, 'days')
@@ -30,6 +30,8 @@ export default connect(state=>({odooServerStatus : state.changePicker.odooServer
                 .format("ddd MM/DD"))
         }
     }
+
+    const sortSession = (a, b) => moment(a.split('-')[0], 'h:mma') - moment(b.split('-')[0], 'h:mma')
 
     const getHandler = (session,i) =>  (value) => {
         if(session in editTT.data){
@@ -44,11 +46,11 @@ export default connect(state=>({odooServerStatus : state.changePicker.odooServer
 
     let faculties = [];
     try {
-    for (let e of subjectInfo[course][batch][semester][group]['subjects']) {
-        if (e.faculty) {
-        faculties.push(`${e.subject} ~ ${e.faculty}`);
+        for (let e of subjectInfo[course][batch][semester][group]['subjects']) {
+            if (e.faculty) {
+            faculties.push(`${e.subject} ~ ${e.faculty}`);
+            }
         }
-    }
     } catch {}
     const classes = tableStyle()
 
@@ -69,8 +71,7 @@ export default connect(state=>({odooServerStatus : state.changePicker.odooServer
                         </TableHead>
                         <TableBody>
                             {editTT.data !== undefined ?
-                                Object.keys(editTT.data).map(session => {
-                                if(session === 'header') return null
+                                Object.keys(editTT.data).sort(sortSession).map(session => {
                                 let temp = []
                                 for(let i =0; i < 7; i++){
                                     temp.push(<CustomTableCell text-align="center" key={i}>
