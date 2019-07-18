@@ -13,10 +13,11 @@ const styles = theme => ({
   width: "100%"
   },
   format: {
-    marginLeft: "auto",
-    marginRight: "auto",
-    width: "100%",
-    maxWidth: 1400,
+        backgroundColor: '#efefef',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        width: '100%',
+        maxWidth: 1400,
   }
 });
 

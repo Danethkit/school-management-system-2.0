@@ -272,10 +272,11 @@ class AdminTimeTable extends Component {
     return (
       <div
         style={{
-          marginLeft: "auto",
-          marginRight: "auto",
-          width: "100%",
-          maxWidth: 1400
+          backgroundColor: '#efefef',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          width: '100%',
+          maxWidth: 1400,
         }}
       >
         <div style={{margin:'auto', width:'40vh', marginBottom:20}}><Typography variant='h4'><b>Generate Timetable</b></Typography></div>
