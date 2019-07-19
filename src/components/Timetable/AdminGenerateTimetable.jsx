@@ -9,6 +9,7 @@ import ToggleButton from "../Picker/ToggleButton";
 import AdminTimeTableTreeView from "../Table/AdminTimeTableTreeView";
 import Report from "@material-ui/icons/Report";
 import Typography from "@material-ui/core/Typography";
+import {bodyColor} from "../../constants/color";
 
 // helper functoin to asign nested key object
 function assign(obj, keyPath, value) {
@@ -272,7 +273,7 @@ class AdminTimeTable extends Component {
     return (
       <div
         style={{
-          backgroundColor: '#efefef',
+          backgroundColor: bodyColor,
           marginLeft: 'auto',
           marginRight: 'auto',
           width: '100%',

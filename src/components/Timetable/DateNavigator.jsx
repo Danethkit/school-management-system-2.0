@@ -63,7 +63,7 @@ const DateNavigator = ({classes, handleLastWeek, handleDuplicateTimetable,
     }catch{}
 
     return (
-        <Toolbar style={{ marginBottom: -15}}>
+        <Toolbar style={{ marginBottom: -6}}>
             <span className={classes.left}>
             <Button size="small" color="primary" className="button" variant="outlined" onClick={handleLastWeek} disabled={weekStartIndex <= 0} >
                 <KeyboardArrowLeft fontSize={'inherit'} />
