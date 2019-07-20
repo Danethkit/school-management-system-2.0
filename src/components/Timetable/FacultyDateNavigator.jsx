@@ -64,7 +64,7 @@ const FacultyDateNavigator = ({classes, week, weekOfYear, handleLastWeek, handle
             </span>
             <span className={classes.middle}>
                 {
-                    <b>{moment.utc().week(week).weekday(0).format("ddd MM/DD")+ '~' + moment.utc().week(week).weekday(6).format("ddd MM/DD")}</b>
+                    <b>{moment.utc().week(week).weekday(1).format("ddd MM/DD")+ '~' + moment.utc().week(week).weekday(6).format("ddd MM/DD")}</b>
                 }
             </span>
         </Toolbar>

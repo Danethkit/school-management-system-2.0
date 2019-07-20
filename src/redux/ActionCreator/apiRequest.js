@@ -184,7 +184,6 @@ export const requestFacultyTimeTable = (data) => (dispatch) => {
 }
 
 export const requestStudentTimeTable = (data) => (dispatch) => {
-    console.log('data',data);
     fetch('http://192.168.7.240:8008/get-student-timetable',{
         method: 'post',
         headers: {'Content-Type':'application/json'},

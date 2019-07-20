@@ -28,7 +28,9 @@ const FacultyTimeTableView = ({userIden, facultyTT, dispatch, subjectInfo}) =>{
     }
 
     useEffect(()=>{
-        dispatch(requestFacultyTimeTable({date:moment.utc().week(week).weekday(0).format('YYYY-MM-DD')}))
+        let date = []
+        for(let i =0; i<7; i++) date.push(moment.utc().week(week).weekday(i).format('MM/DD/YYYY'))
+        dispatch(requestFacultyTimeTable({date}))
     }, [week])
 
     const classes = tableStyle();
@@ -61,7 +63,7 @@ const FacultyTimeTableView = ({userIden, facultyTT, dispatch, subjectInfo}) =>{
                                                 {
                                                     flag ?
                                                     <CustomTableCell align='center' rowSpan={facultyTT[key].length} style={{border:'0.5px solid gray', backgroundColor:'#CFD8DC'}} >
-                                                        {moment.utc().week(week).weekday(key).format('ddd YYYY/MM/DD')}
+                                                        {moment.utc().week(week).weekday(key -1).format('ddd YYYY/MM/DD')}
                                                     </CustomTableCell>: null
                                                 }
                                                 <CustomTableCell align='center'>
