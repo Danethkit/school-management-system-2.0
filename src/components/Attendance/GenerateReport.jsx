@@ -9,12 +9,12 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 function GenerateReport  (props)  {
     return <div
             style={{
-              flexGrow: 1,
-              marginLeft: "auto",
-              marginRight: "auto",
-              width: "100%",
-              maxWidth: 1400
-            }}
+                backgroundColor: '#efefef',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                width: '100%',
+                maxWidth: 1400,
+               }}
           >
         <div style={{width:'40vh', margin:'auto', marginBottom:10, marginTop:10}}><Typography variant='h4'><b>Generate Report</b></Typography></div>
         <GenerateReportHeadPicker {...props} />

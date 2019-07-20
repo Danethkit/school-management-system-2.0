@@ -27,7 +27,7 @@ export default function ToggleButtons({onChange, mode}) {
   const classes = useStyles();
 
   return (
-    <Grid container justify="flex-end" alignItems="baseline">
+    <Grid container justify="flex-end" alignItems="baseline" style={{ marginBottom: 40}}>
         <div className={classes.toggleContainer}>
             <Button variant="contained" className={mode === 'create' ? classes.active : classes.disable} onClick={()=>handleChangeMode('create')}>
                 <TodayIcon  />

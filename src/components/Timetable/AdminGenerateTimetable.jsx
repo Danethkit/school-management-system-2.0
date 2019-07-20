@@ -9,6 +9,7 @@ import ToggleButton from "../Picker/ToggleButton";
 import AdminTimeTableTreeView from "../Table/AdminTimeTableTreeView";
 import Report from "@material-ui/icons/Report";
 import Typography from "@material-ui/core/Typography";
+import {bodyColor} from "../../constants/color";
 
 // helper functoin to asign nested key object
 function assign(obj, keyPath, value) {
@@ -272,10 +273,11 @@ class AdminTimeTable extends Component {
     return (
       <div
         style={{
-          marginLeft: "auto",
-          marginRight: "auto",
-          width: "100%",
-          maxWidth: 1400
+          backgroundColor: bodyColor,
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          width: '100%',
+          maxWidth: 1400,
         }}
       >
         <div style={{margin:'auto', width:'40vh', marginBottom:20}}><Typography variant='h4'><b>Generate Timetable</b></Typography></div>

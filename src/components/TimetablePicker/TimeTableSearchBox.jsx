@@ -23,19 +23,19 @@ const TimeTableSearchBox = ({ value, setWeekNumber }) => {
             justify="flex-start"
             alignItems="center"
           >
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
+            <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
               <CoursePicker />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
+            <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
               <BatchPicker />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
+            <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
               <SemesterPicker />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
+            <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
               <GroupPicker />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
+            <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
               <WeekPicker name="week" value={value} onChange={setWeekNumber} />
             </Grid>
           </Grid>
