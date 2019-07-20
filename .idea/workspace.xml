@@ -2,21 +2,59 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5486def0-6216-4ffb-baf4-86fdbbd32a6c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/start.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/school-management-system-2.0.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/TimetablePicker/GroupPiker.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/TimetablePicker/SemesterPicker.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/TimetablePicker/TimetableHeaderPicker.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/TimetablePicker/WeekPicker.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Timetable/Genereate TimeTable/TimeTable.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Picker/TimetableHeaderPicker.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TimetablePicker/BatchPicker.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Picker/WeekPicker.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TimetablePicker/CouserPicker.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screen/TimeTableScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screen/TimeTableScreen.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Alert/AttendanceReportDialog.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Attendance/Generate Report/AttendanceReportDialog.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Attendance/AttendanceLine.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Attendance/Attendance Line/AttendanceLine.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Attendance/AttendanceSheet.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Attendance/Attendance Sheet/AttendanceSheet.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Attendance/GenerateReport.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Attendance/Generate Report/GenerateReport.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Attendance/SearchBox.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Attendance/Attendance Line/SearchBox.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DuplicateSession/DropBox.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timetable/Genereate TimeTable/DropBox.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DuplicateSession/DuplicateFrom.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timetable/Genereate TimeTable/DuplicateFrom.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DuplicateSession/DuplicateSession.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timetable/Genereate TimeTable/DuplicateSession.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DuplicateSession/DuplicateTo.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timetable/Genereate TimeTable/DuplicateTo.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Picker/GenerateReportHeadPicker.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Attendance/Generate Report/GenerateReportHeadPicker.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Picker/HeadPicker.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Attendance/Attendance Sheet/HeadPicker.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Picker/ToggleButton.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Button/ToggleButton.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Table/AdminTimeTableTreeView.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timetable/Genereate TimeTable/AdminTimeTableTreeView.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Table/AttendanceLineTable.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Attendance/Attendance Line/AttendanceLineTable.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Table/AttendanceLineTableHead.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Attendance/Attendance Line/AttendanceLineTableHead.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Table/EditTimeTable.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timetable/Genereate TimeTable/EditTimeTable.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Table/EditTimeTableDialog.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timetable/Genereate TimeTable/EditTimeTableDialog.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Table/GenerateReportTable.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Attendance/Generate Report/GenerateReportTable.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Table/GenerateReportTableHead.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Attendance/Generate Report/GenerateReportTableHead.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Table/SessionTable.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Attendance/Attendance Sheet/SessionTable.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Table/SessionTableHead.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Attendance/Attendance Sheet/SessionTableHead.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Table/SessionTableToolBar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Attendance/Attendance Sheet/SessionTableToolBar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Timetable/AdminGenerateTimetable.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timetable/Genereate TimeTable/AdminGenerateTimetable.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Timetable/AdminTimetableView.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timetable/Genereate TimeTable/AdminTimetableView.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Timetable/DateNavigator.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timetable/DateNavigator.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Timetable/FacultyTimetableView.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timetable/Faculty TimeTable/FacultyTimetableView.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Timetable/InsertData.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timetable/Genereate TimeTable/InsertData.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Timetable/MUITable.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Timetable/StudentTimetableView.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timetable/Student Timetable/StudentTimetableView.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Timetable/TimeTable.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timetable/TimeTable.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Timetable/TimetableReport.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TimetablePicker/DisplayTimetableHeader.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timetable/DisplayTimetableHeader.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TimetablePicker/TimeTableSearchBox.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Timetable/Genereate TimeTable/TimeTableSearchBox.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants/custom-cell.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants/variable.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/attendanceLineData.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/batch1.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/batch4.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/dataB2.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/dataB3.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/dataB4.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/dataB6G1.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/dataB6G2.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/dataB6G3.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/fac-dummy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/generateReport.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screen/AttendancesScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Attendance/AttendancesScreen.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screen/ProtectedRoute.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ProtectedRoute.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screen/TimeTable.jsx" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -30,70 +68,9 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/Timetable/AdminGenerateTimetable.jsx">
+        <entry file="file://$PROJECT_DIR$/src/components/Attendance/Generate Report/AttendanceReportDialog.jsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-375">
-              <caret line="119" column="1" selection-start-line="114" selection-end-line="119" selection-end-column="1" />
-              <folding>
-                <element signature="e#0#25#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/screen/TimeTableScreen.jsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="51" column="22" lean-forward="true" selection-start-line="45" selection-start-column="7" selection-end-line="51" selection-end-column="22" />
-              <folding>
-                <element signature="e#0#25#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/TimetablePicker/WeekPicker.jsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" column="36" selection-start-line="2" selection-start-column="36" selection-end-line="2" selection-end-column="36" />
-              <folding>
-                <element signature="e#0#41#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/Picker/SubjectPicker.jsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="21" column="12" selection-start-line="21" selection-start-column="12" selection-end-line="21" selection-end-column="12" />
-              <folding>
-                <element signature="e#0#41#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/components/TimetablePicker/BatchPicker.jsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-435">
-              <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
-              <folding>
-                <element signature="e#0#41#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/TimetablePicker/TimetableHeaderPicker.jsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-32">
-              <caret line="34" column="36" selection-start-line="34" selection-start-column="36" selection-end-line="34" selection-end-column="36" />
+            <state relative-caret-position="-682">
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -102,42 +79,120 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/TimetablePicker/GroupPiker.jsx">
+        <entry file="file://$PROJECT_DIR$/src/components/Alert/DefaultDialog.jsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-287">
-              <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
+            <state relative-caret-position="-209">
               <folding>
-                <element signature="e#0#41#0" expanded="true" />
+                <element signature="e#0#26#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/TimetablePicker/SemesterPicker.jsx">
+        <entry file="file://$PROJECT_DIR$/src/components/Alert/OdooServerStatusDialog.jsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
+            <state>
               <folding>
-                <element signature="e#0#41#0" expanded="true" />
+                <element signature="e#0#26#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/TimetablePicker/CouserPicker.jsx">
+        <entry file="file://$PROJECT_DIR$/src/components/Attendance/Attendance Line/SearchBox.jsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
+            <state relative-caret-position="117">
+              <caret line="24" column="4" selection-start-line="24" selection-start-column="4" selection-end-line="24" selection-end-column="4" />
               <folding>
-                <element signature="e#0#41#0" expanded="true" />
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/Attendance/Attendance Sheet/AttendanceSheet.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="476">
+              <caret line="100" column="11" selection-start-line="100" selection-start-column="11" selection-end-line="100" selection-end-column="11" />
+              <folding>
+                <element signature="e#0#51#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/Attendance/Attendance Line/AttendanceLine.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/Attendance/Generate Report/GenerateReport.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="391">
+              <caret line="23" column="10" selection-start-line="23" selection-start-column="10" selection-end-line="23" selection-end-column="10" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/Timetable/DateNavigator.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <folding>
+                <element signature="e#0#25#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/package.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="493">
+              <caret line="29" column="34" selection-start-line="29" selection-start-column="34" selection-end-line="29" selection-end-column="34" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/Attendance/Attendance Sheet/HeadPicker.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="357">
+              <caret line="30" column="19" selection-start-line="30" selection-start-column="19" selection-end-line="30" selection-end-column="19" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>&lt;Date</find>
+      <find>&lt;Time</find>
+      <find>date-io</find>
+      <find>date-f</find>
+      <find>material-table</find>
+      <find>material-ui-pickers</find>
+      <find>notistack</find>
+      <find>react-sel</find>
+      <find>recompose</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -155,6 +210,13 @@
         <option value="$PROJECT_DIR$/src/components/TimetablePicker/GroupPiker.jsx" />
         <option value="$PROJECT_DIR$/src/components/TimetablePicker/BatchPicker.jsx" />
         <option value="$PROJECT_DIR$/src/components/TimetablePicker/WeekPicker.jsx" />
+        <option value="$PROJECT_DIR$/src/components/Attendance/HeadPicker.jsx" />
+        <option value="$PROJECT_DIR$/src/components/Attendance/AttendanceSheet.jsx" />
+        <option value="$PROJECT_DIR$/src/components/Attendance/GenerateReport.jsx" />
+        <option value="$PROJECT_DIR$/src/components/Attendance/Generate Report/GenerateReport.jsx" />
+        <option value="$PROJECT_DIR$/src/components/Timetable/MUITable.jsx" />
+        <option value="$PROJECT_DIR$/src/components/Timetable/DateNavigator.jsx" />
+        <option value="$PROJECT_DIR$/package.json" />
       </list>
     </option>
   </component>
@@ -168,6 +230,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -180,47 +243,14 @@
               <item name="school-management-system-2.0" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="school-management-system-2.0" type="b2602c69:ProjectViewProjectNode" />
-              <item name="school-management-system-2.0" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="school-management-system-2.0" type="b2602c69:ProjectViewProjectNode" />
-              <item name="school-management-system-2.0" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="Picker" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="school-management-system-2.0" type="b2602c69:ProjectViewProjectNode" />
-              <item name="school-management-system-2.0" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="Timetable" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="school-management-system-2.0" type="b2602c69:ProjectViewProjectNode" />
-              <item name="school-management-system-2.0" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="TimetablePicker" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="school-management-system-2.0" type="b2602c69:ProjectViewProjectNode" />
-              <item name="school-management-system-2.0" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="screen" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -229,7 +259,11 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\internship\Earlyphant\SMS2\school-management-system-2.0\src\components\TimetablePicker" />
+      <recent name="C:\Users\Dara\Desktop\school-management-system-2.0\src\components\Attendance\Generate Report" />
+      <recent name="C:\Users\Dara\Desktop\school-management-system-2.0\src\components\Timetable\Genereate TimeTable" />
+      <recent name="C:\Users\Dara\Desktop\school-management-system-2.0\src\components\Button" />
+      <recent name="C:\Users\Dara\Desktop\school-management-system-2.0\src\components" />
+      <recent name="C:\Users\Dara\Desktop\school-management-system-2.0\src\components\Timetable" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -265,16 +299,17 @@
       <updated>1553499115782</updated>
       <workItem from="1553499118769" duration="9048000" />
       <workItem from="1553573071661" duration="16263000" />
+      <workItem from="1563616556571" duration="1935000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25311000" />
+    <option name="totallyTimeSpent" value="27246000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14210178" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.30663857" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -288,7 +323,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.3286119" />
+      <window_info anchor="bottom" id="Terminal" order="10" weight="0.18890075" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -336,117 +371,142 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Table/HeaderForm.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2085">
-          <caret line="142" column="34" selection-start-line="128" selection-start-column="20" selection-end-line="142" selection-end-column="34" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Picker/HeadPicker.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-69">
-          <caret column="26" selection-start-column="26" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/screen/TimeTableScreen.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="51" column="22" lean-forward="true" selection-start-line="45" selection-start-column="7" selection-end-line="51" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/TimetablePicker/TextFileStyle.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="16" selection-start-line="2" selection-start-column="16" selection-end-line="2" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/TimetablePicker/CouserPicker.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/TimetablePicker/SemesterPicker.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Timetable/AdminGenerateTimetable.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-375">
-          <caret line="119" column="1" selection-start-line="114" selection-end-line="119" selection-end-column="1" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Table/HeaderForm.jsx" />
+    <entry file="file://$PROJECT_DIR$/src/screen/TimeTableScreen.jsx" />
+    <entry file="file://$PROJECT_DIR$/src/components/TimetablePicker/TextFileStyle.css" />
+    <entry file="file://$PROJECT_DIR$/src/components/TimetablePicker/CouserPicker.jsx" />
+    <entry file="file://$PROJECT_DIR$/src/components/TimetablePicker/SemesterPicker.jsx" />
+    <entry file="file://$PROJECT_DIR$/src/components/TimetablePicker/TimetableHeaderPicker.jsx" />
+    <entry file="file://$PROJECT_DIR$/src/components/TimetablePicker/GroupPiker.jsx" />
+    <entry file="file://$PROJECT_DIR$/src/components/TimetablePicker/WeekPicker.jsx" />
+    <entry file="file://$PROJECT_DIR$/src/components/TimetablePicker/BatchPicker.jsx" />
     <entry file="file://$PROJECT_DIR$/src/components/Picker/SubjectPicker.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
+        <state relative-caret-position="289">
           <caret line="21" column="12" selection-start-line="21" selection-start-column="12" selection-end-line="21" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/constants/custom-cell.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1239">
           <folding>
-            <element signature="e#0#41#0" expanded="true" />
+            <element signature="e#0#25#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/TimetablePicker/TimetableHeaderPicker.jsx">
+    <entry file="file://$PROJECT_DIR$/src/constants/variable.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Timetable/Genereate TimeTable/AdminGenerateTimetable.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-32">
-          <caret line="34" column="36" selection-start-line="34" selection-start-column="36" selection-end-line="34" selection-end-column="36" />
+        <state relative-caret-position="187">
+          <caret line="129" column="5" selection-start-line="129" selection-start-column="5" selection-end-line="129" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Attendance/Generate Report/AttendanceReportDialog.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-682">
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/TimetablePicker/GroupPiker.jsx">
+    <entry file="file://$PROJECT_DIR$/src/components/Alert/DefaultDialog.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-287">
-          <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
+        <state relative-caret-position="-209">
           <folding>
-            <element signature="e#0#41#0" expanded="true" />
+            <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/TimetablePicker/WeekPicker.jsx">
+    <entry file="file://$PROJECT_DIR$/src/components/Alert/OdooServerStatusDialog.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="36" selection-start-line="2" selection-start-column="36" selection-end-line="2" selection-end-column="36" />
+        <state>
           <folding>
-            <element signature="e#0#41#0" expanded="true" />
+            <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/TimetablePicker/BatchPicker.jsx">
+    <entry file="file://$PROJECT_DIR$/src/components/Attendance/Attendance Line/SearchBox.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-435">
-          <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
+        <state relative-caret-position="117">
+          <caret line="24" column="4" selection-start-line="24" selection-start-column="4" selection-end-line="24" selection-end-column="4" />
           <folding>
-            <element signature="e#0#41#0" expanded="true" />
+            <element signature="e#0#26#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Attendance/Attendance Sheet/HeadPicker.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="30" column="19" selection-start-line="30" selection-start-column="19" selection-end-line="30" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Attendance/Attendance Sheet/AttendanceSheet.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="100" column="11" selection-start-line="100" selection-start-column="11" selection-end-line="100" selection-end-column="11" />
+          <folding>
+            <element signature="e#0#51#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Attendance/Attendance Line/AttendanceLine.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Attendance/Generate Report/GenerateReport.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="23" column="10" selection-start-line="23" selection-start-column="10" selection-end-line="23" selection-end-column="10" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Timetable/TimetableReport.jsx">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Timetable/MUITable.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#40#72#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Timetable/DateNavigator.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="29" column="34" selection-start-line="29" selection-start-column="34" selection-end-line="29" selection-end-column="34" />
         </state>
       </provider>
     </entry>

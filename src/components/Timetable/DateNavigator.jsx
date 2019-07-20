@@ -3,7 +3,7 @@ import { Button, Toolbar, withStyles}
 from '@material-ui/core'
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import DuplicateSession from '../DuplicateSession/DuplicateSession'
+import DuplicateSession from './Genereate TimeTable/DuplicateSession'
 import OpenInNew from '@material-ui/icons/OpenInNew'
 import moment from 'moment'
 
@@ -42,15 +42,11 @@ const styles = theme => ({
 
 })
 
-const weekOfYear = moment.utc().week();
-
 const DateNavigator = ({classes, handleLastWeek, handleDuplicateTimetable,
     handleCurrentWeek, weekEndDate,weekStartDate, handleNextWeek, disableCurrentWeek,
     week, weekStr, open, setOpen, ...rest}) => {
 
     const {subjectInfo, course, batch, semester, group} = rest
-
-    console.log({disableCurrentWeek});
 
     let items = []
     let weekStartIndex = 0

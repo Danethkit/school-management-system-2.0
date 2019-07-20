@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import {connect} from 'react-redux'
 import './index.css'
-import AttendancesScreen from './screen/AttendancesScreen'
-import TimeTable from './screen/TimeTable'
+import AttendancesScreen from './components/Attendance/AttendancesScreen'
+import TimeTable from './components/Timetable/TimeTable'
 import { Route, Switch, Router } from "react-router-dom"
 import * as serviceWorker from './serviceWorker'
 import { createBrowserHistory } from 'history'
@@ -10,7 +10,7 @@ import NavigationBar from "./components/NavigationBar/Navigator"
 import { ThemeProvider } from '@material-ui/styles';
 import {theme} from '../src/constants/color'
 import {getSubjectData, getUid} from './redux/ActionCreator/apiRequest'
-import ProtectedRoute from './screen/ProtectedRoute'
+import ProtectedRoute from './components/ProtectedRoute'
 const hist = createBrowserHistory()
 
 const App = ({dispatch}) => {
