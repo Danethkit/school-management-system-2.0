@@ -6,7 +6,6 @@ import GroupPicker from "../../Picker/GroupPicker";
 import StartDatePicker from "../../Picker/StartDatePicker";
 import EndDatePicker from "../../Picker/EndDatePicker";
 import { Box, Grid } from "@material-ui/core";
-import WeekPicker from "../../Timetable/Genereate TimeTable/TimeTableSearchBox";
 
 
 export default function GenerateReportHeadPicker(props) {
@@ -46,8 +45,5 @@ export default function GenerateReportHeadPicker(props) {
             </Grid>
         </Grid>
     </Box>
-
-
-
     );
 }

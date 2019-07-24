@@ -4,8 +4,7 @@ import {
   Table,
   TableBody,
   TableHead,
-  TableRow
-} from "@material-ui/core";
+  TableRow } from "@material-ui/core";
 import DisplayTimetableHeader from "../DisplayTimetableHeader";
 import FacultyDateNavigator from "../FacultyDateNavigator";
 import { requestStudentTimeTable } from "../../../redux/ActionCreator/apiRequest";
@@ -13,17 +12,27 @@ import { connect } from "react-redux";
 import moment from "moment";
 import CustomTableCell from "../../Table/CustomTableCell";
 import tableStyle from "../../Table/TableStyle";
+import SearchBox from './SearchBox'
+import {onCourseChange, onBatchChange, onGroupChange, onSemesterChange} from '../../../redux/ActionCreator/userBehavior'
+import {sortSession} from '../../../utility-functions'
 
-const weekOfYear = moment.utc().week();
 
-const StudentView = ({ dispatch, studentTT, subjectInfo }) => {
+const StudentView = ({dispatch, studentTT, subjectInfo, semester}) => {
 
   let currentWeekIndex = -1
 
-  const [weekIndex, setWeekIndex] = useState(0)
+  const [weekIndex, setWeekIndex] = useState(-1)
+  const [weekName, changeWeekName] = useState('W 01')
+
+  let weekNameStr = weekName
 
   const handleLastWeek = () => {
+    let weekInt = parseInt(weekNameStr.split(" ")[1]) - 1;
+    let weekName = "";
+    if (weekInt < 10) weekName = "W 0" + weekInt;
+    else weekName = "W " + weekInt;
     setWeekIndex(weekIndex - 1);
+    changeWeekName(weekName)
   };
 
   const handleCurrentWeek = () => {
@@ -31,39 +40,56 @@ const StudentView = ({ dispatch, studentTT, subjectInfo }) => {
   };
 
   const handleNextWeek = () => {
+    let weekInt = parseInt(weekNameStr.split(" ")[1]) + 1;
+    let weekName = "";
+    if (weekInt < 10) weekName = "W 0" + weekInt;
+    else weekName = "W " + weekInt;
     setWeekIndex(weekIndex + 1);
-
+    changeWeekName(weekName)
   };
 
-  const sortSession = (a, b) => moment(a.split('-')[0], 'h:mma') - moment(b.split('-')[0], 'h:mma')
+  const handleChangeWeekName = (value) => {
+    changeWeekName(value)
+    const {course, batch, group} = studentTT.header
+    let weeks = subjectInfo[course][batch][semester][group]['week']
+    const weekIndex = weeks.findIndex(e => e.name === value)
+    setWeekIndex(weekIndex)
+  }
 
   var weeks = []
   if(studentTT.header !== undefined && Object.keys(subjectInfo).length !== 0){
-    const {course, batch, semester, group} = studentTT.header
-    weeks = subjectInfo[course][batch][semester][group]['week']
+    const {course, batch, group} = studentTT.header
+    try{
+      weeks = subjectInfo[course][batch][semester][group]['week']
+    }catch{}
   }
 
-
   useEffect(()=> {
-    if(studentTT.header !== undefined && Object.keys(subjectInfo).length !== 0){
-      currentWeekIndex = weeks.findIndex(e => moment() >= moment(e.startDate, 'YYYY-MM-DD') && moment() <= moment(e.endDate, 'YYYY-MM-DD'))
-      if(weekIndex === 0) setWeekIndex(currentWeekIndex)
+    if(weekIndex === -1){
+      if(studentTT.header !== undefined && Object.keys(subjectInfo).length !== 0){
+        const {course, batch,semester, group} = studentTT.header
+        let weeks = subjectInfo[course][batch][semester][group]['week']
+        currentWeekIndex = weeks.findIndex(e => moment() >= moment(e.startDate, 'YYYY-MM-DD') && moment() <= moment(e.endDate, 'YYYY-MM-DD'))
+        changeWeekName(weeks[currentWeekIndex].name)
+        dispatch(onBatchChange(batch))
+        dispatch(onCourseChange(course))
+        dispatch(onGroupChange(group))
+        dispatch(onSemesterChange(semester))
+        setWeekIndex(currentWeekIndex)
+      }
     }
-  }, [subjectInfo, studentTT])
-
+  }, [subjectInfo, studentTT, semester])
 
 
   useEffect(()=>{
-    if(weeks.length !== 0)
-      dispatch(requestStudentTimeTable({week: weeks[weekIndex].id, date:moment().utc().format('YYYY-MM-DD')}))
+    if(weeks.length !== 0 && weekIndex !== -1)
+      dispatch(requestStudentTimeTable({week: weeks[weekIndex].id, semester, date:moment().utc().format('YYYY-MM-DD')}))
     else  dispatch(requestStudentTimeTable({week: false, date:moment().utc().format('YYYY-MM-DD')}))
-  }, [weekIndex])
-
-
+  }, [weekIndex, semester])
 
   const header = ["Session"];
 
-  if(weeks.length !== 0){
+  if(weeks.length !== 0 && weekIndex !== -1){
     for (let i = 0; i < 7; i++) {
       header.push(
         moment(weeks[weekIndex].startDate, 'YYYY-MM-DD')
@@ -78,13 +104,14 @@ const StudentView = ({ dispatch, studentTT, subjectInfo }) => {
 
   return (
     <div className={classes.format}>
+      <SearchBox value={weekName} onChange={handleChangeWeekName}/>
       <FacultyDateNavigator
-        week={weeks.length !== 0 ? moment(weeks[weekIndex].startDate, 'YYYY-MM-DD').week(): 1}
+        week={weeks.length !== 0 && weekIndex !== -1 ? moment(weeks[weekIndex].startDate, 'YYYY-MM-DD'): moment()}
+        weekEnd = {weeks.length !== 0 ? weeks[weeks.length-1].name: ''}
+        weekStr={weekName}
         handleLastWeek={handleLastWeek}
         handleNextWeek={handleNextWeek}
-        handleCurrentWeek={handleCurrentWeek}
-        weekOfYear={weekOfYear}
-      />
+        handleCurrentWeek={handleCurrentWeek}/>
       <DisplayTimetableHeader
         header={studentTT["header"]}
         week={
@@ -130,11 +157,12 @@ const StudentView = ({ dispatch, studentTT, subjectInfo }) => {
           </Table>
         </Paper>
       </div>
-    </div>
+  </div>
   );
 };
 
 export default connect(state => ({
   studentTT: state.initData.studentTT,
-  subjectInfo: state.initData.subjectInfo
+  subjectInfo: state.initData.subjectInfo,
+  semester: state.changePicker.semester
 }))(StudentView);

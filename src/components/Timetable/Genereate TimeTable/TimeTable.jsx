@@ -1,4 +1,4 @@
-import React, { useMemo,useState } from "react";
+import React, {useState } from "react";
 import DisplayTimetableHeader from "../DisplayTimetableHeader";
 import OdooServerStatusDialog from '../../Alert/OdooServerStatusDialog'
 import {
@@ -20,6 +20,7 @@ import tableStyle from '../../Table/TableStyle'
 import Fade from '@material-ui/core/Fade';
 import DefaultAlert from '../../Alert/DefaultDialog'
 import Report from '@material-ui/icons/Report'
+import {sortSession} from '../../../utility-functions'
 
 const TimeTable = ({
   styles,
@@ -37,17 +38,6 @@ const TimeTable = ({
 
   const [warning, setWarning] = useState(false)
   const handleCloseWarning = () => setWarning(false)
-  const sortedSession = useMemo(
-    () =>
-      sessions.sort((a, b) => {
-        let timeA = [a.slice(0, 5), " ", a.slice(5, 7)].join("");
-        let timeB = [b.slice(0, 5), " ", b.slice(5, 7)].join("");
-        return (
-          new Date(`07/16/1999 ${timeA}`) - new Date(`07/16/1999 ${timeB}`)
-        );
-      }),
-    [sessions]
-  );
 
   const handleSaveTimeTable = () => {
     if(selectedFaculty[weekStr] === undefined) return setWarning(true)
@@ -62,55 +52,35 @@ const TimeTable = ({
     let data = selectedFaculty[weekStr][course][batch][semester][group]
     for(let day in data){
       for(let entrie of Object.entries(data[day])){
+        if(!entrie[1]){
+          return setWarning(true)
+        }
+        let val = {
+              subject: entrie[1].split(' ~ ')[0],
+              faculty: entrie[1].split(' ~ ')[1],
+              session: entrie[0]
+            }
         switch(day.split(' ')[0]){
           case 'Sun':
-              line1.push({
-                subject: entrie[1].split('~')[0].substring(0, entrie[1].split('~')[0].length -1),
-                faculty: entrie[1].split('~')[1].substring(1, entrie[1].split('~')[1].length),
-                session: entrie[0]
-              })
+              line1.push(val)
             break
           case 'Mon':
-              line2.push({
-                subject: entrie[1].split('~')[0].substring(0, entrie[1].split('~')[0].length -1),
-                faculty: entrie[1].split('~')[1].substring(1, entrie[1].split('~')[1].length),
-                session: entrie[0]
-              })
+              line2.push(val)
             break
           case 'Tue':
-              line3.push({
-                subject: entrie[1].split('~')[0].substring(0, entrie[1].split('~')[0].length -1),
-                faculty: entrie[1].split('~')[1].substring(1, entrie[1].split('~')[1].length),
-                session: entrie[0]
-              })
+              line3.push(val)
             break
           case 'Wed':
-              line4.push({
-                subject: entrie[1].split('~')[0].substring(0, entrie[1].split('~')[0].length -1),
-                faculty: entrie[1].split('~')[1].substring(1, entrie[1].split('~')[1].length),
-                session: entrie[0]
-              })
+              line4.push(val)
             break
           case 'Thu':
-              line5.push({
-                subject: entrie[1].split('~')[0].substring(0, entrie[1].split('~')[0].length -1),
-                faculty: entrie[1].split('~')[1].substring(1, entrie[1].split('~')[1].length),
-                session: entrie[0]
-              })
+              line5.push(val)
             break
           case 'Fri':
-              line6.push({
-                subject: entrie[1].split('~')[0].substring(0, entrie[1].split('~')[0].length -1),
-                faculty: entrie[1].split('~')[1].substring(1, entrie[1].split('~')[1].length),
-                session: entrie[0]
-              })
+              line6.push(val)
             break
           case 'Sat':
-              line7.push({
-                subject: entrie[1].split('~')[0].substring(0, entrie[1].split('~')[0].length -1),
-                faculty: entrie[1].split('~')[1].substring(1, entrie[1].split('~')[1].length),
-                session: entrie[0]
-              })
+              line7.push(val)
             break
           default: break
         }
@@ -175,7 +145,7 @@ const TimeTable = ({
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {sortedSession.map(row => (
+                    {sessions.sort(sortSession).map(row => (
                       <TableRow className={classes.row} key={row}>
                         {columns.map((cell, i) => {
                           return cell === "Session" ? (

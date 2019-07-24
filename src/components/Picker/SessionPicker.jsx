@@ -3,21 +3,15 @@ import { onSessionChange } from '../../redux/ActionCreator/userBehavior'
 import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux'
 import AutoComplete from './AutoComplete'
+import {sortSession} from '../../utility-functions'
 
-export const sortSessionTime = (session) => {
-    return session.sort((a, b) => {
-      let timeA = [a.slice(0,5), ' ', a.slice(5,7)].join('')
-      let timeB = [b.slice(0,5), ' ', b.slice(5,7)].join('')
-      return new Date(`07/16/1999 ${timeA}`) - new Date(`07/16/1999 ${timeB}`)
-    })
-}
-const SessionPicker = ({dispatch, session, subjectInfo, userIden, course, batch, semester,sessionNumber, group}) => {
+const SessionPicker = ({dispatch, session, subjectInfo, userTT, course, batch, semester,sessionNumber, group}) => {
 
     let suggestions = []
     let allSuggestions =  []
     try {
         allSuggestions = subjectInfo[course][batch][semester][group]['session']
-        suggestions = Object.keys(userIden[course][batch][semester][group])
+        suggestions = Object.keys(userTT['data'][course][batch][semester][group])
     } catch(err){}
 
     const action = bindActionCreators(onSessionChange, dispatch)
@@ -25,13 +19,13 @@ const SessionPicker = ({dispatch, session, subjectInfo, userIden, course, batch,
     useEffect(()=>{
         let index = suggestions.findIndex(e => e === allSuggestions[sessionNumber -1])
         action(suggestions[index])
-    },[sessionNumber, subjectInfo, userIden])
+    },[sessionNumber, subjectInfo, userTT])
 
     return <AutoComplete
             value ={session}
             onChange = {action}
             label = "Session"
-            suggestions ={sortSessionTime(suggestions)} />
+            suggestions ={suggestions.sort(sortSession)} />
   }
 
 export default connect(state => ({

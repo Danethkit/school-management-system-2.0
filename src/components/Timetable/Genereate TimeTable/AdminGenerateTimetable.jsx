@@ -1,4 +1,4 @@
-import React, { memo, Component } from "react";
+import React, {Component } from "react";
 import TimeTableSearchBox from "./TimeTableSearchBox";
 import DateNavigator from "../DateNavigator";
 import moment from "moment";
@@ -10,47 +10,18 @@ import AdminTimeTableTreeView from "./AdminTimeTableTreeView";
 import Report from "@material-ui/icons/Report";
 import Typography from "@material-ui/core/Typography";
 import {bodyColor} from "../../../constants/color";
-
-// helper functoin to asign nested key object
-function assign(obj, keyPath, value) {
-  const lastKeyIndex = keyPath.length - 1;
-  for (var i = 0; i < lastKeyIndex; ++i) {
-    let key = keyPath[i];
-    if (!(key in obj)) obj[key] = {};
-    obj = obj[key];
-  }
-  obj[keyPath[lastKeyIndex]] = value;
-}
+import {assign} from '../../../utility-functions'
 
 const weekday = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
 
-const areEqual = (prevProps, nextProps) => {
-  if (
-    nextProps.course === null &&
-    (prevProps.batch !== nextProps.batch &&
-      prevProps.semester !== nextProps.semester &&
-      prevProps.group !== nextProps.group)
-  ) {
-    return true;
-  }
-  if (
-    nextProps.batch === null &&
-    (prevProps.semester !== nextProps.semester &&
-      prevProps.group !== nextProps.group)
-  ) {
-    return true;
-  }
-  return false;
-};
-// filter number of tables based on TimeTableSearchBoxComponent
-// filter parameter : course, batch, semester , group are recieved as props from redux store
-const filterTable = (
-  data,
-  course = false,
-  batch = false,
-  semester = false,
-  group = false
-) => {
+/**
+    * @desc filter number of tables based on given cousre batch, semester and group
+    * @param object $data- contain subjectmanagement data, course, batch, semester, group
+    * @return array - array of object contain info of each table
+    * TODO: refactor this method to provie more efficient filtering
+*/
+const filterTable = (data, course = false, batch = false, semester = false, group = false) => {
+
   let res = [];
   if (Object.keys(data).length === 0) {
     return res;
@@ -131,21 +102,21 @@ const filterTable = (
   } catch {}
   return res;
 };
-// weekStr, handleChangeWeekStr, handleCurrentWeek, handleLastWeek, handleNextWeek, ...others
-// const {subjectInfo, course, batch, semester, group, week, endSemDate} = others
 
 class AdminTimeTable extends Component {
+
   clickHandlers = {};
   constructor(props) {
     super(props);
     this.state = {
       open: false,
-      data: {},
       warning: false,
-      mode: "create"
+      mode: "create",
+      data :{}
     };
   }
 
+// function to save timetable data temporary
   onFacultyInsert = (row, col, value, header) => {
     const { weekStr } = this.props;
     const { data } = this.state;
@@ -185,6 +156,7 @@ class AdminTimeTable extends Component {
     this.setState({ data: { ...data } });
   };
 
+
   handleCloseWarning = () => {
     this.setState({ warning: false });
   };
@@ -193,22 +165,18 @@ class AdminTimeTable extends Component {
     this.setState({ open: boo });
   };
 
+  // duplicate the given timetable data to given weeks, and save temporary
   handleDuplicateTimetable = selected => {
     const { weekStr, subjectInfo, course, batch, semester, group } = this.props;
-    let { data } = this.state;
+    let data = this.state.data;
     if (!weekStr) return;
     selected.forEach(w => {
       let temp2 = {};
       let temp = data[weekStr][course][batch][semester][group];
+      let weeks = subjectInfo[course][batch][semester][group]["week"]
       for (let day in temp) {
-        let weekIndex = subjectInfo[course][batch][semester][group][
-          "week"
-        ].findIndex(e => e.name === w);
-        let keyDay = moment(
-          subjectInfo[course][batch][semester][group]["week"][weekIndex]
-            .startDate,
-          "YYYY-MM-DD"
-        )
+        let weekIndex = weeks.findIndex(e => e.name === w);
+        let keyDay = moment(weeks[weekIndex].startDate, "YYYY-MM-DD")
           .weekday(weekday[day.split(" ")[0]])
           .format("ddd MM/DD");
         Object.keys(temp[day]).forEach(k => {
@@ -222,7 +190,6 @@ class AdminTimeTable extends Component {
         assign(data, [w, course, batch, semester, group], temp2);
       }
     });
-    this.setState({ data: { ...data } });
   };
 
   getClickHandler = key => {
@@ -237,6 +204,26 @@ class AdminTimeTable extends Component {
     if (mode === this.state.mode) return;
     this.setState({ mode });
   };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const prevProps = this.props
+    if (
+      nextProps.course === null &&
+      (prevProps.batch !== nextProps.batch &&
+        prevProps.semester !== nextProps.semester &&
+        prevProps.group !== nextProps.group)
+    ) {
+      return false
+    }
+    if (
+      nextProps.batch === null &&
+      (prevProps.semester !== nextProps.semester &&
+        prevProps.group !== nextProps.group)
+    ) {
+      return false
+    }
+    return true
+  }
 
   render() {
     const {
@@ -257,7 +244,8 @@ class AdminTimeTable extends Component {
       dispatch
     } = others;
 
-    const { data, open, warning, mode } = this.state;
+    const {open, warning, mode } = this.state;
+    let data = this.state.data
     let allTables = filterTable(subjectInfo, course, batch, semester, group);
     let weekStartDate = "";
     let weekEndDate = "";
@@ -289,20 +277,23 @@ class AdminTimeTable extends Component {
           setWeekNumber={handleChangeWeekStr}
           value={weekStr}
         />
-        <DateNavigator
-          week={week}
-          weekStr={weekStr}
-          handleLastWeek={handleLastWeek}
-          handleNextWeek={handleNextWeek}
-          handleCurrentWeek={handleCurrentWeek}
-          open={open}
-          setOpen={this.openDuplicateDialog}
-          weekEndDate={weekEndDate}
-          weekStartDate={weekStartDate}
-          handleDuplicateTimetable={this.handleDuplicateTimetable}
-          {...others}
-        />
-        <div>
+        {
+          mode === 'create'?
+          <DateNavigator
+            week={week}
+            weekStr={weekStr}
+            handleLastWeek={handleLastWeek}
+            handleNextWeek={handleNextWeek}
+            handleCurrentWeek={handleCurrentWeek}
+            open={open}
+            setOpen={this.openDuplicateDialog}
+            weekEndDate={weekEndDate}
+            weekStartDate={weekStartDate}
+            handleDuplicateTimetable={this.handleDuplicateTimetable}
+            {...others}
+          />: null
+        }
+        <div style={{margin:10}}>
           <ToggleButton onChange={this.onChangeMode} mode={mode} />
         </div>
         {mode === "view" ? (
@@ -312,12 +303,10 @@ class AdminTimeTable extends Component {
             {allTables.map((table, i) => {
               let faculties = [];
               try {
-                for (let e of subjectInfo[table.course][table.batch][
-                  table.semester
-                ][table.group]["subjects"]) {
-                  if (e.faculty) {
-                    faculties.push(`${e.subject} ~ ${e.faculty}`);
-                  }
+                for (let e of subjectInfo[table.course][table.batch][table.semester][table.group]["subjects"]) {
+                  if(e.faculty)
+                    faculties.push(`${e.subject} ~ ${e.faculty}`)
+                  else faculties.push(e.subject)
                 }
               } catch {}
               return (
@@ -358,4 +347,4 @@ class AdminTimeTable extends Component {
   }
 }
 
-export default memo(AdminTimeTable, areEqual);
+export default AdminTimeTable

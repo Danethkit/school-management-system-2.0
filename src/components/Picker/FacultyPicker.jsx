@@ -12,15 +12,15 @@ const FacultyPicker = ({
   semester,
   group,
   session,
-  userIden,
-  uid
+  userTT,
+  userProfile
 }) => {
   let actions = bindActionCreators(onFacultyChange, dispatch);
   let suggestions = [];
   let temp = {};
-  if (uid.uid === "admin") {
+  if (userProfile.role === "admin") {
     try {
-      temp = userIden[course][batch][semester][group];
+      temp = userTT['data'][course][batch][semester][group];
       for (let e in temp) {
         if (temp[e]["faculty"] && !suggestions.includes(temp[e]["faculty"])) {
           suggestions.push(temp[e]["faculty"]);
@@ -28,8 +28,8 @@ const FacultyPicker = ({
       }
     } catch (e) {}
   } else {
-    suggestions.push(userIden["user"]);
-    faculty = userIden["user"];
+    suggestions.push(userProfile.name)
+    faculty = userProfile.name
   }
 
   useEffect(() => {
@@ -39,10 +39,9 @@ const FacultyPicker = ({
         break;
       }
     }
-  }, [session, userIden]);
+  }, [session, userTT]);
   return (
     <AutoComplete
-     
       value={faculty}
       onChange={actions.onFacultyChange}
       label="Faculty"
@@ -58,5 +57,5 @@ export default connect(state => ({
   batch: state.changePicker.batch,
   group: state.changePicker.group,
   semester: state.changePicker.semester,
-  uid: state.initData.uid
+  userProfile: state.initData.userProfile
 }))(FacultyPicker);

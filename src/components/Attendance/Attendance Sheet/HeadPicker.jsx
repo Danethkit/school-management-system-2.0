@@ -9,7 +9,7 @@ import SubjectPicker from "../../Picker/SubjectPicker";
 import FacultyPicker from "../../Picker/FacultyPicker";
 import { Grid, Box, CircularProgress } from "@material-ui/core";
 
-export default function HeadPicker({ sessionNumber, userIden }) {
+export default function HeadPicker({ sessionNumber, userTT }) {
   return (
     <Box boxShadow={2} display={"flex"}>
       <Grid
@@ -17,7 +17,7 @@ export default function HeadPicker({ sessionNumber, userIden }) {
         justify="center"
         style={{ marginLeft: 20, marginRight: 20 }}
       >
-        {userIden.length !== 0 ? (
+        {userTT.length !== 0 ? (
           <Grid
             item
             container
@@ -31,31 +31,31 @@ export default function HeadPicker({ sessionNumber, userIden }) {
             </Grid>
 
             <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-              <FacultyPicker userIden={userIden} />
+              <FacultyPicker userTT={userTT} />
             </Grid>
 
             <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-              <CoursePicker userIden={userIden} />
+              <CoursePicker userTT={userTT} />
             </Grid>
 
             <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-              <BatchPicker userIden={userIden} />
+              <BatchPicker userTT={userTT} />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
               <SessionPicker
                 sessionNumber={sessionNumber}
-                userIden={userIden}
+                userTT={userTT}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-              <SubjectPicker userIden={userIden} />
+              <SubjectPicker userTT={userTT} />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-              <SemesterPicker userIden={userIden} />
+              <SemesterPicker userTT={userTT} disable />
             </Grid>
 
             <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-              <GroupPicker userIden={userIden} />
+              <GroupPicker userTT={userTT} />
             </Grid>
           </Grid>
         ) : (

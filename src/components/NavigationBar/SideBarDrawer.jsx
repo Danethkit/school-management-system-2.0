@@ -16,7 +16,7 @@ const style = theme => ({
   },
 });
 
-function SideBarDrawer  ({toggleDrawer, userIden, open, classes, items}) {
+function SideBarDrawer  ({toggleDrawer, userProfile, open, classes, items}) {
   return (
     <Drawer anchor='left' open={open} onClose={toggleDrawer(false)}>
         <div
@@ -26,8 +26,8 @@ function SideBarDrawer  ({toggleDrawer, userIden, open, classes, items}) {
             onKeyDown={()=>toggleDrawer(false)}>
               <Grid container justify="center" alignItems="center" style={{padding:30}}>
                 {
-                  userIden['img'] !== undefined ?
-                  <Avatar style={{margin: 10,width: 60,height: 60}} alt="avatar" src={`data:image/png;base64, ${userIden['img']}`}/>:
+                  userProfile['profile'] !== undefined ?
+                  <Avatar style={{margin: 10,width: 60,height: 60}} alt="avatar" src={`data:image/png;base64, ${userProfile['profile']}`}/>:
                   null
                 }
               </Grid>

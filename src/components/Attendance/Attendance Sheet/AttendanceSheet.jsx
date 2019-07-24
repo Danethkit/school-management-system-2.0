@@ -3,7 +3,7 @@ import { AppBar, Tabs, Tab, withStyles, Typography, Box } from "@material-ui/cor
 import HeadPicker from "./HeadPicker";
 import SessionTable from "./SessionTable";
 import { connect } from "react-redux";
-import { requestUserIdentity } from "../../../redux/ActionCreator/apiRequest";
+import { requestUserTimetable } from "../../../redux/ActionCreator/apiRequest";
 import moment from 'moment'
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 
@@ -34,7 +34,7 @@ function ElevationScroll(props) {
 }
 const AttendancesSheet = (props) => {
 
-  const {classes, dispatch, date, course, batch, group, faculty, semester, session, subjectInfo, userIden} = props
+  const {classes, dispatch, date, course, batch, group, faculty, semester, session, subjectInfo, userTT} = props
 
   let availableTab = [];
   let allSessions = [];
@@ -42,7 +42,7 @@ const AttendancesSheet = (props) => {
     if (Object.keys(subjectInfo).length !== 0) {
       allSessions = subjectInfo[course][batch][semester][group]["session"];
       let availableSession = Object.keys(
-        userIden[course][batch][semester][group]
+        userTT['data'][course][batch][semester][group]
       );
       allSessions.forEach((e, i) => {
         if (availableSession.includes(e)) {
@@ -56,7 +56,7 @@ const AttendancesSheet = (props) => {
     if(date == 'Invalid Date') return
     if(!date) return
     if(date > new Date()) return
-    dispatch(requestUserIdentity({date:moment(date).format('YYYY-MM-DD'), course, batch, group, semester}))
+    dispatch(requestUserTimetable({date:moment(date).format('YYYY-MM-DD'), course, batch, group, semester}))
   }, [date, faculty, course, batch, group, semester])
 
   const [sessionNumber, setSessionNumber] = useState(1);
@@ -98,7 +98,7 @@ const AttendancesSheet = (props) => {
         </AppBar>
       </ElevationScroll>
 
-      <HeadPicker sessionNumber={sessionNumber} userIden={userIden} />
+      <HeadPicker sessionNumber={sessionNumber} userTT={userTT} />
       <SessionTable sessions={availableTab} sessionNumber={sessionNumber} />
     </div>
   );
@@ -114,5 +114,5 @@ export default connect(state => ({
   faculty: state.changePicker.faculty,
   semester: state.changePicker.semester,
   subjectInfo: state.initData.subjectInfo,
-  userIden: state.initData.userIden
+  userTT: state.initData.userTT
 }))(withStyles(styles)(AttendancesSheet));

@@ -4,14 +4,15 @@ import { bindActionCreators } from 'redux'
 import { onCourseChange } from '../../redux/ActionCreator/userBehavior'
 import AutoComplete from './AutoComplete'
 
-const CoursePicker = ({course, subjectInfo, userIden, uid, dispatch}) => {
+const CoursePicker = ({course, subjectInfo, userTT, userProfile, dispatch}) => {
   let data = {}
-  if(uid.uid === 'admin'){
+  if(userProfile.role === 'admin'){
     data = subjectInfo
   }else {
-    data = userIden
+    data = userTT['data']
   }
   let actions = bindActionCreators({onCourseChange}, dispatch)
+  console.log('data',data);
   return <AutoComplete
           value={course}
           onChange={actions.onCourseChange}
@@ -21,5 +22,5 @@ const CoursePicker = ({course, subjectInfo, userIden, uid, dispatch}) => {
 export default connect(state => ({
   course : state.changePicker.course,
   subjectInfo: state.initData.subjectInfo,
-  uid: state.initData.uid
+  userProfile: state.initData.userProfile
 }))(CoursePicker)

@@ -2,12 +2,12 @@ import React from 'react'
 import {Route, Redirect} from 'react-router-dom'
 import {connect} from 'react-redux'
 
-export default connect(state=> ({uid:state.initData.uid}))(({ component: Component, uid, route, ...rest }) => {
+export default connect(state=> ({userProfile:state.initData.userProfile}))(({ component: Component, userProfile, route, ...rest }) => {
     return <>
     {
-        uid.uid === undefined ? null :
+        userProfile.role === undefined ? null :
         <Route {...rest} render={(props) => (
-            uid.uid === 'admin' || uid.uid === 'faculty' ?
+            userProfile.role === 'admin' || userProfile.role === 'faculty' ?
                <Component {...props} /> :
                <Redirect to={{ pathname: '/sms/timetable/student', state: { from: props.location }}} />
         )} />

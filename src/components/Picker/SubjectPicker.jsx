@@ -4,11 +4,11 @@ import { onSubjectChange } from '../../redux/ActionCreator/userBehavior'
 import { bindActionCreators } from "redux";
 import AutoComplete from './AutoComplete'
 
-const SubjectPicker = ({dispatch, subject, userIden, course, batch, semester, group, session}) => {
+const SubjectPicker = ({dispatch, subject, userTT, course, batch, semester, group, session}) => {
   let actions = bindActionCreators(onSubjectChange,dispatch)
   let sub = ''
   try{
-    sub = userIden[course][batch][semester][group][session]['subject']
+    sub = userTT['data'][course][batch][semester][group][session]['subject']
   }catch{}
 
   useEffect(()=>{

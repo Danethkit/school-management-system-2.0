@@ -18,6 +18,4 @@ const AttendanceDate = ({ date, onChangeDate, dispatch }) => {
     />
   );
 };
-export default connect(state => ({ date: state.changePicker.date }))(
-  AttendanceDate
-);
+export default connect(state => ({ date: state.changePicker.date }))(AttendanceDate)

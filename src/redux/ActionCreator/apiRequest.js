@@ -157,8 +157,8 @@ export const saveTimeTable = (data) => (dispatch) => {
     .catch(err => dispatch({type: TOGGLE_DIALOG, payload: err}))
 }
 
-export const requestUserIdentity = (data) => (dispatch) => {
-    fetch('http://192.168.7.240:8008/get-user-identity',{
+export const requestUserTimetable = (data) => (dispatch) => {
+    fetch('http://192.168.7.240:8008/get-user-timetable',{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -223,7 +223,7 @@ export const requestTimeTableData = (data) => (dispatch) => {
 }
 
 export const getUid = () => (dispatch) => {
-    fetch('http://192.168.7.240:8008/get-uid',{
+    fetch('http://192.168.7.240:8008/get-user-profile',{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({

@@ -5,6 +5,9 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import moment from 'moment'
 
+const weekOfYear = moment().utc()
+
+
 const styles = theme => ({
 
     container1: {
@@ -42,21 +45,23 @@ const styles = theme => ({
 
 })
 
-const FacultyDateNavigator = ({classes, week, weekOfYear, handleLastWeek, handleCurrentWeek, handleNextWeek}) => {
+const FacultyDateNavigator = ({classes, week, weekStr, handleLastWeek, handleCurrentWeek, handleNextWeek, weekEnd}) => {
+
+    console.log('week end', weekEnd);
 
     return (
         <Toolbar>
             <span className={classes.left}>
-            <Button size="small" color="primary" className="button" variant="outlined" onClick={handleLastWeek} >
+            <Button size="small" color="primary" className="button" variant="outlined" onClick={handleLastWeek} disabled={weekStr === 'W 01'}>
                 <KeyboardArrowLeft fontSize={'inherit'} />
                 Last
             </Button>
 
-            <Button size="small" color="primary" className="button" variant="outlined" onClick={handleCurrentWeek} disabled={week === weekOfYear} >
+            <Button size="small" color="primary" className="button" variant="outlined" onClick={handleCurrentWeek} disabled={weekOfYear.week() === week.week() && weekOfYear.year() === week.year()} >
                 Current
             </Button>
 
-            <Button size="small"  color="primary" className="button" variant="outlined" onClick={handleNextWeek} disabled={week === weekOfYear}>
+            <Button size="small"  color="primary" className="button" variant="outlined" onClick={handleNextWeek} disabled={weekStr === weekEnd}>
                 Next
                 <KeyboardArrowRight fontSize={'inherit'}/>
             </Button>
@@ -64,7 +69,7 @@ const FacultyDateNavigator = ({classes, week, weekOfYear, handleLastWeek, handle
             </span>
             <span className={classes.middle}>
                 {
-                    <b>{moment.utc().week(week).weekday(1).format("ddd MM/DD")+ '~' + moment.utc().week(week).weekday(6).format("ddd MM/DD")}</b>
+                    <b>{moment.utc().week(week.week()).weekday(1).format("ddd MM/DD")+ '~' + moment.utc().week(week.week()).weekday(6).format("ddd MM/DD")}</b>
                 }
             </span>
         </Toolbar>

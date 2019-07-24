@@ -21,6 +21,8 @@ import { store } from '../../../redux/store'
 import OdooServerStatusDialog from '../../Alert/OdooServerStatusDialog'
 import { Prompt } from 'react-router-dom'
 import moment from 'moment'
+import DefaultAlert from '../../Alert/DefaultDialog'
+import Report from "@material-ui/icons/Report";
 
 
 const styles = theme => ({
@@ -96,6 +98,7 @@ class SessionTable extends Component {
       order: "asc",
       orderBy: "roll_number",
       selected: {},
+      warning: false
     };
   }
   // get all inputed data and request for create attendance sheet
@@ -136,7 +139,7 @@ class SessionTable extends Component {
   handleSelectAllClick = (event, data) => {
     let {selected} = this.state
     let {session, group} = this.props
-    if(!session) return
+    if(!session) return this.setState({warning:true})
     if (event.target.checked) {
       if(!(session in selected)){
         let temp = {}
@@ -159,10 +162,14 @@ class SessionTable extends Component {
     onChangeRemark(remark)
   }
 
+  handleCloseWarning = () => {
+    this.setState({warning:false})
+  }
+
   handleClick = (event, roll_number) => {
     const { selected } = this.state;
     const {session, group} = this.props
-    if(!session) return
+    if(!session) return this.setState({warning:true})
     if(session in selected){
       if(group in selected[session]){
         const selectedIndex = selected[session][group].indexOf(roll_number);
@@ -194,7 +201,7 @@ class SessionTable extends Component {
   handleDuplicateSession = (newSelected) => {
     let {course, batch, semester, group, subjectInfo, session} = this.props
     let {selected} = this.state
-    if(!(session in selected)) return
+    if(!(session in selected)) return this.setState({warning:true})
     let sessions = subjectInfo[course][batch][semester][group]['session']
     sessions.filter((e,i) => newSelected.includes(i+1))
     .forEach(sess => {
@@ -308,6 +315,23 @@ class SessionTable extends Component {
         <OdooServerStatusDialog odooServerStatus={odooServerStatus}/>
         </>
       }
+      <DefaultAlert
+          icon={
+            <Report
+              style={{
+                width: 150,
+                height: 150,
+                marginLeft: 60,
+                marginRight: 60,
+                marginTop: 30
+              }}
+              color="secondary"
+            />
+          }
+          onClick={this.handleCloseWarning}
+          detail="Please selected any session"
+          open={this.state.warning}
+        />
       </>
     );
   }

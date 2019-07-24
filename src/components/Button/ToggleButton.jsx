@@ -20,19 +20,15 @@ const useStyles = makeStyles(theme => ({
 
 export default function ToggleButtons({onChange, mode}) {
 
-  const handleChangeMode = (mode) => {
-    onChange(mode)
-  };
-
   const classes = useStyles();
 
   return (
     <Grid container justify="flex-end" alignItems="baseline" style={{ marginBottom: 40}}>
         <div className={classes.toggleContainer}>
-            <Button variant="contained" className={mode === 'create' ? classes.active : classes.disable} onClick={()=>handleChangeMode('create')}>
+            <Button variant="contained" className={mode === 'create' ? classes.active : classes.disable} onClick={()=>onChange('create')}>
                 <TodayIcon  />
             </Button>
-            <Button variant="contained" className={mode === 'view' ? classes.active : classes.disable}  onClick={()=>handleChangeMode('view')} >
+            <Button variant="contained" className={mode === 'view' ? classes.active : classes.disable}  onClick={()=>onChange('view')} >
                 <FormatAlignCenterIcon  />
             </Button>
         </div>

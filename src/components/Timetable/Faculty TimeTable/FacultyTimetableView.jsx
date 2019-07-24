@@ -11,7 +11,7 @@ const headData = ["Date", 'Session' ,'Time', 'Subject', 'Batch', 'Group', 'Semes
 
 const weekOfYear = moment.utc().week();
 
-const FacultyTimeTableView = ({userIden, facultyTT, dispatch, subjectInfo}) =>{
+const FacultyTimeTableView = ({facultyTT, dispatch, subjectInfo}) =>{
 
     const [week, setWeek] = useState(weekOfYear)
 
@@ -38,11 +38,10 @@ const FacultyTimeTableView = ({userIden, facultyTT, dispatch, subjectInfo}) =>{
     return(
         <div className={classes.format}>
             <FacultyDateNavigator
-                week={week}
+                week={moment.utc().week(week)}
                 handleLastWeek={handleLastWeek}
                 handleNextWeek={handleNextWeek}
                 handleCurrentWeek={handleCurrentWeek}
-                weekOfYear = {weekOfYear}
                 />
                 <div className={classes.container}>
                     <Paper className={classes.subRoot}>

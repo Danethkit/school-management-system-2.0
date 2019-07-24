@@ -34,12 +34,12 @@ const initialData = {
     report: false,
     b64Report : '',
     sessionData: {},
-    userIden: {},
+    userTT: {},
     facultyTT : {},
     studentTT: {},
     TTView:{},
     editTT: {},
-    uid: {},
+    userProfile: {},
     editTTStatus: {},
     semDate: [],
     attendanceReportData: {}
@@ -68,7 +68,7 @@ export const initData = (state= initialData, action={}) => {
         case GET_SESSION_DATA:
             return {...state, ...{sessionData:action.payload}}
         case SET_USER_IDENTITY:
-            return {...state, ...{userIden:action.payload}}
+            return {...state, ...{userTT:action.payload}}
         case SET_FACULTY_TIMETABLE:
             return {...state, ...{facultyTT:action.payload}}
         case SET_STUDENT_TIMETABLE:
@@ -78,7 +78,7 @@ export const initData = (state= initialData, action={}) => {
         case SET_EDIT_TT:
             return {...state, ...{editTT:action.payload}}
         case SET_UID:
-            return {...state, ...{uid:action.payload}}
+            return {...state, ...{userProfile:action.payload}}
         case SET_SEM_DATE:
             return {...state, ...{semDate:action.payload}}
         case SET_ATTENDANCE_REPORT_DATA:

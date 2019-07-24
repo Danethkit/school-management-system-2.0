@@ -16,7 +16,6 @@ import Group from '@material-ui/icons/Group'
 import Subtitles from '@material-ui/icons/Subtitles'
 import List from '@material-ui/icons/List'
 import Print from '@material-ui/icons/Print'
-import Avatar from '@material-ui/core/Avatar';
 
 
 
@@ -57,7 +56,7 @@ const navBar = [
   "Apps",
 ];
 
-const NavigationBar = ({ classes, history, userIden }) => {
+const NavigationBar = ({ classes, history, userProfile }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [route, setRoute] = useState("/sms/attendance");
 
@@ -148,7 +147,7 @@ const NavigationBar = ({ classes, history, userIden }) => {
             className={menuOpen ? classes.hide : classes.menuButton}>
                 <MenuIcon />
             </IconButton>
-            <SideBarDrawer open={menuOpen} toggleDrawer={toggleDrawer} items={items} userIden={userIden}/>
+            <SideBarDrawer open={menuOpen} toggleDrawer={toggleDrawer} items={items} userProfile={userProfile}/>
             <Tabs
               variant="scrollable"
               scrollButtons="off"
@@ -170,4 +169,4 @@ const NavigationBar = ({ classes, history, userIden }) => {
       </div>
     );
 }
-export default connect(state=>({userIden: state.initData.userIden}))(withStyles(styles)(NavigationBar))
+export default connect(state=>({userProfile: state.initData.userProfile}))(withStyles(styles)(NavigationBar))

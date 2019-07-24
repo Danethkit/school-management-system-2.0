@@ -4,12 +4,12 @@ import { connect } from 'react-redux'
 import { onGroupChange } from '../../redux/ActionCreator/userBehavior'
 import AutoComplete from './AutoComplete'
 
-const GroupPicker = ({dispatch, group, batch, course, subjectInfo, userIden, semester, uid}) => {
+const GroupPicker = ({dispatch, group, batch, course, subjectInfo, userTT, semester, userProfile}) => {
   let actions = bindActionCreators(onGroupChange, dispatch)
   let data = []
   try{
-    if(uid.uid !== 'admin'){
-      data = Object.keys(userIden[course][batch][semester].filter(e=>e.includes('Group')))
+    if(userProfile.role !== 'admin'){
+      data = Object.keys(userTT['data'][course][batch][semester].filter(e=>e.includes('Group')))
     }else{
       data = Object.keys(subjectInfo[course][batch][semester]).filter(e=>e.includes('Group'))
     }
@@ -32,5 +32,5 @@ export default connect(state => ({
   course : state.changePicker.course,
   semester : state.changePicker.semester,
   subjectInfo : state.initData.subjectInfo,
-  uid : state.initData.uid,
+  userProfile : state.initData.userProfile,
 }))(GroupPicker)
