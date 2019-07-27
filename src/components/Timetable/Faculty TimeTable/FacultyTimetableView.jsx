@@ -61,7 +61,7 @@ const FacultyTimeTableView = ({facultyTT, dispatch, subjectInfo}) =>{
                                         const row =  <TableRow className={classes.row} key={i}>
                                                 {
                                                     flag ?
-                                                    <CustomTableCell align='center' rowSpan={facultyTT[key].length} style={{border:'0.5px solid gray', backgroundColor:'#CFD8DC'}} >
+                                                    <CustomTableCell align='center' rowSpan={facultyTT[key].length} style={{border:'0.5px solid gray'}} >
                                                         {moment.utc().week(week).weekday(key -1).format('ddd YYYY/MM/DD')}
                                                     </CustomTableCell>: null
                                                 }

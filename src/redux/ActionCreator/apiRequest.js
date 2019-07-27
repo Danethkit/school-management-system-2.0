@@ -17,7 +17,8 @@ import {
     SET_UID,
     SET_SEM_DATE,
     PRINT_REPORT_LOADING,
-    SET_ATTENDANCE_REPORT_DATA
+    SET_ATTENDANCE_REPORT_DATA,
+    apiURL
 } from '../../constants/env'
 import {odooRequest, odooPrintReport} from '../api'
 // Helper functino
@@ -73,7 +74,7 @@ export const requestSemesterDate = ({course, batch, semester, group}) => (dispat
 }
 
 export const createAttendanceSheet= (data) => (dispatch) => {
-    fetch('http://192.168.7.240:8008/create-attendance-sheet',{
+    fetch(`${apiURL}/create-attendance-sheet`,{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -87,7 +88,7 @@ export const createAttendanceSheet= (data) => (dispatch) => {
 
 export const getAttendanceLine = (data) => (dispatch) => {
     dispatch({type: REQUEST_ATTENDANCE_LINE_PENDING})
-    fetch('http://192.168.7.240:8008/get-attendance-line', {
+    fetch(`${apiURL}/get-attendance-line`, {
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -101,7 +102,7 @@ export const getAttendanceLine = (data) => (dispatch) => {
 
 export const getReportAttendanceLine = (data) => (dispatch) => {
     dispatch({type: REQUEST_ATTENDANCE_LINE_PENDING, payload:true})
-    fetch('http://192.168.7.240:8008/get-attendance-line', {
+    fetch(`${apiURL}/get-attendance-line`, {
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -117,7 +118,7 @@ export const getReportAttendanceLine = (data) => (dispatch) => {
 }
 
 export const getSubjectData = () => (dispatch) => {
-    fetch('http://192.168.7.240:8008/get-subject-data')
+    fetch(`${apiURL}/get-subject-data`)
     .then(res => res.json())
     .then(data => dispatch({type:REQUEST_SUBJECT_DATA, payload:data}))
     .catch( err => console.log(err))
@@ -125,7 +126,7 @@ export const getSubjectData = () => (dispatch) => {
 }
 
 export const getSessionData = () => (dispatch) => {
-    fetch('http://192.168.7.240:8008/get-session-data')
+    fetch(`${apiURL}/get-session-data`)
     .then(res => res.json())
     .then(data => dispatch({type:GET_SESSION_DATA, payload:data}))
     .catch( err => console.log(err))
@@ -145,7 +146,7 @@ export const printAttendanceReport = (data) => (dispatch) => {
 }
 
 export const saveTimeTable = (data) => (dispatch) => {
-    fetch('http://192.168.7.240:8008/create-timetable',{
+    fetch(`${apiURL}/create-timetable`,{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -158,7 +159,7 @@ export const saveTimeTable = (data) => (dispatch) => {
 }
 
 export const requestUserTimetable = (data) => (dispatch) => {
-    fetch('http://192.168.7.240:8008/get-user-timetable',{
+    fetch(`${apiURL}/get-user-timetable`,{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -171,7 +172,7 @@ export const requestUserTimetable = (data) => (dispatch) => {
 }
 
 export const requestFacultyTimeTable = (data) => (dispatch) => {
-    fetch('http://192.168.7.240:8008/get-faculty-timetable',{
+    fetch(`${apiURL}/get-faculty-timetable`,{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -184,7 +185,7 @@ export const requestFacultyTimeTable = (data) => (dispatch) => {
 }
 
 export const requestStudentTimeTable = (data) => (dispatch) => {
-    fetch('http://192.168.7.240:8008/get-student-timetable',{
+    fetch(`${apiURL}/get-student-timetable`,{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -197,7 +198,7 @@ export const requestStudentTimeTable = (data) => (dispatch) => {
 }
 
 export const requestTimeTableView = (data) => (dispatch) => {
-    fetch('http://192.168.7.240:8008/get-timetable-view',{
+    fetch(`${apiURL}/get-timetable-view`,{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -210,7 +211,7 @@ export const requestTimeTableView = (data) => (dispatch) => {
 }
 
 export const requestTimeTableData = (data) => (dispatch) => {
-    fetch('http://192.168.7.240:8008/get-timetable-data',{
+    fetch(`${apiURL}/get-timetable-data`,{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -223,7 +224,7 @@ export const requestTimeTableData = (data) => (dispatch) => {
 }
 
 export const getUid = () => (dispatch) => {
-    fetch('http://192.168.7.240:8008/get-user-profile',{
+    fetch(`${apiURL}/get-user-profile`,{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -236,7 +237,7 @@ export const getUid = () => (dispatch) => {
 }
 
 export const editTimeTable = (data) => (dispatch) => {
-    fetch('http://192.168.7.240:8008/edit-time-table',{
+    fetch(`${apiURL}/edit-time-table`,{
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({

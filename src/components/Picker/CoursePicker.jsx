@@ -12,7 +12,6 @@ const CoursePicker = ({course, subjectInfo, userTT, userProfile, dispatch}) => {
     data = userTT['data']
   }
   let actions = bindActionCreators({onCourseChange}, dispatch)
-  console.log('data',data);
   return <AutoComplete
           value={course}
           onChange={actions.onCourseChange}

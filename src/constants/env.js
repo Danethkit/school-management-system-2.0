@@ -36,5 +36,6 @@ export const SET_UID = 'SET_UID'
 export const SET_SEM_DATE = 'SET_SEM_DATE'
 export const PRINT_REPORT_LOADING = 'PRINT_REPORT_LOADING'
 export const SET_ATTENDANCE_REPORT_DATA = 'SET_ATTENDANCE_REPORT_DATA'
+export const apiURL = 'http://192.168.7.240'
 
 

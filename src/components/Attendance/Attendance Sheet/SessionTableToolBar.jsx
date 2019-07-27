@@ -1,5 +1,4 @@
 import React from "react"
-import classNames from "classnames"
 import PropTypes from "prop-types"
 import DuplicateSession from "../../Timetable/Genereate TimeTable/DuplicateSession"
 import { Toolbar, Typography, withStyles } from "@material-ui/core"
@@ -37,10 +36,7 @@ const SessionTableToolBar = props => {
 
   return (
     <Toolbar
-      className={classNames(classes.root, {
-        [classes.highlight]: numSelected > 0
-      })}
-    >
+      className={ numSelected > 0 ? classes.highlight : classes.root}>
       <div className={classes.title}>
         {numSelected > 0 ? (
           <Typography color="inherit" variant="subtitle1">
