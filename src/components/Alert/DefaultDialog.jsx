@@ -21,10 +21,10 @@ const styles = theme => ({
 
 const DefaultAlert = ({open, classes, onClick, error, icon, detail}) =>{
   return (
-    <Dialog
+    <Dialog data-test='Dialog'
         open={open}
         className={classes.root}>
-        <Grid container justify="center" alignItems="center" >
+        <Grid container justify="center" alignItems="center"  >
           {icon}
         </Grid>
         <DialogTitle>{detail}</DialogTitle>

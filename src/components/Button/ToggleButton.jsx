@@ -23,13 +23,13 @@ export default function ToggleButtons({onChange, mode}) {
   const classes = useStyles();
 
   return (
-    <Grid container justify="flex-end" alignItems="baseline" style={{ marginBottom: 40}}>
+    <Grid container justify="flex-end" alignItems="baseline" style={{ marginBottom: 40}} data-test="Grid"  >
         <div className={classes.toggleContainer}>
-            <Button variant="contained" className={mode === 'create' ? classes.active : classes.disable} onClick={()=>onChange('create')}>
-                <TodayIcon  />
+            <Button data-test="Button" variant="contained" className={mode === 'create' ? classes.active : classes.disable} onClick={()=>onChange('create')}>
+                <TodayIcon data-test="TodayIcon" />
             </Button>
-            <Button variant="contained" className={mode === 'view' ? classes.active : classes.disable}  onClick={()=>onChange('view')} >
-                <FormatAlignCenterIcon  />
+            <Button data-test="Button" variant="contained" className={mode === 'view' ? classes.active : classes.disable}  onClick={()=>onChange('view')} >
+                <FormatAlignCenterIcon  data-test="FormatAlignCenterIcon"/>
             </Button>
         </div>
     </Grid>

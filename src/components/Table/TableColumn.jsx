@@ -7,13 +7,13 @@ import {
 
 const TableColumn = ({id, numeric, orderBy, order, classes, label, disablePadding}) => {
     return (
-    <TableCell
+    <TableCell data-test="TableCell"
             key={id}
             align={numeric ? "left" : "center"}
             sortDirection={orderBy === id ? order : false}
             padding={disablePadding ? "none" : "default"}>
-    <Tooltip title="Sort" enterDelay={300}>
-        <TableSortLabel
+    <Tooltip title="Sort" enterDelay={300} data-test="ToolTip">
+        <TableSortLabel data-test='TableSortLabel'
             className={classes.text}
             active={orderBy === id}
             direction={order}

@@ -24,12 +24,9 @@ const styles = theme => ({
         margin: theme.spacing(3)
     },
     leftIcon: {
-        marginRight: theme.spacing(3)
-    },
-
-    iconSmall: {
+        marginRight: theme.spacing(3),
         fontSize: 20
-    }
+    },
 });
 
 function desc(a, b, orderBy) {

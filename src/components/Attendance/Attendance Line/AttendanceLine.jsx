@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography'
 
 const AttendanceLine = ({ attendanceLine }) => {
   return (
-    <div
+    <div data-test="div"
       style={{
         flexGrow: 1,
         marginLeft: "auto",

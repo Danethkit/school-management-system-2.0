@@ -22,7 +22,7 @@ const OdooServerStatusDialog = ({odooServerStatus, dispatch}) =>{
       error = odooServerStatus.error.data.arguments[0]
     }
   }
-  return <DefaultAlert
+  return <DefaultAlert data-test="DefaultAlert"
           onClick={() => dispatch(toggleDialog(!odooServerStatus))}
           icon={icon}
           open={odooServerStatus ? true :false}

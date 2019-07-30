@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography'
 import LinearProgress from '@material-ui/core/LinearProgress'
 
 function GenerateReport  (props)  {
-    return <div
+    return <div data-test='div1'
             style={{
                 backgroundColor: '#efefef',
                 marginLeft: 'auto',

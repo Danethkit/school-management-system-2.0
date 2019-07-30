@@ -21,7 +21,7 @@ const SessionPicker = ({dispatch, session, subjectInfo, userTT, course, batch, s
         action(suggestions[index])
     },[sessionNumber, subjectInfo, userTT])
 
-    return <AutoComplete
+    return <AutoComplete data-test="AutoComplete"
             value ={session}
             onChange = {action}
             label = "Session"
