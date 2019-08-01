@@ -36,8 +36,8 @@ const SessionTableToolBar = props => {
 
   return (
     <Toolbar
-      className={numSelected > 0 ? classes.highlight : classes.root}
-    >
+      className={ numSelected > 0 ? classes.highlight : classes.root}>
+>>>>>>> upstream/master
       <div className={classes.title}>
         {numSelected > 0 ? (
           <Typography color="inherit" variant="subtitle1">

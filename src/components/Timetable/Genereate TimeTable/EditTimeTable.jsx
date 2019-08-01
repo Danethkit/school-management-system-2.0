@@ -22,7 +22,7 @@ export default connect(state=>({odooServerStatus : state.changePicker.odooServer
 
     const header = ['Session']
     if(currentWeek.startDate){
-        for (let i = 0; i <= 6; i++) {
+        for (let i = 1; i < 7; i++) {
             header.push(
               moment(currentWeek.startDate, 'YYYY-MM-DD')
                 .add(i, 'days')
@@ -43,7 +43,12 @@ export default connect(state=>({odooServerStatus : state.changePicker.odooServer
         }
         setData({...editTT})
     }
-
+    let columns = []
+    for(let i =1 ; i <header.length; i++)
+    {
+        columns.push(i)
+    }
+    let sessions = subjectInfo[course][batch][semester][group]['session']
     let faculties = [];
     try {
         for (let e of subjectInfo[course][batch][semester][group]['subjects']) {
@@ -71,26 +76,30 @@ export default connect(state=>({odooServerStatus : state.changePicker.odooServer
                         </TableHead>
                         <TableBody>
                             {editTT.data !== undefined ?
-                                Object.keys(editTT.data).sort(sortSession).map(session => {
-                                let temp = []
-                                for(let i =0; i < 7; i++){
-                                    temp.push(<CustomTableCell text-align="center" key={i}>
-                                    {
-                                        editMode ?
-                                        <AutoComplete value={i+1 in editTT.data[session] ? editTT.data[session][i+1]:null} onChange={getHandler(session, i+1)} suggestions={faculties}/>:
-                                        i+1 in editTT.data[session] ? editTT.data[session][i+1]
-                                        : null
-                                    }
-                                    </CustomTableCell>)
-                                }
-                                return <TableRow className={classes.row} key={session}>
+                                sessions.sort(sortSession).map(session => {
+                                    return <TableRow className={classes.row} key={session}>
                                         <CustomTableCell align="center">
                                             {session}
                                         </CustomTableCell>
-                                        {temp}
-                                </TableRow>
-                                })
-                                :null
+                                        {
+                                        columns.map(i => {
+                                            return <CustomTableCell align='center' multiline={"true"} key={i}>
+
+                                                {
+                                                            session in editTT.data ?
+                                                                editMode ? <AutoComplete value={i+1 in editTT.data[session] ? editTT.data[session][i+1]:null} onChange={getHandler(session, i+1)} suggestions={faculties}/>
+                                                                :i+1 in editTT.data[session] ? editTT.data[session][i+1]
+                                                                    :null
+
+                                                            : editMode ? <AutoComplete value={null} onChange={getHandler(session, i+1)} suggestions={faculties}/>
+                                                                :null
+                                                }
+                                            </CustomTableCell>
+
+                                        })
+                                    }
+                                    </TableRow>
+                                }):null
                             }
                         </TableBody>
                     </Table>
@@ -98,4 +107,5 @@ export default connect(state=>({odooServerStatus : state.changePicker.odooServer
                 <OdooServerStatusDialog odooServerStatus={odooServerStatus}/>
         </>
     )
+
 })

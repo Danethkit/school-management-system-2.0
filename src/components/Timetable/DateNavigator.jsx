@@ -58,8 +58,6 @@ const DateNavigator = ({classes, handleLastWeek, handleDuplicateTimetable,
         items = weeks.map(e=>e.name)
     }catch{}
 
-    console.log({weekStr, weekStartIndex, weekEndIndex});
-
     return (
         <Toolbar style={{ marginBottom: -6}}>
             <span className={classes.left}>

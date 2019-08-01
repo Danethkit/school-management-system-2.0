@@ -3,7 +3,7 @@ import moment from 'moment'
 
 var odoo = new Odoo({
     url: 'http://192.168.7.240',
-    port: '8008',
+    port: '80',
     db: 'kit',
     username: 'admin',
     password: 'adminkit'

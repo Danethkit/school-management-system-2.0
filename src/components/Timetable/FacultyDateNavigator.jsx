@@ -47,8 +47,6 @@ const styles = theme => ({
 
 const FacultyDateNavigator = ({classes, week, weekStr, handleLastWeek, handleCurrentWeek, handleNextWeek, weekEnd}) => {
 
-    console.log('week end', weekEnd);
-
     return (
         <Toolbar>
             <span className={classes.left}>

@@ -13,7 +13,6 @@ const styles = theme => ({
   width: "100%"
   },
   format: {
-        backgroundColor: '#efefef',
         marginLeft: 'auto',
         marginRight: 'auto',
         width: '100%',

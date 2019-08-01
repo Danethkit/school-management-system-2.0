@@ -40,7 +40,6 @@ const styles = theme => ({
     }
   },
   generateTimetable: {
-    backgroundColor: "#efefef",
     paddingBottom: 1,
     borderColor: "#ccc",
     borderStyle: "solid",

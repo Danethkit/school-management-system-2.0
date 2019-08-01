@@ -9,7 +9,6 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 function GenerateReport  (props)  {
     return <div data-test='div1'
             style={{
-                backgroundColor: '#efefef',
                 marginLeft: 'auto',
                 marginRight: 'auto',
                 width: '100%',

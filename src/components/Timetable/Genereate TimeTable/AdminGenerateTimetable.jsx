@@ -261,7 +261,6 @@ class AdminTimeTable extends Component {
     return (
       <div
         style={{
-          backgroundColor: bodyColor,
           marginLeft: 'auto',
           marginRight: 'auto',
           width: '100%',
