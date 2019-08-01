@@ -78,7 +78,7 @@ describe('Pickers', () => {
             EndDate_Picker = shallow(<EndDatePicker/>)
         })
         it('should render without errors', () => {
-            expect(EndDate_Picker).toMatchSnapshot
+            expect(EndDate_Picker).toMatchSnapshot()
         });
     });
     describe('FacultyPicker', () => {
@@ -87,7 +87,7 @@ describe('Pickers', () => {
             Faculty_Picker = shallow(<FacultyPicker/>)
         })
         it('should render without errors', () => {
-            expect(Faculty_Picker).toMatchSnapshot
+            expect(Faculty_Picker).toMatchSnapshot()
         });
     });
     describe('GroupPicker', () => {
@@ -96,7 +96,7 @@ describe('Pickers', () => {
          Group_Picker = shallow(<GroupPicker/>)
         })
         it('should render without errors', () => {
-            expect(Group_Picker).toMatchSnapshot
+            expect(Group_Picker).toMatchSnapshot()
         });
     });
     describe('SemesterPicker', () => {
@@ -105,7 +105,34 @@ describe('Pickers', () => {
             Semester_Picker = shallow(<SemesterPicker/>)
         })
         it('should render without errors', () => {
-            expect(Semester_Picker).toMatchSnapshot
+            expect(Semester_Picker).toMatchSnapshot()
+        });
+    });
+    describe('StartDatePicker', () => {
+        let StartDate_Picker
+        beforeEach(()=>{
+            StartDate_Picker = shallow(<StartDatePicker/>)
+        })
+        it('should render without errors', () => {
+            expect(StartDate_Picker).toMatchSnapshot()
+        });
+    });
+    describe('SubjectPicker', () => {
+        let Subject_Picker
+        beforeEach(()=>{
+            Subject_Picker = shallow(<SubjectPicker/>)
+        })
+        it('should render without errors', () => {
+            expect(Subject_Picker).toMatchSnapshot()
+        });
+    });
+    describe('WeekPicker', () => {
+        let Week_Picker
+        beforeEach(()=>{
+            Week_Picker = shallow(<WeekPicker/>)
+        })
+        it('should render without errors', () => {
+            expect(Week_Picker).toMatchSnapshot()
         });
     });
 });
