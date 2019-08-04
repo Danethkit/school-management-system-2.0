@@ -9,8 +9,7 @@ describe('Alert components', () => {
             Default_Dialog = shallow(<DefaultDialog/>)
         })
         it('should render without errors', () => { 
-            const render = Default_Dialog.find(`[data-test='Dialog']`)
-            //expect(render.length).toBe(1)
+            expect(Default_Dialog).toMatchSnapshot()
         });
     });
     describe('OdooServerStatusDialog',()=>{
@@ -19,8 +18,7 @@ describe('Alert components', () => {
             OdooServer_StatusDialog = shallow(<OdooServerStatusDialog/>)
         })
         it('it should render without erros', () => {
-            const render = OdooServer_StatusDialog.find(`[data-test='DefaultAlert']`)
-            //expect(render.length).toBe(1)
+            expect(OdooServer_StatusDialog).toMatchSnapshot()
         });
     })
 });
